@@ -486,7 +486,7 @@ class SupabaseBlogService {
       nav_main: [
         { id: 'nav_1', label: 'Tentang', url: '/#about', target: '_self' },
         { id: 'nav_2', label: 'Arsip Karya', url: '/#works', target: '_self' },
-        { id: 'nav_3', label: 'Lab & Kalkulator', url: '/#lab', target: '_self' },
+        { id: 'nav_3', label: 'Lab & Kalkulator', url: '/tools', target: '_self' },
         { id: 'nav_4', label: 'Blog', url: '/blog', target: '_self' },
         { id: 'nav_5', label: 'Kontak', url: '/#contact', target: '_self' }
       ],

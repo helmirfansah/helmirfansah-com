@@ -1,0 +1,19 @@
+---
+// src/pages/kalkulator/index.astro
+// Halaman alias /kalkulator yang mengarah ke /tools untuk SEO & keramahan pencarian
+---
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Mengarahkan ke Kalkulator Tools...</title>
+  <link rel="canonical" href="https://helmirfansah.com/tools" />
+  <meta http-equiv="refresh" content="0; url=/tools" />
+  <script is:inline>
+    window.location.replace('/tools');
+  </script>
+</head>
+<body style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f6f1e4; color: #181410;">
+  <p>Mengarahkan ke <a href="/tools" style="color: #c85a32; font-weight: 600;">Kalkulator Cloud &amp; AI Tools</a>...</p>
+</body>
+</html>
