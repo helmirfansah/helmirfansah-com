@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E1A16"/>
+      <stop offset="100%" stop-color="#0E0C0A"/>
+    </linearGradient>
+    <linearGradient id="dotGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E26D50"/>
+      <stop offset="100%" stop-color="#C84E32"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Modern Rounded Squircle Badge -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bgGrad)" stroke="#3A332C" stroke-width="1.5"/>
+
+  <!-- Bold Crisp 'H' Monogram (Pure Vectors, No Font Dependency) -->
+  <path d="
+    M 15,16 
+    H 23 
+    V 28 
+    H 35 
+    V 16 
+    H 43 
+    V 48 
+    H 35 
+    V 36 
+    H 23 
+    V 48 
+    H 15 
+    Z
+  " fill="#F6F1E4" />
+
+  <!-- Iconic Terracotta Brand Dot (H · ) -->
+  <circle cx="51.5" cy="32" r="4" fill="url(#dotGrad)"/>
+</svg>

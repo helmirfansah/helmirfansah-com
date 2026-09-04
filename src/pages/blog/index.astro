@@ -1,0 +1,396 @@
+---
+// src/pages/blog/index.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Blog & Studi Kasus Teknis - Helmi Irfansah" 
+  description="Arsip tulisan dan studi teknis mendalam tentang cloud infrastructure, database, payment gateway, dan AI tools oleh Helmi Irfansah."
+>
+  <div id="reading-progress" style="position:fixed;top:0;left:0;height:3px;background:var(--accent-clay);width:0%;z-index:999;transition:width 0.1s ease;"></div>
+
+  <main class="section-inner" style="max-width: 920px; padding-top: 7rem; padding-bottom: 5rem; min-height: 85vh;">
+    
+    <!-- ARCHIVE VIEW -->
+    <div id="archive-view">
+      <div style="margin-bottom: 3.5rem;">
+        <div style="display:inline-flex;align-items:center;gap:0.4rem;font-size:0.75rem;padding:0.25rem 0.6rem;border-radius:12px;margin-bottom:1.5rem;background:var(--bg-card);border:1px solid var(--border);color:var(--ink-muted);">
+          <span class="status-dot" id="status-dot" style="width:7px;height:7px;border-radius:50%;background:#E5A93C;"></span>
+          <span id="status-text">Memeriksa Database...</span>
+        </div>
+        <h1 style="font-size: clamp(2.25rem, 5vw, 3.5rem); margin-bottom: 0.75rem; color: var(--ink);" data-brand-key="blog_archive_title">Catatan &amp; Studi Kasus</h1>
+        <p style="color: var(--ink-secondary); font-size: 1.125rem; max-width: 620px; margin-bottom: 2rem;" data-brand-key="blog_archive_desc">Eksplorasi teknis mendalam tentang cloud architecture, evaluasi biaya SaaS, dan tooling AI berdasarkan uji coba dunia nyata.</p>
+        
+        <div style="display:flex;flex-direction:column;gap:1.25rem;margin-bottom:2.5rem;">
+          <div style="position:relative;width:100%;">
+            <svg style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--ink-muted);width:1.125rem;height:1.125rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="search-input" placeholder="Cari artikel, tech stack, atau kata kunci..." style="width:100%;padding:0.875rem 1.25rem 0.875rem 2.85rem;background:var(--bg-card);border:1px solid var(--border-strong);border-radius:var(--radius-sm);color:var(--ink);font-size:1rem;outline:none;">
+          </div>
+          
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;" id="category-pills">
+            <button class="category-pill active" data-cat="Semua">Semua</button>
+            <button class="category-pill" data-cat="Cloud Migration">Cloud Migration</button>
+            <button class="category-pill" data-cat="Database">Database</button>
+            <button class="category-pill" data-cat="Payment Gateway">Payment Gateway</button>
+            <button class="category-pill" data-cat="AI Tools">AI Tools</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="articles-container" style="display:grid;gap:2rem;">
+        <!-- Dynamic Articles Injected via Client Script -->
+      </div>
+    </div>
+
+    <!-- SINGLE POST VIEW -->
+    <article id="single-view" style="display:none;">
+      <nav style="margin-bottom:2rem;font-size:0.875rem;">
+        <a href="/blog" id="back-to-archive" style="color:var(--ink-muted);text-decoration:none;">← Kembali ke Semua Artikel</a>
+      </nav>
+
+      <header style="margin-bottom:3rem;border-bottom:1px solid var(--border);padding-bottom:2rem;">
+        <span style="color:var(--accent-clay);text-transform:uppercase;letter-spacing:0.08em;font-weight:500;font-size:0.75rem;" id="post-category">Category</span>
+        <h1 style="font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2; margin: 0.75rem 0 1.25rem; color: var(--ink);" id="post-title">Judul Artikel</h1>
+        <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;font-size:0.875rem;color:var(--ink-muted);">
+          <div style="display:flex;align-items:center;gap:0.6rem;font-weight:500;color:var(--ink);">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-clay);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:bold;">HI</div>
+            <span>Helmi Irfansah</span>
+          </div>
+          <span id="post-date">Tanggal</span>
+          <span id="post-read-time">X menit baca</span>
+          <span id="post-views">👁️ 0 views</span>
+        </div>
+      </header>
+
+      <div id="post-content" style="font-size:1.125rem;line-height:1.8;color:var(--ink-secondary);">
+        <!-- Parsed Markdown HTML -->
+      </div>
+
+      <!-- High-CPC Action Box -->
+      <div style="background:var(--bg-alt);border:1px solid var(--border-strong);padding:2rem;border-radius:var(--radius-sm);margin:3.5rem 0 2rem;">
+        <h4 style="font-family:var(--font-serif);font-size:1.35rem;color:var(--ink);font-weight:normal;margin-bottom:0.5rem;">⚡ Ingin Menghitung Estimasi Biaya Infrastruktur Anda Sendiri?</h4>
+        <p style="color:var(--ink-secondary);font-size:0.95rem;margin-bottom:1.25rem;">Gunakan kalkulator interaktif gratis kami untuk membandingkan biaya server AWS, DigitalOcean, Biznet Gio, dan token AI dalam Rupiah.</p>
+        <div>
+          <a href="/#lab" class="btn-primary" style="font-size:0.875rem;">Buka Kalkulator Cloud &amp; AI →</a>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:0.75rem;margin-top:2rem;align-items:center;">
+        <span style="font-size:0.875rem;color:var(--ink-muted);">Bagikan artikel:</span>
+        <button class="share-btn" id="btn-share-x" style="padding:0.5rem 0.9rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--ink);cursor:pointer;">X (Twitter)</button>
+        <button class="share-btn" id="btn-share-li" style="padding:0.5rem 0.9rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--ink);cursor:pointer;">LinkedIn</button>
+        <button class="share-btn" id="btn-copy-link" style="padding:0.5rem 0.9rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--ink);cursor:pointer;">Salin Tautan</button>
+      </div>
+    </article>
+
+  </main>
+
+  <style is:global>
+    .category-pill {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--ink-muted);
+      padding: 0.45rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-family: var(--font-sans);
+    }
+    .category-pill:hover,
+    .category-pill.active {
+      border-color: var(--accent-clay);
+      color: var(--ink);
+      background: var(--bg-alt);
+    }
+    .category-pill.active {
+      font-weight: 500;
+      border-color: var(--ink);
+    }
+    .article-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      border-radius: 6px;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                  background 0.2s ease,
+                  border-color 0.2s ease,
+                  box-shadow 0.25s ease;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+      cursor: pointer;
+      position: relative;
+    }
+    .article-card:hover {
+      transform: translateY(-5px);
+      background: var(--bg-alt);
+      border-color: var(--accent-clay);
+      box-shadow: 0 16px 36px var(--shadow), 0 0 0 1px rgba(214, 120, 96, 0.25);
+    }
+    .article-card .article-title {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.35;
+      color: var(--ink);
+      font-family: var(--font-serif);
+      transition: color 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .article-card:hover .article-title {
+      color: var(--accent-clay);
+    }
+    .article-card .article-arrow {
+      font-family: var(--font-sans);
+      font-size: 1.35rem;
+      color: var(--accent-clay);
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+    }
+    .article-card:hover .article-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .tag-chip {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.55rem;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .article-card:hover .tag-chip {
+      border-color: rgba(214, 120, 96, 0.35);
+      color: var(--ink);
+    }
+  </style>
+
+  <script is:inline src="/supabase-client.js"></script>
+  <script is:inline>
+    // Reading Progress Bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      const bar = document.getElementById('reading-progress');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    // Simple Markdown Parser
+    function parseMarkdown(md) {
+      if (!md) return '';
+      // Sanitize dangerous HTML & protocols
+      const sanitized = md
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+        .replace(/javascript\s*:/gi, 'blocked:');
+
+      let html = sanitized
+        .replace(/### (.*?)\n/g, '<h3>$1</h3>')
+        .replace(/## (.*?)\n/g, '<h2>$1</h2>')
+        .replace(/# (.*?)\n/g, '<h1>$1</h1>')
+        .replace(/\*\*(.*?)\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/```([a-z]*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+        .replace(/\n\n/g, '</p><p>');
+
+      if (html.includes('|')) {
+        const lines = html.split('\n');
+        let inTable = false;
+        let tableHtml = '<table>';
+        const newLines = [];
+        for (let line of lines) {
+          if (line.trim().startsWith('|') && line.trim().endsWith('|')) {
+            const cells = line.split('|').slice(1, -1).map(c => c.trim());
+            if (cells.every(c => c.match(/^:?-+:?$/))) continue;
+            if (!inTable) {
+              inTable = true;
+              tableHtml += '<thead><tr>' + cells.map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
+            } else {
+              tableHtml += '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+            }
+          } else {
+            if (inTable) {
+              inTable = false;
+              tableHtml += '</tbody></table>';
+              newLines.push(tableHtml);
+              tableHtml = '<table>';
+            }
+            newLines.push(line);
+          }
+        }
+        if (inTable) {
+          tableHtml += '</tbody></table>';
+          newLines.push(tableHtml);
+        }
+        html = newLines.join('\n');
+      }
+      return '<p>' + html + '</p>';
+    }
+
+    let currentCategory = 'Semua';
+    let currentSearch = '';
+
+    const archiveView = document.getElementById('archive-view');
+    const singleView = document.getElementById('single-view');
+    const articlesContainer = document.getElementById('articles-container');
+    const statusDot = document.getElementById('status-dot');
+    const statusText = document.getElementById('status-text');
+
+    async function loadArticles() {
+      if (!articlesContainer) return;
+      articlesContainer.innerHTML = '<div style="color:var(--ink-muted);padding:2rem 0;">Memuat artikel...</div>';
+      
+      const result = await window.BlogService.getPosts({
+        category: currentCategory,
+        search: currentSearch,
+        includeDrafts: false
+      });
+
+      if (result.isLive) {
+        statusDot.style.background = '#10B981';
+        statusText.textContent = 'Terhubung ke Live Supabase';
+      } else {
+        statusDot.style.background = '#E5A93C';
+        statusText.textContent = 'Database Mode: Local Offline Cache';
+      }
+
+      const posts = result.data || [];
+      if (posts.length === 0) {
+        articlesContainer.innerHTML = `
+          <div style="text-align:center;padding:4rem 1rem;background:var(--bg-card);border:1px dashed var(--border-strong);border-radius:4px;">
+            <p style="color:var(--ink-muted);margin-bottom:1rem;">Tidak ada artikel yang cocok dengan pencarian.</p>
+            <button class="btn-ghost" onclick="resetFilters()" style="font-size:0.875rem;">Reset Filter</button>
+          </div>
+        `;
+        return;
+      }
+
+      articlesContainer.innerHTML = posts.map(post => {
+        const dateStr = new Date(post.created_at).toLocaleDateString('id-ID', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        });
+        const tagsHtml = (post.tags || []).map(t => `<span class="tag-chip">${t}</span>`).join(' ');
+
+        return `
+          <article class="article-card" onclick="openPost('${post.slug}')">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;font-size:0.8125rem;">
+              <span style="color:var(--accent-clay);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;font-size:0.75rem;">${post.category || 'Tech'}</span>
+              <span style="color:var(--ink-muted);">${post.reading_time_minutes || 5} menit baca</span>
+            </div>
+            <h2 class="article-title">
+              <span>${post.title}</span>
+              <span class="article-arrow">→</span>
+            </h2>
+            <p style="color:var(--ink-secondary);font-size:1rem;line-height:1.65;margin-bottom:1.25rem;">${post.excerpt || ''}</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:1rem;font-size:0.8125rem;color:var(--ink-muted);">
+              <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">${tagsHtml}</div>
+              <span>${dateStr}</span>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function openPost(slug) {
+      window.history.pushState({}, '', `/blog?slug=${slug}`);
+      const { data: post } = await window.BlogService.getPostBySlug(slug);
+      if (!post) {
+        alert('Artikel tidak ditemukan.');
+        showArchive();
+        return;
+      }
+
+      document.title = `${post.title} - Helmi Irfansah`;
+      document.getElementById('post-title').textContent = post.title;
+      document.getElementById('post-category').textContent = post.category || 'Infrastructure';
+      document.getElementById('post-date').textContent = new Date(post.created_at).toLocaleDateString('id-ID', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+      document.getElementById('post-read-time').textContent = `${post.reading_time_minutes || 5} menit baca`;
+      document.getElementById('post-views').textContent = `👁️ ${(post.view_count || 0) + 1} pembaca`;
+      document.getElementById('post-content').innerHTML = parseMarkdown(post.content);
+
+      // Social Share
+      const shareUrl = encodeURIComponent(window.location.href);
+      const shareTitle = encodeURIComponent(post.title);
+      document.getElementById('btn-share-x').onclick = () => window.open(`https://twitter.com/intent/tweet?text=${shareTitle}&url=${shareUrl}`, '_blank');
+      document.getElementById('btn-share-li').onclick = () => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`, '_blank');
+      document.getElementById('btn-copy-link').onclick = () => {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Tautan artikel berhasil disalin!');
+      };
+
+      archiveView.style.display = 'none';
+      singleView.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showArchive() {
+      window.history.pushState({}, '', '/blog');
+      document.title = 'Blog & Studi Kasus Teknis - Helmi Irfansah';
+      singleView.style.display = 'none';
+      archiveView.style.display = 'block';
+      loadArticles();
+    }
+
+    const backBtn = document.getElementById('back-to-archive');
+    if (backBtn) {
+      backBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showArchive();
+      });
+    }
+
+    window.addEventListener('popstate', () => {
+      checkUrlRouting();
+    });
+
+    function checkUrlRouting() {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
+      if (slug) openPost(slug);
+      else showArchive();
+    }
+
+    // Category pills
+    document.querySelectorAll('.category-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.category-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.cat;
+        loadArticles();
+      });
+    });
+
+    // Search input
+    let searchTimer;
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+          currentSearch = e.target.value.trim();
+          loadArticles();
+        }, 250);
+      });
+    }
+
+    function resetFilters() {
+      currentSearch = '';
+      currentCategory = 'Semua';
+      if (searchInput) searchInput.value = '';
+      document.querySelectorAll('.category-pill').forEach(b => b.classList.toggle('active', b.dataset.cat === 'Semua'));
+      loadArticles();
+    }
+
+    checkUrlRouting();
+  </script>
+</BaseLayout>

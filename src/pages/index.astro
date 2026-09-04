@@ -1,0 +1,289 @@
+---
+// src/pages/index.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Helmi Irfansah",
+  "url": "https://helmirfansah.com",
+  "jobTitle": "Fullstack Developer & Tech Writer",
+  "sameAs": [
+    "https://github.com/helmirfansah",
+    "https://linkedin.com/in/helmirfansah"
+  ]
+};
+---
+
+<BaseLayout 
+  title="Helmi Irfansah · Tech Notes & Web Lab"
+  description="Helmi Irfansah: developer Indonesia yang menulis studi teknis mendalam tentang cloud infrastructure, SaaS tools, AI, dan web development. Tersedia kalkulator biaya cloud & AI gratis."
+  schema={personSchema}
+>
+  <main id="main-content">
+
+    <!-- ── HERO ──────────────────────────────────────────────────── -->
+    <section id="hero" aria-label="Pengenalan">
+      <div class="hero-inner">
+        <!-- Generative Art Canvas (Seamless) -->
+        <div class="hero-enso" id="hero-enso" aria-hidden="true"></div>
+
+        <!-- Hero Text -->
+        <div class="hero-text">
+          <p class="section-label" data-brand-key="hero_badge">Riset Teknis &amp; Rekayasa Sistem · helmirfansah.com</p>
+          <h1 data-brand-key="hero_title">Membongkar kompleksitas <em style="font-style:italic;color:var(--accent-clay);">cloud</em> dan perangkat lunak.</h1>
+          <p class="hero-sub" data-brand-key="hero_sub">Dari audit efisiensi server hingga integrasi AI modern - dibedah tuntas dengan data empiris, angka nyata, dan arsitektur mandiri <em>(self-hosted)</em>.</p>
+          <div class="hero-cta-group">
+            <a href="#lab" class="btn-primary" data-brand-key="hero_cta_1_text" data-brand-href="hero_cta_1_url">Buka Lab Kalkulator</a>
+            <a href="/blog" class="btn-ghost" data-brand-key="hero_cta_2_text" data-brand-href="hero_cta_2_url">Baca Catatan Teknis →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ABOUT ─────────────────────────────────────────────────── -->
+    <section id="about" aria-labelledby="about-heading">
+      <div class="section-inner">
+        <div class="section-label" data-brand-key="about_badge">Tentang Saya</div>
+        <h2 id="about-heading" data-brand-key="about_title">Membangun perangkat lunak.<br>Membagikan apa yang dipelajari.</h2>
+        <div class="about-grid">
+          <div class="about-bio">
+            <p data-brand-key="about_p1">Halo, saya <strong>Helmi Irfansah</strong>. Saya seorang software engineer dan tech writer asal Indonesia yang berfokus pada arsitektur cloud berbiaya efisien, integrasi AI modern, dan pengembangan produk B2B SaaS.</p>
+            <p data-brand-key="about_p2">Di era di mana biaya cloud dan kompleksitas stack semakin tidak terkendali, saya memprioritaskan kesederhanaan, transparansi angka, dan kepemilikan data mandiri <em>(self-hosting)</em>.</p>
+            <p data-brand-key="about_p3">Website ini adalah kanvas riset terbuka saya - tempat saya mempublikasikan benchmark latensi nyata, audit biaya penyedia infrastruktur, dan kalkulator interaktif gratis untuk membantu sesama developer &amp; pendiri startup.</p>
+          </div>
+          <div class="about-skills">
+            <div class="skill-card">
+              <span class="skill-num" data-brand-key="skill_1_num">01</span>
+              <h3 data-brand-key="skill_1_title">Cloud Architecture &amp; VPS</h3>
+              <p data-brand-key="skill_1_desc">Migrasi dari platform serverless mahal (Vercel, Heroku) ke VPS mandiri (Coolify, Dokku, Hetzner, Biznet Gio) yang menghemat biaya hingga 80%.</p>
+            </div>
+            <div class="skill-card">
+              <span class="skill-num" data-brand-key="skill_2_num">02</span>
+              <h3 data-brand-key="skill_2_title">BaaS &amp; Database Modern</h3>
+              <p data-brand-key="skill_2_desc">PostgreSQL, Supabase, Firebase, dan ClickHouse - merancang skema relasional tangguh dengan Row Level Security dan query sub-50ms.</p>
+            </div>
+            <div class="skill-card">
+              <span class="skill-num" data-brand-key="skill_3_num">03</span>
+              <h3 data-brand-key="skill_3_title">Integrasi LLM &amp; AI Tools</h3>
+              <p data-brand-key="skill_3_desc">Menerapkan OpenAI, Anthropic Claude, dan Gemini API ke dalam produk produksi dengan caching token efisien dan pemantauan biaya transparan.</p>
+            </div>
+            <div class="skill-card">
+              <span class="skill-num" data-brand-key="skill_4_num">04</span>
+              <h3 data-brand-key="skill_4_title">B2B Payment &amp; FinTech</h3>
+              <p data-brand-key="skill_4_desc">Integrasi Midtrans, Xendit, dan Doku untuk pasar Indonesia - simulasi fee transaksi, penanganan webhook andal, dan rekonsiliasi otomatis.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FEATURED WORKS ────────────────────────────────────────── -->
+    <section id="works" aria-labelledby="works-heading">
+      <div class="section-inner">
+        <div class="section-label" data-brand-key="works_badge">Studi Kasus Unggulan</div>
+        <h2 id="works-heading" data-brand-key="works_title">Eksplorasi Teknis<br>&amp; Benchmark Nyata</h2>
+        <div class="works-grid" id="works-grid">
+          <!-- Dynamic Articles Injected via BlogService -->
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1.5rem; color: var(--ink-muted);">
+            Memeriksa artikel terbaru...
+          </div>
+        </div>
+        <div class="works-more">
+          <a href="/blog" class="btn-ghost" data-brand-key="works_more_btn_text">Lihat Semua Tulisan →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── LAB & CALCULATORS ─────────────────────────────────────── -->
+    <section id="lab" aria-labelledby="lab-heading">
+      <div class="section-inner">
+        <div class="section-label" data-brand-key="lab_badge">Lab &amp; Kalkulator</div>
+        <h2 id="lab-heading" data-brand-key="lab_title">Tools Gratis<br>untuk Developer &amp; Startup</h2>
+        <p class="section-sub" data-brand-key="lab_desc">Kalkulator interaktif untuk membuat keputusan infrastruktur yang lebih tepat - tanpa perlu menghitung manual.</p>
+
+        <!-- CALCULATOR WIDGET -->
+        <div class="calc-container" id="cloud-calc">
+          <div class="calc-header">
+            <div class="calc-tabs" role="tablist" aria-label="Pilih Kalkulator">
+              <button class="calc-tab active" role="tab" aria-selected="true" data-tab="cloud">
+                ☁️ Server Cloud (IDR)
+              </button>
+              <button class="calc-tab" role="tab" aria-selected="false" data-tab="ai">
+                🤖 Token API AI (IDR)
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB 1: CLOUD CALCULATOR -->
+          <div class="calc-body" id="tab-cloud" role="tabpanel">
+            <div class="calc-inputs">
+              <div class="input-group">
+                <label for="vcpu">vCPU: <strong id="vcpu-val">4 vCPU</strong></label>
+                <input type="range" id="vcpu" min="1" max="32" value="4" step="1">
+              </div>
+              <div class="input-group">
+                <label for="ram">RAM (GB): <strong id="ram-val">8 GB</strong></label>
+                <input type="range" id="ram" min="1" max="128" value="8" step="1">
+              </div>
+              <div class="input-group">
+                <label for="storage">NVMe SSD (GB): <strong id="storage-val">100 GB</strong></label>
+                <input type="range" id="storage" min="20" max="1000" value="100" step="10">
+              </div>
+              <div class="input-group">
+                <label for="transfer">Bandwidth Out (TB/bln): <strong id="transfer-val">2 TB</strong></label>
+                <input type="range" id="transfer" min="1" max="20" value="2" step="1">
+              </div>
+            </div>
+            <div class="calc-results" id="cloud-results">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- TAB 2: AI CALCULATOR -->
+          <div class="calc-body hidden" id="tab-ai" role="tabpanel">
+            <div class="calc-inputs">
+              <div class="input-group">
+                <label for="tokens-in">Input Tokens / hari: <strong id="tokens-in-val">500K token</strong></label>
+                <input type="range" id="tokens-in" min="10" max="5000" value="500" step="10">
+              </div>
+              <div class="input-group">
+                <label for="tokens-out">Output Tokens / hari: <strong id="tokens-out-val">200K token</strong></label>
+                <input type="range" id="tokens-out" min="10" max="2000" value="200" step="10">
+              </div>
+            </div>
+            <div class="calc-results" id="ai-results">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── NOTES ─────────────────────────────────────────────────── -->
+    <section id="notes" aria-labelledby="notes-heading">
+      <div class="section-inner">
+        <div class="section-label" data-brand-key="notes_badge">Catatan Teknis</div>
+        <h2 id="notes-heading" data-brand-key="notes_title">Fragmen Pemikiran<br>&amp; Eksplorasi</h2>
+        <div class="notes-list" id="notes-list">
+          <!-- Dynamic Notes Injected via BlogService -->
+          <div style="text-align: center; padding: 2rem 1rem; color: var(--ink-muted);">
+            Memeriksa catatan teknis terbaru...
+          </div>
+        </div>
+        <div class="notes-more">
+          <a href="/blog" class="btn-ghost" data-brand-key="notes_more_btn_text">Semua Catatan →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONTACT ────────────────────────────────────────────────── -->
+    <section id="contact" aria-labelledby="contact-heading">
+      <div class="section-inner contact-inner">
+        <div class="section-label" data-brand-key="contact_badge">Kontak</div>
+        <h2 id="contact-heading" data-brand-key="contact_title">Mari ngobrol.</h2>
+        <p class="contact-sub" data-brand-key="contact_desc">Tertarik berkolaborasi, ada pertanyaan teknis, atau sekadar mau berdiskusi tentang tech? Saya terbuka untuk semuanya.</p>
+        <div class="contact-links">
+          <a href="mailto:halo@helmirfansah.com" class="contact-link" data-brand-key="contact_email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+            halo@helmirfansah.com
+          </a>
+          <a href="https://github.com/helmirfansah" class="contact-link" target="_blank" rel="noopener noreferrer" data-brand-key="contact_github_text" data-brand-href="contact_github_url">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a href="https://linkedin.com/in/helmirfansah" class="contact-link" target="_blank" rel="noopener noreferrer" data-brand-key="contact_linkedin_text" data-brand-href="contact_linkedin_url">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const worksGrid = document.getElementById('works-grid');
+      const notesList = document.getElementById('notes-list');
+
+      if (!window.BlogService) return;
+
+      let cachedPosts = null;
+
+      async function renderHomeContent() {
+        try {
+          if (!cachedPosts) {
+            const res = await window.BlogService.getPosts({ includeDrafts: false });
+            cachedPosts = (res && res.data) ? res.data : [];
+          }
+          const posts = cachedPosts;
+          const s = window.BlogService.getSettings() || {};
+
+          if (worksGrid) {
+            if (posts.length === 0) {
+              const emptyTitle = s.works_empty_title || 'Belum Ada Studi Kasus Dipublikasikan';
+              const emptyDesc = s.works_empty_desc || 'Artikel dan eksplorasi teknis terbaru akan segera hadir. Anda dapat menulis dan merilis artikel pertama Anda melalui panel admin.';
+              const emptyBtn = s.works_empty_btn || 'Buka Admin Panel →';
+              worksGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3.5rem 1.5rem; background: var(--bg-card); border: 1px dashed var(--border-strong); border-radius: var(--radius-sm);">
+                  <div style="font-size: 2rem; margin-bottom: 0.75rem;">📝</div>
+                  <h3 data-brand-key="works_empty_title" style="font-size: 1.15rem; color: var(--ink); margin-bottom: 0.4rem; font-weight: 600;">${emptyTitle}</h3>
+                  <p data-brand-key="works_empty_desc" style="color: var(--ink-secondary); font-size: 0.95rem; max-width: 480px; margin: 0 auto 1.25rem;">${emptyDesc}</p>
+                  <a href="/admin" class="btn-ghost" data-brand-key="works_empty_btn" style="font-size: 0.85rem;">${emptyBtn}</a>
+                </div>
+              `;
+            } else {
+              worksGrid.innerHTML = posts.slice(0, 4).map(post => `
+                <article class="work-card" data-type="torn">
+                  <div class="work-card-inner">
+                    <div class="work-meta">
+                      <span class="work-tag">${post.category || 'Engineering'}</span>
+                      <span class="work-year">${new Date(post.created_at).getFullYear()}</span>
+                    </div>
+                    <h3><a href="/blog?slug=${encodeURIComponent(post.slug)}">${post.title}</a></h3>
+                    <p>${post.excerpt || ''}</p>
+                    <div class="work-footer">
+                      <span class="work-stat">⏱️ ${post.reading_time_minutes || 5} menit baca</span>
+                    </div>
+                  </div>
+                </article>
+              `).join('');
+            }
+          }
+
+          if (notesList) {
+            if (posts.length === 0) {
+              const notesEmpty = s.notes_empty_desc || 'Belum ada catatan teknis tersedia saat ini.';
+              notesList.innerHTML = `
+                <div style="text-align: center; padding: 2.5rem 1.5rem; background: var(--bg-card); border: 1px dashed var(--border-strong); border-radius: var(--radius-sm);">
+                  <p data-brand-key="notes_empty_desc" style="color: var(--ink-secondary); font-size: 0.95rem;">${notesEmpty}</p>
+                </div>
+              `;
+            } else {
+              notesList.innerHTML = posts.slice(0, 3).map(post => {
+                const dateStr = new Date(post.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+                return `
+                  <article class="note-item">
+                    <time class="note-date" datetime="${post.created_at}">${dateStr}</time>
+                    <h3 class="note-title"><a href="/blog?slug=${encodeURIComponent(post.slug)}">${post.title}</a></h3>
+                    <p class="note-excerpt">${post.excerpt || ''}</p>
+                    <div class="note-meta">
+                      <span>📁 ${post.category || 'Catatan'}</span>
+                      <span>${post.reading_time_minutes || 5} menit baca</span>
+                    </div>
+                  </article>
+                `;
+              }).join('');
+            }
+          }
+        } catch (err) {
+          console.warn('Gagal memuat postingan di beranda:', err);
+        }
+      }
+
+      await renderHomeContent();
+      window.addEventListener('hi_settings_updated', () => renderHomeContent());
+    });
+  </script>
+</BaseLayout>

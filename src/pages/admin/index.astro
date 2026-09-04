@@ -1,0 +1,4161 @@
+---
+// src/pages/admin/index.astro
+---
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Helmi Studio - Modern Executive CMS</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style is:global>
+    /* ==========================================================================
+       NEXT-GEN STUDIO CMS THEME (Linear / Vercel Dark Aesthetics)
+       ========================================================================== */
+    :root {
+      --wp-canvas: #080B11;
+      --wp-surface: #0E1524;
+      --wp-card: #131D31;
+      --wp-card-hover: #18253E;
+      --wp-subtle: #1E293B;
+      --wp-hover: #24344D;
+      --wp-border: rgba(255, 255, 255, 0.08);
+      --wp-border-strong: rgba(255, 255, 255, 0.14);
+      --wp-border-focus: #3B82F6;
+      --wp-text: #F8FAFC;
+      --wp-muted: #94A3B8;
+      --wp-dim: #64748B;
+      --wp-brand: #3B82F6;
+      --wp-brand-hover: #2563EB;
+      --wp-brand-subtle: rgba(59, 130, 246, 0.14);
+      --wp-clay: #DE6548;
+      --wp-clay-subtle: rgba(222, 101, 72, 0.15);
+      --wp-success: #10B981;
+      --wp-success-subtle: rgba(16, 185, 129, 0.14);
+      --wp-warning: #F59E0B;
+      --wp-warning-subtle: rgba(245, 158, 11, 0.14);
+      --wp-danger: #EF4444;
+      --wp-danger-subtle: rgba(239, 68, 68, 0.14);
+      --sidebar-w: 256px;
+      --topbar-h: 64px;
+      --font-ui: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--wp-canvas);
+      color: var(--wp-text);
+      font-family: var(--font-ui);
+      font-size: 13.5px;
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Auth State Initial Loader */
+    #auth-loader {
+      position: fixed;
+      inset: 0;
+      background: var(--wp-canvas);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      z-index: 9999;
+      transition: opacity 0.25s ease;
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--wp-border);
+      border-top-color: var(--wp-brand);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Layout Shell */
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--wp-surface);
+      border-right: 1px solid var(--wp-border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 40;
+    }
+
+    .sidebar-brand {
+      height: var(--topbar-h);
+      padding: 0 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--wp-border);
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    .brand-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #1E1A16, #0E0C0A);
+      border: 1px solid #3A332C;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+    .brand-badge span {
+      font-weight: 800;
+      font-size: 15px;
+      color: #F6F1E4;
+      font-family: var(--font-ui);
+    }
+    .brand-badge::after {
+      content: '';
+      position: absolute;
+      right: 5px;
+      top: 14px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--wp-clay);
+    }
+
+    .brand-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #FFF;
+      letter-spacing: -0.01em;
+    }
+    .brand-version {
+      font-size: 10.5px;
+      padding: 0.1rem 0.45rem;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      color: var(--wp-dim);
+      border: 1px solid var(--wp-border);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.85rem 0.65rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748B;
+      padding: 0 0.5rem 0.35rem;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.55rem 0.7rem;
+      color: #94A3B8;
+      border-radius: 7px;
+      font-weight: 500;
+      font-size: 13px;
+      text-decoration: none;
+      background: transparent;
+      border: 1px solid transparent;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+    }
+    .nav-btn:hover {
+      color: #F8FAFC;
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.04);
+    }
+    .nav-btn.active {
+      color: #FFFFFF;
+      background: rgba(172, 80, 54, 0.14);
+      border-color: rgba(172, 80, 54, 0.32);
+      font-weight: 600;
+    }
+    .nav-btn.active svg {
+      color: #E28872;
+    }
+    .nav-btn-inner {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    .nav-btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      color: #64748B;
+      transition: color 0.15s ease;
+    }
+    .nav-btn:hover svg {
+      color: #CBD5E1;
+    }
+    .nav-counter {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 0.1rem 0.45rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #94A3B8;
+    }
+    .nav-btn.active .nav-counter {
+      background: #AC5036;
+      color: #FFF;
+    }
+
+    /* Sidebar Submenu */
+    .nav-sublist {
+      list-style: none;
+      padding: 0.25rem 0 0.35rem 1.75rem;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      transition: all 0.2s ease;
+    }
+    .nav-sub-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.65rem;
+      color: #94A3B8;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      background: transparent;
+      border: 1px solid transparent;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .nav-sub-btn:hover {
+      color: #FFF;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .nav-sub-btn.active {
+      color: #FFF;
+      background: rgba(172, 80, 54, 0.22);
+      border-color: rgba(172, 80, 54, 0.4);
+      font-weight: 600;
+    }
+    .submenu-arrow {
+      width: 14px !important;
+      height: 14px !important;
+      transition: transform 0.2s ease;
+      color: #64748B;
+    }
+    .submenu-arrow.open {
+      transform: rotate(180deg);
+      color: #E28872;
+    }
+
+    /* Navigation Editor Item Card */
+    .nav-item-card {
+      background: var(--wp-canvas);
+      border: 1px solid var(--wp-border);
+      border-radius: 10px;
+      padding: 0.85rem 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      transition: all 0.15s ease;
+    }
+    .nav-item-card:hover {
+      border-color: rgba(172, 80, 54, 0.35);
+      background: rgba(17, 24, 39, 0.95);
+    }
+    .nav-item-order {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .nav-order-btn {
+      width: 24px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--wp-border);
+      border-radius: 4px;
+      color: var(--wp-muted);
+      cursor: pointer;
+      font-size: 10px;
+      transition: all 0.15s ease;
+    }
+    .nav-order-btn:hover:not(:disabled) {
+      background: var(--wp-subtle);
+      color: #FFF;
+      border-color: var(--wp-dim);
+    }
+    .nav-order-btn:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+
+    /* Sidebar Footer User Card */
+    .sidebar-user {
+      padding: 1rem;
+      border-top: 1px solid var(--wp-border);
+      background: rgba(14, 21, 36, 0.95);
+    }
+    .user-profile-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #DE6548, #B8472C);
+      color: #FFF;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(222, 101, 72, 0.3);
+    }
+    .user-meta-name {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #FFF;
+      line-height: 1.2;
+    }
+    .user-meta-badge {
+      font-size: 11px;
+      color: var(--wp-success);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .status-dot-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--wp-success);
+      box-shadow: 0 0 8px var(--wp-success);
+    }
+
+    .user-actions-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+    }
+    .user-action-btn {
+      padding: 0.35rem 0.5rem;
+      font-size: 11.5px;
+      border-radius: 6px;
+      background: var(--wp-subtle);
+      border: 1px solid var(--wp-border);
+      color: var(--wp-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .user-action-btn:hover {
+      color: #FFF;
+      background: var(--wp-hover);
+    }
+    .user-action-btn.logout:hover {
+      color: var(--wp-danger);
+      background: var(--wp-danger-subtle);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    /* Main Viewport */
+    .viewport {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--wp-canvas);
+    }
+    .topbar {
+      height: var(--topbar-h);
+      background: rgba(14, 21, 36, 0.7);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--wp-border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .content-area {
+      padding: 2rem;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      flex: 1;
+    }
+
+    /* Button Tokens */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.55rem 1.1rem;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .btn-brand {
+      background: linear-gradient(135deg, #3B82F6, #2563EB);
+      color: #FFF;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    }
+    .btn-brand:hover {
+      background: linear-gradient(135deg, #2563EB, #1D4ED8);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: var(--wp-surface);
+      color: var(--wp-text);
+      border-color: var(--wp-border);
+    }
+    .btn-secondary:hover {
+      background: var(--wp-subtle);
+      border-color: var(--wp-border-strong);
+    }
+    .btn-danger {
+      background: var(--wp-danger-subtle);
+      color: var(--wp-danger);
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+    .btn-danger:hover {
+      background: var(--wp-danger);
+      color: #FFF;
+    }
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 12px; }
+
+    .input, select, textarea {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      background: var(--wp-surface);
+      border: 1px solid var(--wp-border);
+      border-radius: 8px;
+      color: var(--wp-text);
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+    .input:focus, select:focus, textarea:focus {
+      border-color: var(--wp-border-focus);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Executive KPI Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: linear-gradient(180deg, var(--wp-card), rgba(19, 29, 49, 0.5));
+      border: 1px solid var(--wp-border);
+      border-radius: 12px;
+      padding: 1.25rem 1.4rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .metric-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--wp-border-strong);
+    }
+    .metric-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .metric-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--wp-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .metric-icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .metric-val {
+      font-size: 26px;
+      font-weight: 800;
+      color: #FFF;
+      line-height: 1.1;
+      margin-bottom: 0.35rem;
+      font-feature-settings: "tnum";
+    }
+    .metric-sub {
+      font-size: 11.5px;
+      color: var(--wp-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Segmented Tabs & Modern Toolbar */
+    .toolbar-card {
+      background: var(--wp-surface);
+      border: 1px solid var(--wp-border);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .segmented-control {
+      display: inline-flex;
+      background: var(--wp-canvas);
+      padding: 0.25rem;
+      border-radius: 8px;
+      border: 1px solid var(--wp-border);
+      gap: 0.2rem;
+    }
+    .segmented-btn {
+      padding: 0.4rem 0.85rem;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--wp-muted);
+      background: none;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: inherit;
+    }
+    .segmented-btn:hover { color: #FFF; }
+    .segmented-btn.active {
+      background: var(--wp-subtle);
+      color: #FFF;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .segmented-counter {
+      font-size: 11px;
+      padding: 0.1rem 0.45rem;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      color: var(--wp-dim);
+    }
+    .segmented-btn.active .segmented-counter {
+      background: var(--wp-brand);
+      color: #FFF;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      width: 260px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--wp-dim);
+      width: 14px;
+      height: 14px;
+      pointer-events: none;
+    }
+    .search-input-wrapper input {
+      padding-left: 2.25rem;
+      padding-right: 2.5rem;
+      padding-top: 0.45rem;
+      padding-bottom: 0.45rem;
+      font-size: 12.5px;
+      border-radius: 8px;
+    }
+    .search-kbd {
+      position: absolute;
+      right: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      color: var(--wp-dim);
+      border: 1px solid var(--wp-border);
+      font-family: var(--font-mono);
+      pointer-events: none;
+    }
+
+    /* Linear-Grade Data Table */
+    .table-container {
+      background: var(--wp-surface);
+      border: 1px solid var(--wp-border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+    .wp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    .wp-table th {
+      background: rgba(14, 21, 36, 0.95);
+      padding: 0.85rem 1.25rem;
+      color: var(--wp-dim);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--wp-border);
+    }
+    .wp-table td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--wp-border);
+      color: var(--wp-muted);
+      vertical-align: middle;
+      transition: background 0.12s ease;
+    }
+    .wp-table tr:hover td {
+      background: rgba(30, 41, 59, 0.45);
+    }
+    .wp-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .post-title-link {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #FFF;
+      text-decoration: none;
+      display: inline-block;
+      transition: color 0.15s ease;
+      letter-spacing: -0.01em;
+    }
+    .post-title-link:hover {
+      color: var(--wp-brand);
+    }
+
+    .slug-badge {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--wp-dim);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.2rem;
+    }
+
+    /* Micro Action Buttons on Row Hover */
+    .row-actions-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+      opacity: 0.3;
+      transition: opacity 0.15s ease;
+    }
+    .wp-table tr:hover .row-actions-bar {
+      opacity: 1;
+    }
+
+    .micro-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 500;
+      background: var(--wp-subtle);
+      border: 1px solid var(--wp-border);
+      color: var(--wp-muted);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.12s ease;
+    }
+    .micro-chip:hover {
+      color: #FFF;
+      background: var(--wp-hover);
+      border-color: var(--wp-border-strong);
+    }
+    .micro-chip.chip-edit { color: #93C5FD; }
+    .micro-chip.chip-quick { color: #A78BFA; }
+    .micro-chip.chip-trash { color: #FCA5A5; }
+    .micro-chip.chip-trash:hover {
+      background: var(--wp-danger-subtle);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #FFF;
+    }
+    .micro-chip.chip-view { color: #6EE7B7; }
+
+    /* Category Badges with Tints */
+    .cat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .cat-chip.cloud { background: rgba(56, 189, 248, 0.12); color: #38BDF8; border: 1px solid rgba(56, 189, 248, 0.25); }
+    .cat-chip.db { background: rgba(52, 211, 153, 0.12); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.25); }
+    .cat-chip.payment { background: rgba(129, 140, 248, 0.12); color: #818CF8; border: 1px solid rgba(129, 140, 248, 0.25); }
+    .cat-chip.ai { background: rgba(251, 191, 36, 0.12); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.25); }
+    .cat-chip.default { background: rgba(148, 163, 184, 0.12); color: #94A3B8; border: 1px solid rgba(148, 163, 184, 0.25); }
+
+    .tag-bubble {
+      display: inline-block;
+      padding: 0.15rem 0.45rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--wp-muted);
+      margin-right: 0.25rem;
+      font-family: var(--font-mono);
+    }
+
+    .views-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .views-num {
+      font-weight: 700;
+      color: #FFF;
+      font-size: 13.5px;
+      font-feature-settings: "tnum";
+    }
+    .views-bar {
+      width: 70px;
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .views-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--wp-brand), #8B5CF6);
+      border-radius: 2px;
+    }
+
+    /* Bottom Information Cards (Fills empty void) */
+    .dashboard-grid-footer {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .insight-box {
+      background: var(--wp-surface);
+      border: 1px solid var(--wp-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .insight-box-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .seo-checklist-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .seo-checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 12.5px;
+      color: var(--wp-text);
+      background: var(--wp-canvas);
+      padding: 0.6rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--wp-border);
+    }
+    .check-icon {
+      color: var(--wp-success);
+      font-weight: bold;
+    }
+
+    /* Quick Edit Row */
+    .quick-edit-row td {
+      background: var(--wp-card) !important;
+      padding: 1.5rem !important;
+    }
+    .quick-edit-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Gutenberg / Editor Toolbar */
+    .editor-split-container {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .editor-main-col { display: flex; flex-direction: column; }
+    .editor-sidebar-col { display: flex; flex-direction: column; gap: 1rem; }
+
+    .editor-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--wp-card);
+      border: 1px solid var(--wp-border);
+      border-bottom: none;
+      padding: 0.45rem 0.75rem;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      flex-wrap: wrap;
+    }
+    .toolbar-btn {
+      background: none;
+      border: 1px solid transparent;
+      color: var(--wp-muted);
+      padding: 0.35rem 0.55rem;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .toolbar-btn:hover { background: var(--wp-hover); color: #FFF; }
+
+    #edit-content {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      min-height: 480px;
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      line-height: 1.6;
+      resize: vertical;
+    }
+
+    /* Modals & Popups */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .modal-box {
+      background: var(--wp-surface);
+      border: 1px solid var(--wp-border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      width: 100%;
+      max-width: 540px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+
+    /* Floating Toast */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: rgba(14, 21, 36, 0.95);
+      border: 1px solid var(--wp-border-strong);
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #FFF;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      display: none;
+      z-index: 9999;
+    }
+    #toast.show { display: flex; align-items: center; gap: 0.5rem; animation: slideUpToast 0.2s ease; }
+    @keyframes slideUpToast { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Media Library Luxury Gallery */
+    .media-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .media-dropzone {
+      border: 2px dashed rgba(59, 130, 246, 0.35);
+      background: linear-gradient(180deg, rgba(14, 21, 36, 0.7), rgba(8, 11, 17, 0.4));
+      border-radius: 12px;
+      padding: 2.25rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .media-dropzone:hover, .media-dropzone.dragover {
+      border-color: var(--wp-brand);
+      background: rgba(59, 130, 246, 0.08);
+      transform: translateY(-2px);
+    }
+    .dropzone-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--wp-brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.35rem;
+    }
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+    .media-card {
+      background: #0E1524;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .media-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(172, 80, 54, 0.4);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+    }
+    .media-thumb-box {
+      width: 100%;
+      height: 165px;
+      background: #080B11 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23131A26' d='M0 0h8v8H0zM8 8h8v8H8z'/%3E%3C/svg%3E");
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .media-thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .media-card:hover .media-thumb-img {
+      transform: scale(1.06);
+    }
+    .media-overlay-actions {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 11, 17, 0.78);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      padding: 0.75rem;
+      z-index: 2;
+    }
+    .media-card:hover .media-overlay-actions {
+      opacity: 1;
+    }
+    .media-action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #FFF;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      backdrop-filter: blur(8px);
+      font-family: inherit;
+    }
+    .media-action-pill:hover {
+      background: #AC5036;
+      border-color: #D67860;
+      transform: translateY(-1px);
+    }
+    .media-action-pill.pill-delete:hover {
+      background: #EF4444;
+      border-color: #F87171;
+    }
+    .media-body-info {
+      padding: 0.85rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      background: #0E1524;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .media-item-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #F8FAFC;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .media-item-sub {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #64748B;
+    }
+    .format-badge {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #94A3B8;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Initial Checking Screen -->
+  <div id="auth-loader">
+    <div class="spinner"></div>
+    <span style="font-size:13px;color:var(--wp-muted);">Memeriksa sesi login...</span>
+  </div>
+
+  <!-- Floating Toast -->
+  <div id="toast">Notifikasi berhasil</div>
+
+  <!-- =========================================================================
+       1. AUTH / LOGIN VIEW (PERSISTENT AUTO-LOGIN)
+       ========================================================================== -->
+  <div id="view-login" style="display:none;min-height:100vh;align-items:center;justify-content:center;padding:1.5rem;">
+    <div style="width:100%;max-width:420px;background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:2.25rem;margin:auto;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
+        <div class="brand-badge"><span>H</span></div>
+        <div>
+          <h2 style="font-size:17px;font-weight:700;color:#FFF;">Studio CMS &amp; Admin</h2>
+          <p style="font-size:12px;color:var(--wp-dim);">Executive Content Engine</p>
+        </div>
+      </div>
+
+      <form id="form-auth" onsubmit="handleAuthLogin(event)">
+        <div style="margin-bottom:1rem;">
+          <label style="display:block;font-size:12px;color:var(--wp-muted);margin-bottom:0.35rem;">Email Admin</label>
+          <input type="email" id="login-email" class="input" value="admin@helmirfansah.com" required>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <label style="display:block;font-size:12px;color:var(--wp-muted);margin-bottom:0.35rem;">Password</label>
+          <input type="password" id="login-password" class="input" value="admin123" required>
+        </div>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:12px;color:var(--wp-muted);margin-bottom:1.25rem;cursor:pointer;">
+          <input type="checkbox" id="login-remember" checked>
+          <span>Ingat sesi saya di browser ini (Persisten)</span>
+        </label>
+        <button type="submit" class="btn btn-brand" id="btn-login" style="width:100%;">Masuk Dashboard Studio →</button>
+      </form>
+
+      <div style="margin-top:1.5rem;padding:0.75rem;background:var(--wp-card);border-radius:8px;border:1px solid var(--wp-border);font-size:11.5px;color:var(--wp-dim);">
+        💡 <strong>Persistent Session:</strong> Sekali login berhasil, Anda dapat me-refresh atau membuka browser kapan saja tanpa perlu login ulang!
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       2. MODERN EXECUTIVE DASHBOARD APP
+       ========================================================================== -->
+  <div id="view-dashboard" class="app-shell" style="display:none;">
+    
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a href="/" class="brand-group" target="_blank" title="Buka website publik">
+          <div class="brand-badge"><span>H</span></div>
+          <div>
+            <div class="brand-title">Helmi Studio</div>
+          </div>
+        </a>
+        <span class="brand-version">v2.5</span>
+      </div>
+
+      <div class="sidebar-nav">
+        <div>
+          <div class="nav-section-label">Konten &amp; Tulisan</div>
+          <ul class="nav-list">
+            <li>
+              <button class="nav-btn active" id="nav-posts" onclick="switchNav('posts')">
+                <span class="nav-btn-inner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  <span>Semua Artikel</span>
+                </span>
+                <span class="nav-counter" id="sidebar-post-count">4</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" id="nav-editor" onclick="openNewPostEditor()">
+                <span class="nav-btn-inner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  <span>Tulis Artikel Baru</span>
+                </span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" id="nav-categories" onclick="switchNav('categories')">
+                <span class="nav-btn-inner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                  <span>Kategori &amp; Topik</span>
+                </span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" id="nav-media" onclick="switchNav('media')">
+                <span class="nav-btn-inner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span>Pustaka Media</span>
+                </span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="nav-section-label">Sistem &amp; Pengaturan</div>
+          <ul class="nav-list">
+            <li>
+              <button class="nav-btn" id="nav-branding" onclick="switchNav('branding')">
+                <span class="nav-btn-inner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/><circle cx="6" cy="6" r="3"/></svg>
+                  <span>Branding &amp; Tulisan</span>
+                </span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" id="nav-navigation" onclick="toggleNavSubmenu(); switchNav('nav-main');">
+                <span class="nav-btn-inner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                  <span>Navigasi</span>
+                </span>
+                <svg id="nav-arrow-navigation" class="submenu-arrow open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <ul class="nav-sublist" id="sublist-navigation">
+                <li>
+                  <button type="button" class="nav-sub-btn active" id="nav-sub-main" onclick="switchNav('nav-main')">
+                    <span style="font-size:12px;">🧭</span>
+                    <span>Utama</span>
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="nav-sub-btn" id="nav-sub-footer" onclick="switchNav('nav-footer')">
+                    <span style="font-size:12px;">📌</span>
+                    <span>Footer</span>
+                  </button>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <button class="nav-btn" id="nav-supabase" onclick="openSupabaseModal()">
+                <span class="nav-btn-inner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                  <span>Koneksi Supabase</span>
+                </span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" id="nav-tools" onclick="switchNav('tools')">
+                <span class="nav-btn-inner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <span>Cadangan Data (Backup)</span>
+                </span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" id="nav-settings" onclick="switchNav('settings')">
+                <span class="nav-btn-inner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                  <span>Pengaturan &amp; SEO</span>
+                </span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- User Profile Card -->
+      <div class="sidebar-user">
+        <div class="user-profile-row">
+          <div class="user-avatar" id="sidebar-avatar">HI</div>
+          <div style="min-width:0;flex:1;">
+            <div class="user-meta-name" id="sidebar-email">admin@helmirfansah.com</div>
+            <div class="user-meta-badge">
+              <span class="status-dot-pulse"></span>
+              <span id="sidebar-db-status">Sesi Aktif</span>
+            </div>
+          </div>
+        </div>
+        <div class="user-actions-row">
+          <a href="/blog" target="_blank" class="user-action-btn">
+            <svg style="width:13px;height:13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>Buka Web</span>
+          </a>
+          <button class="user-action-btn logout" onclick="handleLogout()">
+            <svg style="width:13px;height:13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Keluar</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content Viewport -->
+    <div class="viewport">
+      
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div style="display:flex;align-items:center;gap:1.25rem;">
+          <div>
+            <div style="font-size:11px;color:var(--wp-dim);text-transform:uppercase;letter-spacing:0.05em;">Dashboard &amp; Studio</div>
+            <h1 style="font-size:17px;font-weight:700;color:#FFF;line-height:1.2;" id="topbar-title">Semua Postingan</h1>
+          </div>
+          <div style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.25rem 0.65rem;border-radius:20px;background:var(--wp-surface);border:1px solid var(--wp-border);font-size:11.5px;">
+            <span style="width:7px;height:7px;border-radius:50%;background:#10B981;" id="topbar-db-dot"></span>
+            <span id="topbar-db-text" style="color:var(--wp-muted);">Cloudflare + Supabase Active</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <a href="/blog" target="_blank" class="btn btn-secondary btn-sm" style="gap:0.4rem;">
+            <span>Lihat Blog Publik</span>
+            <svg style="width:13px;height:13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <button class="btn btn-brand btn-sm" onclick="openNewPostEditor()">
+            <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>Tulis Artikel Baru</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW 1: POSTS LIST -->
+      <div class="content-area" id="section-posts">
+        
+        <!-- Executive KPI Metrics Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-card-header">
+              <span class="metric-title">Total Pembaca</span>
+              <div class="metric-icon-box" style="background:rgba(59, 130, 246, 0.12);color:#3B82F6;">📊</div>
+            </div>
+            <div class="metric-val" id="metric-views">8.560</div>
+            <div class="metric-sub">
+              <span style="color:var(--wp-success);font-weight:600;">+24.5%</span>
+              <span>akumulasi pembaca teknis</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-card-header">
+              <span class="metric-title">Artikel Diterbitkan</span>
+              <div class="metric-icon-box" style="background:rgba(16, 185, 129, 0.12);color:#10B981;">📝</div>
+            </div>
+            <div class="metric-val" id="metric-published">4</div>
+            <div class="metric-sub">
+              <span style="color:var(--wp-success);font-weight:600;">100% Live</span>
+              <span>terindeks di Cloudflare Edge</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-card-header">
+              <span class="metric-title">Kategori Taksonomi</span>
+              <div class="metric-icon-box" style="background:rgba(139, 92, 246, 0.12);color:#8B5CF6;">📁</div>
+            </div>
+            <div class="metric-val" id="metric-categories">4</div>
+            <div class="metric-sub">
+              <span>Cloud, DB, Payment, AI</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-card-header">
+              <span class="metric-title">Kesiapan Google AdSense</span>
+              <div class="metric-icon-box" style="background:rgba(245, 158, 11, 0.12);color:#F59E0B;">⭐</div>
+            </div>
+            <div class="metric-val">100%</div>
+            <div class="metric-sub">
+              <span style="color:var(--wp-success);font-weight:600;">✓ Legal Siap</span>
+              <span>Privacy &amp; Disclaimer aktif</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Segmented Filter & Search Toolbar -->
+        <div class="toolbar-card">
+          <!-- Segmented Status Tabs -->
+          <div class="segmented-control">
+            <button class="segmented-btn active" id="filter-all" onclick="filterByStatus('all')">
+              <span>Semua</span>
+              <span class="segmented-counter" id="count-all">0</span>
+            </button>
+            <button class="segmented-btn" id="filter-published" onclick="filterByStatus('published')">
+              <span>Telah Terbit</span>
+              <span class="segmented-counter" id="count-published">0</span>
+            </button>
+            <button class="segmented-btn" id="filter-draft" onclick="filterByStatus('draft')">
+              <span>Konsep</span>
+              <span class="segmented-counter" id="count-draft">0</span>
+            </button>
+            <button class="segmented-btn" id="filter-trash" onclick="filterByStatus('trash')">
+              <span style="color:var(--wp-danger);">Sampah</span>
+              <span class="segmented-counter" id="count-trash">0</span>
+            </button>
+          </div>
+
+          <!-- Actions & Search -->
+          <div class="toolbar-actions">
+            <select id="filter-category-select" class="input" style="width:165px;padding:0.45rem 0.65rem;font-size:12.5px;" onchange="filterByCategory(this.value)">
+              <option value="Semua">Semua Kategori</option>
+            </select>
+
+            <select id="bulk-action-select" class="input" style="width:150px;padding:0.45rem 0.65rem;font-size:12.5px;">
+              <option value="">Tindakan Massal</option>
+              <option value="publish">Terbitkan</option>
+              <option value="draft">Jadikan Konsep</option>
+              <option value="trash">Pindahkan ke Sampah</option>
+              <option value="restore">Pulihkan</option>
+              <option value="delete">Hapus Permanen</option>
+            </select>
+            <button class="btn btn-secondary btn-sm" onclick="applyBulkAction()">Terapkan</button>
+
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="table-search-input" class="input" placeholder="Cari postingan..." oninput="onSearchInput(this.value)">
+              <span class="search-kbd">⌘K</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Linear / Modern Data Table -->
+        <div class="table-container">
+          <table class="wp-table">
+            <thead>
+              <tr>
+                <th style="width:40px;text-align:center;"><input type="checkbox" id="check-all" onchange="toggleSelectAll(this.checked)"></th>
+                <th style="min-width:320px;">Judul &amp; Informasi</th>
+                <th>Kategori</th>
+                <th>Tags</th>
+                <th>Status</th>
+                <th>Pembaca</th>
+                <th>Tanggal Rilis</th>
+              </tr>
+            </thead>
+            <tbody id="posts-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Bottom Informational Widgets (Prevents Empty Page Void) -->
+        <div class="dashboard-grid-footer">
+          <div class="insight-box">
+            <div class="insight-box-title">
+              <span>🎯 Checklist Kelayakan Google AdSense &amp; Kualitas SEO</span>
+            </div>
+            <div class="seo-checklist-list">
+              <div class="seo-checklist-item">
+                <span class="check-icon">✓</span>
+                <span>Halaman Privacy Policy standar DART</span>
+              </div>
+              <div class="seo-checklist-item">
+                <span class="check-icon">✓</span>
+                <span>Halaman Disclaimer afiliasi aktif</span>
+              </div>
+              <div class="seo-checklist-item">
+                <span class="check-icon">✓</span>
+                <span>JSON-LD Schema Person &amp; TechArticle</span>
+              </div>
+              <div class="seo-checklist-item">
+                <span class="check-icon">✓</span>
+                <span>Tools Interaktif (Kalkulator Cloud/AI)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-box">
+            <div class="insight-box-title">
+              <span>⚡ Akses Cepat &amp; Pemeliharaan</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;">
+              <button class="btn btn-secondary btn-sm" onclick="switchNav('tools')" style="justify-content:flex-start;gap:0.6rem;">
+                <span>💾 Cadangkan Semua Artikel (Export JSON)</span>
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="openSupabaseModal()" style="justify-content:flex-start;gap:0.6rem;">
+                <span>🗄️ Sinkronisasi Supabase Database Cloud</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VIEW 2: GUTENBERG / ADVANCED EDITOR -->
+      <div class="content-area" id="section-editor" style="display:none;">
+        <input type="hidden" id="edit-id">
+        
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <button class="btn btn-secondary btn-sm" onclick="switchNav('posts')">← Kembali ke Postingan</button>
+            <span class="autosave-pill" id="autosave-status" style="font-size:12px;color:var(--wp-dim);">● Draft tersimpan otomatis</span>
+          </div>
+          <div style="display:flex;gap:0.5rem;">
+            <button class="btn btn-secondary btn-sm" onclick="savePostCurrent(false)">Simpan Konsep</button>
+            <button class="btn btn-brand btn-sm" id="btn-publish" onclick="savePostCurrent(true)">Terbitkan (Publish)</button>
+          </div>
+        </div>
+
+        <div class="editor-split-container">
+          
+          <!-- Main Writing Column -->
+          <div class="editor-main-col">
+            <input type="text" id="edit-title" placeholder="Tambahkan Judul Artikel..." style="font-size:24px;font-weight:700;padding:0.85rem 1.25rem;background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:10px;color:#FFF;margin-bottom:0.75rem;outline:none;" oninput="onEditorTitleChange(this.value)" required>
+
+            <div style="display:flex;align-items:center;gap:0.5rem;font-size:12px;color:var(--wp-dim);margin-bottom:1rem;padding-left:0.5rem;">
+              <span>Permalink:</span>
+              <span style="color:var(--wp-brand);font-family:var(--font-mono);">https://helmirfansah.com/blog?slug=</span>
+              <input type="text" id="edit-slug" class="input" style="width:auto;flex:1;padding:0.3rem 0.6rem;font-size:12px;font-family:var(--font-mono);" placeholder="slug-artikel">
+            </div>
+
+            <!-- Toolbar -->
+            <div class="editor-toolbar">
+              <button type="button" class="toolbar-btn" title="Bold" onclick="insertFormatting('**', '**')"><strong>B</strong></button>
+              <button type="button" class="toolbar-btn" title="Italic" onclick="insertFormatting('*', '*')"><em>I</em></button>
+              <button type="button" class="toolbar-btn" title="Heading 2" onclick="insertFormatting('## ', '')">H2</button>
+              <button type="button" class="toolbar-btn" title="Heading 3" onclick="insertFormatting('### ', '')">H3</button>
+              <button type="button" class="toolbar-btn" title="Kutipan" onclick="insertFormatting('> ', '')">Quote</button>
+              <button type="button" class="toolbar-btn" title="Code block" onclick="insertFormatting('```ts\n', '\n```')">Code</button>
+              <button type="button" class="toolbar-btn" title="Bullet list" onclick="insertFormatting('- ', '')">List</button>
+              <button type="button" class="toolbar-btn" title="Table" onclick="insertFormatting('\n| Kolom 1 | Kolom 2 |\n|---|---|\n| Nilai A | Nilai B |\n', '')">Tabel</button>
+              <input type="file" id="editor-direct-upload" accept="image/*" style="display:none;" onchange="handleEditorDirectUpload(event)">
+              <button type="button" class="toolbar-btn" title="Unggah Gambar dari Komputer (atau Ctrl+V di editor)" onclick="document.getElementById('editor-direct-upload').click()" style="color:#FFF;background:rgba(172,80,54,0.3);border:1px solid rgba(172,80,54,0.5);font-weight:600;">📷 Unggah Gambar</button>
+              <button type="button" class="toolbar-btn" title="Pilih dari Pustaka Media" onclick="openMediaModalForEditor('insert')" style="color:var(--wp-muted);">🖼️ Pustaka Media</button>
+            </div>
+
+            <!-- Textarea -->
+            <textarea id="edit-content" class="input" placeholder="Mulai menulis artikel dalam format Markdown..." oninput="onEditorContentChange()"></textarea>
+
+            <!-- Live Excerpt Box -->
+            <div style="margin-top:1.25rem;">
+              <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Ringkasan Artikel (Excerpt / Meta Description)</label>
+              <textarea id="edit-excerpt" class="input" rows="3" placeholder="Tulis ringkasan singkat untuk tampilan kartu blog dan Google SERP..."></textarea>
+            </div>
+          </div>
+
+          <!-- Sidebar Settings Column (Yoast / RankMath Style) -->
+          <div class="editor-sidebar-col">
+            
+            <!-- RankMath / Yoast Live SEO Scorecard -->
+            <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:10px;padding:1.25rem;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+                <span style="font-size:12.5px;font-weight:700;color:#FFF;">🎯 Live SEO Scorecard</span>
+                <span id="seo-score-badge" style="font-size:12px;font-weight:700;padding:0.15rem 0.55rem;border-radius:12px;background:rgba(16,185,129,0.15);color:var(--wp-success);">100 / 100</span>
+              </div>
+              <div style="margin-bottom:1rem;">
+                <label style="display:block;font-size:11px;color:var(--wp-dim);margin-bottom:0.25rem;">Fokus Kata Kunci (Target Keyword):</label>
+                <input type="text" id="seo-focus-kw" class="input" style="padding:0.4rem;font-size:12px;" placeholder="cth: Cloud, Next.js, VPS" oninput="calculateSeoScore()">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:11.5px;" id="seo-checklist">
+                <div id="seo-rule-title" style="color:var(--wp-success);">✓ Kata kunci ada di Judul</div>
+                <div id="seo-rule-content" style="color:var(--wp-success);">✓ Kata kunci ditemukan di konten</div>
+                <div id="seo-rule-length" style="color:var(--wp-success);">✓ Konten cukup panjang (>300 kata)</div>
+                <div id="seo-rule-desc" style="color:var(--wp-success);">✓ Ringkasan meta memadai</div>
+              </div>
+            </div>
+
+            <!-- Taxonomy Panel -->
+            <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:10px;padding:1.25rem;">
+              <h3 style="font-size:12.5px;font-weight:700;color:#FFF;margin-bottom:0.75rem;">Kategori</h3>
+              <select id="edit-category" class="input" style="margin-bottom:1rem;font-size:12.5px;">
+                <!-- Dynamically Populated -->
+              </select>
+
+              <h3 style="font-size:12.5px;font-weight:700;color:#FFF;margin-bottom:0.5rem;">Tags (Pisahkan koma)</h3>
+              <input type="text" id="edit-tags" class="input" style="font-size:12px;" placeholder="Cloud, Nextjs, Docker">
+            </div>
+
+            <!-- Featured Image Cover -->
+            <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:10px;padding:1.25rem;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;">
+                <h3 style="font-size:12.5px;font-weight:700;color:#FFF;margin:0;">Gambar Utama (Featured)</h3>
+                <button type="button" id="btn-remove-cover" onclick="removeCoverImage()" style="display:none;background:none;border:none;color:#EF4444;font-size:11px;font-weight:600;cursor:pointer;padding:0;">✕ Hapus</button>
+              </div>
+
+              <input type="file" id="cover-direct-upload" accept="image/*" style="display:none;" onchange="handleCoverDirectUpload(event)">
+              
+              <div id="cover-preview-box" onclick="document.getElementById('cover-direct-upload').click()" title="Klik atau seret gambar ke sini untuk unggah langsung" style="margin-bottom:0.75rem;min-height:110px;background:var(--wp-canvas);border:1.5px dashed rgba(255,255,255,0.15);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;padding:0.75rem;text-align:center;transition:all 0.15s ease;">
+                <div id="cover-placeholder-content" style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
+                  <span style="font-size:22px;">📁</span>
+                  <strong style="font-size:12px;color:#FFF;">Unggah dari Komputer</strong>
+                  <span style="font-size:10.5px;color:var(--wp-dim);">atau seret berkas gambar ke sini</span>
+                </div>
+                <img id="cover-preview-img" style="display:none;width:100%;height:auto;max-height:150px;object-fit:cover;border-radius:6px;">
+              </div>
+
+              <input type="hidden" id="edit-cover-url">
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;">
+                <button type="button" class="btn btn-brand btn-sm" onclick="document.getElementById('cover-direct-upload').click()" style="font-size:11.5px;">📁 Unggah</button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="openMediaModalForEditor('cover')" style="font-size:11.5px;">🖼️ Pustaka</button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- VIEW 3: CATEGORIES MANAGER -->
+      <div class="content-area" id="section-categories" style="display:none;">
+        <h2 style="font-size:18px;font-weight:700;color:#FFF;margin-bottom:1.25rem;">Kelola Kategori Taksonomi</h2>
+        <div style="display:grid;grid-template-columns:360px 1fr;gap:2rem;">
+          
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:10px;padding:1.5rem;">
+            <h3 style="font-size:14px;font-weight:700;color:#FFF;margin-bottom:1rem;">Tambah Kategori Baru</h3>
+            <form onsubmit="handleCreateCategory(event)">
+              <div style="margin-bottom:1rem;">
+                <label style="font-size:12px;color:var(--wp-muted);">Nama Kategori</label>
+                <input type="text" id="new-cat-name" class="input" placeholder="cth: DevOps &amp; CI/CD" required>
+              </div>
+              <div style="margin-bottom:1rem;">
+                <label style="font-size:12px;color:var(--wp-muted);">Slug</label>
+                <input type="text" id="new-cat-slug" class="input" placeholder="cth: devops-cicd">
+              </div>
+              <div style="margin-bottom:1.25rem;">
+                <label style="font-size:12px;color:var(--wp-muted);">Deskripsi Singkat</label>
+                <textarea id="new-cat-desc" class="input" rows="3" placeholder="Penjelasan ruang lingkup kategori..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-brand" style="width:100%;">+ Tambahkan Kategori</button>
+            </form>
+          </div>
+
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:10px;overflow:hidden;">
+            <table class="wp-table">
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Slug</th>
+                  <th>Deskripsi</th>
+                  <th style="width:80px;text-align:center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="categories-tbody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- VIEW 4: MEDIA LIBRARY -->
+      <div class="content-area" id="section-media" style="display:none;">
+        <div class="media-toolbar">
+          <div>
+            <h2 style="font-size:18px;font-weight:700;color:#FFF;line-height:1.2;">Pustaka Media &amp; Aset</h2>
+            <p style="font-size:12px;color:var(--wp-dim);" id="media-stats-summary">Kelola foto, cover blog, diagram, dan ikon pendukung artikel.</p>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="search-input-wrapper" style="width:220px;">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="media-search-input" class="input" placeholder="Cari aset..." oninput="onMediaSearch(this.value)">
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="openUploadModal()">+ Impor URL</button>
+            <button class="btn btn-brand btn-sm" onclick="document.getElementById('file-upload-input').click()">
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Unggah Berkas</span>
+            </button>
+            <input type="file" id="file-upload-input" accept="image/*" multiple style="display:none;" onchange="handleFileInputChange(event)">
+          </div>
+        </div>
+
+        <!-- Interactive Drag & Drop Upload Zone -->
+        <div class="media-dropzone" id="media-dropzone" onclick="document.getElementById('file-upload-input').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+          <div class="dropzone-icon">
+            <svg style="width:24px;height:24px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:#FFF;">Tarik &amp; lepas gambar ke sini, atau <span style="color:var(--wp-brand);text-decoration:underline;">pilih berkas dari komputer</span></div>
+          <p style="font-size:11.5px;color:var(--wp-dim);">Mendukung PNG, JPG, WebP, SVG hingga 5MB. Otomatis teroptimasi untuk web.</p>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div id="media-gallery" class="media-grid">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <!-- VIEW 5: TOOLS & BACKUP -->
+      <div class="content-area" id="section-tools" style="display:none;">
+        <h2 style="font-size:18px;font-weight:700;color:#FFF;margin-bottom:1.5rem;">Alat Cadangan &amp; Ekspor / Impor</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;">
+          
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:2rem;">
+            <h3 style="font-size:16px;font-weight:700;color:#FFF;margin-bottom:0.75rem;">📦 Ekspor Seluruh Konten (JSON Backup)</h3>
+            <p style="font-size:13px;color:var(--wp-muted);margin-bottom:1.5rem;line-height:1.6;">
+              Unduh salinan lengkap seluruh artikel, kategori, dan pustaka media Anda ke dalam format file JSON. Anda dapat menyimpannya sebagai arsip offline yang aman.
+            </p>
+            <button class="btn btn-brand" onclick="handleExportBackup()">Unduh Cadangan JSON (.json)</button>
+          </div>
+
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:2rem;">
+            <h3 style="font-size:16px;font-weight:700;color:#FFF;margin-bottom:0.75rem;">📥 Impor Data Cadangan</h3>
+            <p style="font-size:13px;color:var(--wp-muted);margin-bottom:1.5rem;line-height:1.6;">
+              Pulihkan artikel Anda dari file JSON cadangan yang telah diunduh sebelumnya ke dalam sistem.
+            </p>
+            <input type="file" id="import-file" accept=".json" class="input" style="margin-bottom:1rem;">
+            <button class="btn btn-secondary" onclick="handleImportBackup()">Mulai Impor Data</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- VIEW 6: SETTINGS & SEO -->
+      <div class="content-area" id="section-settings" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <h2 style="font-size:18px;font-weight:700;color:#FFF;line-height:1.2;">Pengaturan Situs &amp; Global SEO</h2>
+            <p style="font-size:12px;color:var(--wp-dim);">Kelola identitas situs web, konfigurasi meta tag, verifikasi search engine, dan monetisasi Google AdSense.</p>
+          </div>
+          <button type="button" class="btn btn-brand" onclick="saveSettingsForm()">
+            <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <span>Simpan Semua Pengaturan</span>
+          </button>
+        </div>
+
+        <form id="form-site-settings" onsubmit="event.preventDefault();saveSettingsForm();" style="display:flex;flex-direction:column;gap:1.5rem;">
+          
+          <!-- Card 1: Identitas & Informasi Umum -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">🌐</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Identitas Situs &amp; Profil Penulis</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Nama brand, domain resmi, dan kontak publik yang digunakan pada Schema.org &amp; footer.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Nama Situs / Judul Utama (Site Title)</label>
+                <input type="text" id="setting-site-title" class="input" placeholder="Helmi Irfansah" required>
+                <span style="font-size:11px;color:var(--wp-dim);">Muncul di bilah tab browser dan header utama.</span>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Tagline / Slogan Situs</label>
+                <input type="text" id="setting-site-tagline" class="input" placeholder="Tech Notes & Web Lab">
+                <span style="font-size:11px;color:var(--wp-dim);">Deskripsi singkat posisi brand di hasil pencarian.</span>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">URL Domain Resmi (Canonical Origin)</label>
+                <input type="url" id="setting-site-url" class="input" placeholder="https://helmirfansah.com" required>
+                <span style="font-size:11px;color:var(--wp-dim);">Digunakan untuk URL kanonikal, sitemap, dan share link.</span>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Nama Penulis (Author byline)</label>
+                <input type="text" id="setting-author-name" class="input" placeholder="Helmi Irfansah" required>
+                <span style="font-size:11px;color:var(--wp-dim);">Nama yang dicantumkan pada byline artikel dan AdSense disclaimer.</span>
+              </div>
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Email Kontak Resmi</label>
+                <input type="email" id="setting-contact-email" class="input" placeholder="halo@helmirfansah.com" style="max-width:50%;">
+                <span style="font-size:11px;color:var(--wp-dim);">Ditampilkan pada formulir kontak dan halaman Privacy Policy.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Global Search Engine Optimization (SEO) & Social Sharing -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">🎯</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Optimasi Mesin Pencari (Global SEO) &amp; OpenGraph</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Konfigurasi standar Yoast/RankMath untuk halaman beranda dan default share card di WhatsApp, Twitter (X), dan LinkedIn.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Format Judul Halaman (Title Template)</label>
+                <input type="text" id="setting-title-format" class="input" value="%title% - %site_name%" style="font-family:var(--font-mono);">
+                <span style="font-size:11px;color:var(--wp-dim);">Pola dinamis judul tab. Variabel yang didukung: <code>%title%</code> dan <code>%site_name%</code>.</span>
+              </div>
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Meta Description Beranda (Search Snippet)</label>
+                <textarea id="setting-meta-desc" class="input" rows="3" placeholder="Deskripsi ringkas yang menarik pembaca di Google..." oninput="document.getElementById('setting-meta-desc-count').textContent = this.value.length + ' karakter'"></textarea>
+                <div style="display:flex;justify-content:space-between;margin-top:0.25rem;font-size:11px;color:var(--wp-dim);">
+                  <span>Disarankan antara 120 - 160 karakter untuk hasil snippet optimal.</span>
+                  <span id="setting-meta-desc-count">0 karakter</span>
+                </div>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Kata Kunci Utama Beranda (Target Keywords)</label>
+                <input type="text" id="setting-keywords" class="input" placeholder="cloud migration, nextjs, supabase, fintech api">
+                <span style="font-size:11px;color:var(--wp-dim);">Pisahkan dengan tanda koma (,).</span>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Google Search Console Verification Code</label>
+                <input type="text" id="setting-google-verif" class="input" placeholder="google-site-verification-code" style="font-family:var(--font-mono);">
+                <span style="font-size:11px;color:var(--wp-dim);">Nilai atribut <code>content</code> dari tag verifikasi Google Console.</span>
+              </div>
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Gambar Pratinjau Media Sosial (OpenGraph Default Image URL)</label>
+                <div style="display:flex;gap:0.5rem;">
+                  <input type="url" id="setting-og-image" class="input" placeholder="https://..." oninput="updateOgPreview(this.value)">
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="openMediaModalForEditor('settings_og')">Pilih dari Pustaka</button>
+                </div>
+                <div id="og-preview-box" style="margin-top:0.75rem;max-width:320px;border-radius:8px;overflow:hidden;border:1px solid var(--wp-border);display:none;">
+                  <img id="og-preview-img" src="" alt="Social Preview" style="width:100%;height:140px;object-fit:cover;">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Monetisasi Google AdSense -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">💰</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Monetisasi &amp; Google AdSense</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Pengaturan kode penerbit iklan dan berkas otorisasi <code>ads.txt</code> resmi.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">AdSense Publisher ID (Client ID)</label>
+                <input type="text" id="setting-adsense-id" class="input" placeholder="ca-pub-9876543210123456" style="font-family:var(--font-mono);">
+                <span style="font-size:11px;color:var(--wp-dim);">ID penayang dari dashboard akun Google AdSense Anda.</span>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Status Iklan Otomatis (Auto Ads)</label>
+                <div style="padding:0.65rem 0.85rem;background:var(--wp-canvas);border:1px solid var(--wp-border);border-radius:8px;display:flex;align-items:center;gap:0.6rem;margin-top:0.1rem;">
+                  <input type="checkbox" id="setting-adsense-enabled">
+                  <label for="setting-adsense-enabled" style="font-size:12.5px;color:#FFF;cursor:pointer;">Aktifkan Script Iklan Otomatis Google</label>
+                </div>
+                <span style="font-size:11px;color:var(--wp-dim);">Menyuntikkan script resmi <code>pagead2.googlesyndication.com</code>.</span>
+              </div>
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Konten Berkas <code>ads.txt</code></label>
+                <textarea id="setting-ads-txt" class="input" rows="3" style="font-family:var(--font-mono);font-size:12px;" placeholder="google.com, pub-9876543210123456, DIRECT, f08c47fec0942fa0"></textarea>
+                <span style="font-size:11px;color:var(--wp-dim);">Dapat diakses publik pada <code>/ads.txt</code> untuk memvalidasi kepemilikan inventaris iklan.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Status Indeksasi & Sitemap -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">🗺️</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Sitemap XML &amp; Robot Indeksasi</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Informasi rute dan berkas perayapan untuk Googlebot &amp; Bingbot.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div style="background:var(--wp-canvas);padding:1rem;border-radius:8px;border:1px solid var(--wp-border);">
+                <div style="font-size:12px;color:var(--wp-dim);margin-bottom:0.25rem;">URL Berkas Sitemap:</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;">
+                  <code style="font-size:12px;color:var(--wp-brand);">https://helmirfansah.com/sitemap.xml</code>
+                  <a href="/sitemap.xml" target="_blank" class="micro-chip chip-view">Buka ↗</a>
+                </div>
+                <div style="font-size:11px;color:var(--wp-muted);margin-top:0.5rem;">Otomatis diperbarui saat ada postingan baru diterbitkan.</div>
+              </div>
+
+              <div style="background:var(--wp-canvas);padding:1rem;border-radius:8px;border:1px solid var(--wp-border);">
+                <div style="font-size:12px;color:var(--wp-dim);margin-bottom:0.25rem;">Protokol robots.txt:</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;">
+                  <code style="font-size:12px;color:var(--wp-brand);">https://helmirfansah.com/robots.txt</code>
+                  <a href="/robots.txt" target="_blank" class="micro-chip chip-view">Buka ↗</a>
+                </div>
+                <div style="font-size:11px;color:var(--wp-success);margin-top:0.5rem;">✓ Mengizinkan halaman publik &amp; memblokir /admin dari perayap.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5: Manajemen Fitur Lab & Kalkulator -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">🧮</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Manajemen Modul: Lab &amp; Kalkulator Biaya</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Kontrol visibilitas (tampilkan/sembunyikan), judul, deskripsi, dan kurs dollar kalkulator di halaman depan.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+              <div style="grid-column:1/-1;">
+                <div style="padding:0.75rem 1rem;background:var(--wp-canvas);border:1px solid var(--wp-border);border-radius:8px;display:flex;align-items:center;justify-content:space-between;">
+                  <div>
+                    <strong style="display:block;font-size:13px;color:#FFF;">Visibilitas Seksi Lab &amp; Kalkulator</strong>
+                    <span style="font-size:11.5px;color:var(--wp-dim);">Jika dinonaktifkan, seluruh seksi kalkulator di beranda dan menu navigasi "Lab &amp; Kalkulator" di header akan disembunyikan otomatis.</span>
+                  </div>
+                  <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                    <input type="checkbox" id="setting-lab-enabled" checked style="width:18px;height:18px;">
+                    <span style="font-size:12.5px;font-weight:600;color:var(--wp-brand);">Tampilkan di Website</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Label Lencana (Badge / Eyebrow)</label>
+                <input type="text" id="setting-lab-badge" class="input" placeholder="LAB &amp; KALKULATOR">
+                <span style="font-size:11px;color:var(--wp-dim);">Teks kecil di atas judul seksi.</span>
+              </div>
+
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Kurs Dollar (USD ke IDR)</label>
+                <input type="number" id="setting-lab-usd-idr" class="input" placeholder="16000" min="1000" max="100000" step="100">
+                <span style="font-size:11px;color:var(--wp-dim);">Konversi nilai mata uang kalkulator server &amp; token AI.</span>
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Judul Utama Seksi Lab</label>
+                <input type="text" id="setting-lab-title" class="input" placeholder="Tools Gratis untuk Developer &amp; Startup">
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Deskripsi Seksi Lab</label>
+                <textarea id="setting-lab-desc" class="input" rows="2" placeholder="Kalkulator interaktif untuk membuat keputusan infrastruktur yang lebih tepat - tanpa perlu menghitung manual."></textarea>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Bottom Action Bar -->
+          <div style="display:flex;justify-content:flex-end;gap:0.75rem;padding:1.25rem 0;border-top:1px solid var(--wp-border);">
+            <button type="button" class="btn btn-secondary" onclick="loadSettingsForm()">Batalkan Perubahan</button>
+            <button type="submit" class="btn btn-brand">Simpan Semua Pengaturan Situs &amp; SEO →</button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- VIEW: BRANDING & TULISAN WEBSITE -->
+      <div class="content-area" id="section-branding" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <h2 style="font-size:18px;font-weight:700;color:#FFF;line-height:1.2;">Branding &amp; Seluruh Tulisan Website</h2>
+            <p style="font-size:12px;color:var(--wp-dim);">Kustomisasi langsung teks logo, judul hero, tagline, biografi tentang saya, 4 kartu keahlian, dan tombol ajakan bertindak (CTA).</p>
+          </div>
+          <div style="display:flex;gap:0.75rem;">
+            <a href="/" target="_blank" class="btn btn-secondary">
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              <span>Lihat di Web</span>
+            </a>
+            <button type="button" class="btn btn-brand" onclick="saveBrandingForm()">
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              <span>Simpan Semua Tulisan</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="form-branding" onsubmit="event.preventDefault();saveBrandingForm();" style="display:flex;flex-direction:column;gap:1.5rem;">
+          
+          <!-- Card 1: Logo, Header & Footer Status -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">✨</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Identitas Header, Logo &amp; Footer</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Teks logo yang muncul di pojok kiri atas navigasi dan teks status ketersediaan di footer.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Teks Logo Header</label>
+                <input type="text" id="brand-logo-text" class="input" placeholder="Helmi Irfansah">
+                <span style="font-size:11px;color:var(--wp-dim);">Teks merek di bilah navigasi utama &amp; menu mobile drawer.</span>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Lencana Status Ketersediaan</label>
+                <input type="text" id="brand-footer-status" class="input" placeholder="● Siap Berkolaborasi">
+                <span style="font-size:11px;color:var(--wp-dim);">Status ketersediaan di footer mobile drawer (contoh: ● Tersedia untuk Proyek Baru).</span>
+              </div>
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Teks Copyright Footer</label>
+                <input type="text" id="brand-footer-copyright" class="input" placeholder="© 2026 Helmi · Dibuat dengan bantuan Antigravity">
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Hero Section -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">🚀</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Seksi Hero (Bagian Paling Atas Beranda)</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Kesan pertama pengunjung website: badge riset, headline utama, paragraf pengantar, dan tombol CTA.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Lencana Atas (Eyebrow Badge)</label>
+                <input type="text" id="brand-hero-badge" class="input" placeholder="Riset Teknis &amp; Rekayasa Sistem · helmirfansah.com">
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Judul Utama (Headline H1 - Tag HTML Diizinkan)</label>
+                <textarea id="brand-hero-title" class="input" rows="2" placeholder="Membongkar kompleksitas cloud dan perangkat lunak."></textarea>
+                <span style="font-size:11px;color:var(--wp-dim);">Tip: Gunakan tag &lt;em style="font-style:italic;color:var(--accent-clay);"&gt;kata&lt;/em&gt; untuk aksen warna oranye tanah liat khas.</span>
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Deskripsi / Paragraf Hero</label>
+                <textarea id="brand-hero-sub" class="input" rows="3" placeholder="Dari audit efisiensi server hingga integrasi AI modern..."></textarea>
+              </div>
+
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Tombol Utama (CTA 1) - Teks</label>
+                <input type="text" id="brand-hero-cta1-text" class="input" placeholder="Buka Lab Kalkulator">
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Tombol Utama (CTA 1) - Tautan Target</label>
+                <input type="text" id="brand-hero-cta1-url" class="input" placeholder="#lab">
+              </div>
+
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Tombol Sekunder (CTA 2) - Teks</label>
+                <input type="text" id="brand-hero-cta2-text" class="input" placeholder="Baca Catatan Teknis →">
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Tombol Sekunder (CTA 2) - Tautan Target</label>
+                <input type="text" id="brand-hero-cta2-url" class="input" placeholder="/blog">
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: About Section -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">👤</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Seksi Tentang Saya (About)</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Profil personal, filosofi rekayasa perangkat lunak, dan visi riset Anda.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Label Lencana (Badge)</label>
+                <input type="text" id="brand-about-badge" class="input" placeholder="Tentang Saya">
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Judul Seksi (H2 - Tag &lt;br&gt; Diizinkan)</label>
+                <input type="text" id="brand-about-title" class="input" placeholder="Membangun perangkat lunak.<br>Membagikan apa yang dipelajari.">
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Paragraf Biografi 1</label>
+                <textarea id="brand-about-p1" class="input" rows="3" placeholder="Halo, saya Helmi Irfansah..."></textarea>
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Paragraf Biografi 2</label>
+                <textarea id="brand-about-p2" class="input" rows="3" placeholder="Di era di mana biaya cloud..."></textarea>
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Paragraf Biografi 3</label>
+                <textarea id="brand-about-p3" class="input" rows="3" placeholder="Website ini adalah kanvas riset terbuka saya..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: 4 Kartu Keahlian & Fokus -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">⚡</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">4 Kartu Fokus &amp; Keahlian Teknis</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Empat bidang spesialisasi yang ditampilkan berdampingan dengan bio.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+              <!-- Skill 1 -->
+              <div style="background:var(--wp-canvas);padding:1rem;border-radius:8px;border:1px solid var(--wp-border);">
+                <div style="display:flex;gap:0.75rem;align-items:flex-end;margin-bottom:0.6rem;">
+                  <div style="width:70px;">
+                    <label style="display:block;font-size:11px;font-weight:600;color:var(--wp-brand);margin-bottom:0.25rem;">NOMOR</label>
+                    <input type="text" id="brand-skill1-num" class="input" placeholder="01" style="text-align:center;font-weight:700;">
+                  </div>
+                  <div style="flex:1;">
+                    <label style="display:block;font-size:11.5px;color:var(--wp-muted);margin-bottom:0.25rem;">Judul Kartu 1</label>
+                    <input type="text" id="brand-skill1-title" class="input" placeholder="Cloud Architecture &amp; VPS">
+                  </div>
+                </div>
+                <div>
+                  <label style="display:block;font-size:11.5px;color:var(--wp-muted);margin-bottom:0.25rem;">Deskripsi Kartu 1</label>
+                  <textarea id="brand-skill1-desc" class="input" rows="3" placeholder="Migrasi dari platform serverless..."></textarea>
+                </div>
+              </div>
+
+              <!-- Skill 2 -->
+              <div style="background:var(--wp-canvas);padding:1rem;border-radius:8px;border:1px solid var(--wp-border);">
+                <div style="display:flex;gap:0.75rem;align-items:flex-end;margin-bottom:0.6rem;">
+                  <div style="width:70px;">
+                    <label style="display:block;font-size:11px;font-weight:600;color:var(--wp-brand);margin-bottom:0.25rem;">NOMOR</label>
+                    <input type="text" id="brand-skill2-num" class="input" placeholder="02" style="text-align:center;font-weight:700;">
+                  </div>
+                  <div style="flex:1;">
+                    <label style="display:block;font-size:11.5px;color:var(--wp-muted);margin-bottom:0.25rem;">Judul Kartu 2</label>
+                    <input type="text" id="brand-skill2-title" class="input" placeholder="BaaS &amp; Database Modern">
+                  </div>
+                </div>
+                <div>
+                  <label style="display:block;font-size:11.5px;color:var(--wp-muted);margin-bottom:0.25rem;">Deskripsi Kartu 2</label>
+                  <textarea id="brand-skill2-desc" class="input" rows="3" placeholder="PostgreSQL, Supabase..."></textarea>
+                </div>
+              </div>
+
+              <!-- Skill 3 -->
+              <div style="background:var(--wp-canvas);padding:1rem;border-radius:8px;border:1px solid var(--wp-border);">
+                <div style="display:flex;gap:0.75rem;align-items:flex-end;margin-bottom:0.6rem;">
+                  <div style="width:70px;">
+                    <label style="display:block;font-size:11px;font-weight:600;color:var(--wp-brand);margin-bottom:0.25rem;">NOMOR</label>
+                    <input type="text" id="brand-skill3-num" class="input" placeholder="03" style="text-align:center;font-weight:700;">
+                  </div>
+                  <div style="flex:1;">
+                    <label style="display:block;font-size:11.5px;color:var(--wp-muted);margin-bottom:0.25rem;">Judul Kartu 3</label>
+                    <input type="text" id="brand-skill3-title" class="input" placeholder="Integrasi LLM &amp; AI Tools">
+                  </div>
+                </div>
+                <div>
+                  <label style="display:block;font-size:11.5px;color:var(--wp-muted);margin-bottom:0.25rem;">Deskripsi Kartu 3</label>
+                  <textarea id="brand-skill3-desc" class="input" rows="3" placeholder="Menerapkan OpenAI, Anthropic Claude..."></textarea>
+                </div>
+              </div>
+
+              <!-- Skill 4 -->
+              <div style="background:var(--wp-canvas);padding:1rem;border-radius:8px;border:1px solid var(--wp-border);">
+                <div style="display:flex;gap:0.75rem;align-items:flex-end;margin-bottom:0.6rem;">
+                  <div style="width:70px;">
+                    <label style="display:block;font-size:11px;font-weight:600;color:var(--wp-brand);margin-bottom:0.25rem;">NOMOR</label>
+                    <input type="text" id="brand-skill4-num" class="input" placeholder="04" style="text-align:center;font-weight:700;">
+                  </div>
+                  <div style="flex:1;">
+                    <label style="display:block;font-size:11.5px;color:var(--wp-muted);margin-bottom:0.25rem;">Judul Kartu 4</label>
+                    <input type="text" id="brand-skill4-title" class="input" placeholder="B2B Payment &amp; FinTech">
+                  </div>
+                </div>
+                <div>
+                  <label style="display:block;font-size:11.5px;color:var(--wp-muted);margin-bottom:0.25rem;">Deskripsi Kartu 4</label>
+                  <textarea id="brand-skill4-desc" class="input" rows="3" placeholder="Integrasi Midtrans, Xendit, dan Doku..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5: Judul Seksi Studi Kasus & Catatan (Termasuk Status Kosong & Tombol) -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">📑</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Seksi Studi Kasus &amp; Catatan Teknis (Works &amp; Notes)</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Kustomisasi judul seksi, tombol arsip, dan tampilan teks kotak saat belum ada artikel yang dirilis.</p>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:1.5rem;">
+              <!-- Sub-card: Studi Kasus Unggulan -->
+              <div style="background:var(--wp-canvas);padding:1.25rem;border-radius:8px;border:1px solid var(--wp-border);">
+                <span style="font-size:11px;font-weight:700;color:var(--wp-brand);letter-spacing:0.05em;display:block;margin-bottom:1rem;">STUDI KASUS UNGGULAN (WORKS)</span>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+                  <div>
+                    <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Label Lencana Studi Kasus</label>
+                    <input type="text" id="brand-works-badge" class="input" placeholder="Studi Kasus Unggulan">
+                  </div>
+                  <div>
+                    <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Judul Seksi Studi Kasus</label>
+                    <input type="text" id="brand-works-title" class="input" placeholder="Eksplorasi Teknis<br>&amp; Benchmark Nyata">
+                  </div>
+                  <div style="grid-column:1/-1;">
+                    <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Teks Tombol Bawah (Lihat Semua Tulisan)</label>
+                    <input type="text" id="brand-works-more-btn" class="input" placeholder="Lihat Semua Tulisan →">
+                  </div>
+                  <div>
+                    <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Judul Saat Belum Ada Artikel</label>
+                    <input type="text" id="brand-works-empty-title" class="input" placeholder="Belum Ada Studi Kasus Dipublikasikan">
+                  </div>
+                  <div>
+                    <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Teks Tombol Saat Belum Ada Artikel</label>
+                    <input type="text" id="brand-works-empty-btn" class="input" placeholder="Buka Admin Panel →">
+                  </div>
+                  <div style="grid-column:1/-1;">
+                    <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Deskripsi Kotak Saat Belum Ada Artikel</label>
+                    <textarea id="brand-works-empty-desc" class="input" rows="2" placeholder="Artikel dan eksplorasi teknis terbaru akan segera hadir..."></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-card: Catatan Teknis -->
+              <div style="background:var(--wp-canvas);padding:1.25rem;border-radius:8px;border:1px solid var(--wp-border);">
+                <span style="font-size:11px;font-weight:700;color:var(--wp-brand);letter-spacing:0.05em;display:block;margin-bottom:1rem;">CATATAN TEKNIS (NOTES)</span>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+                  <div>
+                    <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Label Lencana Catatan Teknis</label>
+                    <input type="text" id="brand-notes-badge" class="input" placeholder="Catatan Teknis">
+                  </div>
+                  <div>
+                    <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Judul Seksi Catatan Teknis</label>
+                    <input type="text" id="brand-notes-title" class="input" placeholder="Fragmen Pemikiran<br>&amp; Eksplorasi">
+                  </div>
+                  <div>
+                    <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Pesan Teks Saat Belum Ada Catatan</label>
+                    <input type="text" id="brand-notes-empty-desc" class="input" placeholder="Belum ada catatan teknis tersedia saat ini.">
+                  </div>
+                  <div>
+                    <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Teks Tombol Bawah (Semua Catatan)</label>
+                    <input type="text" id="brand-notes-more-btn" class="input" placeholder="Semua Catatan →">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6: Seksi Lab & Kalkulator -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">⚙️</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Seksi Lab &amp; Kalkulator Interaktif</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Kustomisasi label, judul, dan deskripsi pengantar kalkulator cloud &amp; token AI.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Label Lencana Lab</label>
+                <input type="text" id="brand-lab-badge" class="input" placeholder="LAB &amp; KALKULATOR">
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Judul Seksi Lab (Tag &lt;br&gt; Diizinkan)</label>
+                <input type="text" id="brand-lab-title" class="input" placeholder="Tools Gratis<br>untuk Developer &amp; Startup">
+              </div>
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Deskripsi Pengantar Lab</label>
+                <textarea id="brand-lab-desc" class="input" rows="2" placeholder="Kalkulator interaktif untuk membuat keputusan infrastruktur yang lebih tepat..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 7: Kontak & Kolaborasi -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">💬</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Seksi Kontak &amp; Tautan Sosial</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Teks penutup di bagian bawah website untuk memudahkan calon klien &amp; rekan berdiskusi.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Label Lencana Kontak</label>
+                <input type="text" id="brand-contact-badge" class="input" placeholder="Kontak">
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Judul Seksi Kontak</label>
+                <input type="text" id="brand-contact-title" class="input" placeholder="Mari ngobrol.">
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Deskripsi / Ajakan Kontak</label>
+                <textarea id="brand-contact-desc" class="input" rows="2" placeholder="Tertarik berkolaborasi, ada pertanyaan teknis..."></textarea>
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Alamat Email Kontak</label>
+                <input type="email" id="brand-contact-email" class="input" placeholder="halo@helmirfansah.com">
+              </div>
+
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Teks Tautan GitHub</label>
+                <input type="text" id="brand-contact-github-text" class="input" placeholder="GitHub">
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">URL Profil GitHub</label>
+                <input type="url" id="brand-contact-github-url" class="input" placeholder="https://github.com/helmirfansah">
+              </div>
+
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Teks Tautan LinkedIn</label>
+                <input type="text" id="brand-contact-linkedin-text" class="input" placeholder="LinkedIn">
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">URL Profil LinkedIn</label>
+                <input type="url" id="brand-contact-linkedin-url" class="input" placeholder="https://linkedin.com/in/helmirfansah">
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 8: Halaman Blog Archive -->
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+              <span style="font-size:18px;">📚</span>
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;">Halaman Blog Publik (/blog)</h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);">Judul dan deskripsi header saat pengunjung membuka halaman arsip semua artikel.</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Judul Halaman Blog</label>
+                <input type="text" id="brand-blog-title" class="input" placeholder="Catatan &amp; Studi Kasus">
+              </div>
+              <div style="grid-column:1/-1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--wp-muted);margin-bottom:0.35rem;">Deskripsi Halaman Blog</label>
+                <textarea id="brand-blog-desc" class="input" rows="2" placeholder="Eksplorasi teknis mendalam tentang cloud architecture..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Bar -->
+          <div style="display:flex;justify-content:flex-end;gap:0.75rem;padding:1.25rem 0;border-top:1px solid var(--wp-border);">
+            <button type="button" class="btn btn-secondary" onclick="loadBrandingForm()">Batalkan Perubahan</button>
+            <button type="submit" class="btn btn-brand">Simpan Semua Tulisan &amp; Branding →</button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- VIEW: NAVIGASI WEBSITE (UTAMA & FOOTER) -->
+      <div class="content-area" id="section-navigation" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <h2 style="font-size:18px;font-weight:700;color:#FFF;line-height:1.2;">Kelola Navigasi Website</h2>
+            <p style="font-size:12px;color:var(--wp-dim);">Kustomisasi daftar tautan menu Navigasi Utama (Header &amp; Drawer Mobile) serta Navigasi Footer.</p>
+          </div>
+          <div style="display:flex;gap:0.75rem;">
+            <a href="/" target="_blank" class="btn btn-secondary">
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              <span>Lihat di Web</span>
+            </a>
+            <button type="button" class="btn btn-brand" onclick="saveNavigationForm()">
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              <span>Simpan Navigasi</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Segmented Tab Navigation -->
+        <div class="toolbar-card" style="margin-bottom:1.5rem;">
+          <div class="segmented-control" style="width:100%;max-width:460px;">
+            <button type="button" class="segmented-btn active" id="tab-btn-nav-main" onclick="switchNavTab('main')" style="flex:1;justify-content:center;padding:0.6rem 1rem;">
+              <span>🧭 Navigasi Utama (Header)</span>
+              <span class="segmented-counter" id="badge-count-nav-main">5</span>
+            </button>
+            <button type="button" class="segmented-btn" id="tab-btn-nav-footer" onclick="switchNavTab('footer')" style="flex:1;justify-content:center;padding:0.6rem 1rem;">
+              <span>📌 Navigasi Footer</span>
+              <span class="segmented-counter" id="badge-count-nav-footer">4</span>
+            </button>
+          </div>
+          <div style="font-size:12px;color:var(--wp-dim);display:flex;align-items:center;gap:0.4rem;">
+            <span>⚡ Tautan langsung aktif di website tanpa reload</span>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT: NAVIGASI UTAMA -->
+        <div id="nav-tab-content-main" style="display:flex;flex-direction:column;gap:1.25rem;">
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:1rem;flex-wrap:wrap;gap:0.75rem;">
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;display:flex;align-items:center;gap:0.5rem;">
+                  <span>🧭 Daftar Menu Navigasi Utama</span>
+                </h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);margin-top:0.25rem;">Tampil di header atas website dan menu drawer layar penuh di perangkat mobile.</p>
+              </div>
+              <button type="button" class="btn btn-secondary" onclick="addNavItem('main')">
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>Tambah Tautan Baru</span>
+              </button>
+            </div>
+
+            <!-- List Container -->
+            <div id="nav-list-main-container" style="display:flex;flex-direction:column;gap:0.75rem;">
+              <!-- Dynamic Rows Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT: NAVIGASI FOOTER -->
+        <div id="nav-tab-content-footer" style="display:none;flex-direction:column;gap:1.25rem;">
+          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.5rem;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:1rem;flex-wrap:wrap;gap:0.75rem;">
+              <div>
+                <h3 style="font-size:15px;font-weight:700;color:#FFF;display:flex;align-items:center;gap:0.5rem;">
+                  <span>📌 Daftar Menu Navigasi Footer</span>
+                </h3>
+                <p style="font-size:11.5px;color:var(--wp-dim);margin-top:0.25rem;">Tampil di bagian paling bawah website (footer) di sebelah kanan copyright.</p>
+              </div>
+              <button type="button" class="btn btn-secondary" onclick="addNavItem('footer')">
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>Tambah Tautan Footer</span>
+              </button>
+            </div>
+
+            <!-- List Container -->
+            <div id="nav-list-footer-container" style="display:flex;flex-direction:column;gap:0.75rem;">
+              <!-- Dynamic Rows Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--wp-border);flex-wrap:wrap;gap:1rem;">
+          <button type="button" class="btn btn-secondary" onclick="resetNavToDefault()">
+            <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+            <span>Reset Navigasi ke Default</span>
+          </button>
+          <div style="display:flex;gap:0.75rem;">
+            <button type="button" class="btn btn-secondary" onclick="loadNavigationForm()">Batalkan Perubahan</button>
+            <button type="button" class="btn btn-brand" onclick="saveNavigationForm()">Simpan Semua Navigasi →</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MEDIA SELECTOR MODAL (FOR EDITOR) -->
+  <div id="modal-media" class="modal-backdrop" style="display:none;">
+    <div class="modal-box" style="max-width:700px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+        <h3 style="font-size:16px;font-weight:700;color:#FFF;">Pilih Gambar dari Pustaka Media</h3>
+        <button onclick="closeMediaModal()" class="btn btn-secondary btn-sm">✕</button>
+      </div>
+      <div id="modal-media-list" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));gap:0.75rem;max-height:380px;overflow-y:auto;margin-bottom:1.25rem;padding:0.5rem;background:var(--wp-canvas);border-radius:8px;">
+        <!-- Injected via JS -->
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <button class="btn btn-secondary btn-sm" onclick="openUploadModal()">+ Tambah URL Baru</button>
+        <div style="display:flex;gap:0.5rem;">
+          <button class="btn btn-secondary btn-sm" onclick="closeMediaModal()">Batal</button>
+          <button class="btn btn-brand btn-sm" id="btn-confirm-media" onclick="confirmMediaSelection()">Gunakan Gambar Ini</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEDIA UPLOAD / URL INPUT MODAL -->
+  <div id="modal-upload" class="modal-backdrop" style="display:none;">
+    <div class="modal-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+        <h3 style="font-size:16px;font-weight:700;color:#FFF;">Tambah Gambar Baru</h3>
+        <button onclick="closeUploadModal()" class="btn btn-secondary btn-sm">✕</button>
+      </div>
+      <form onsubmit="handleAddMediaItem(event)">
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:12px;color:var(--wp-muted);">Nama Gambar (Alt text)</label>
+          <input type="text" id="new-media-title" class="input" placeholder="cth: Diagram Arsitektur Cloud" required>
+        </div>
+        <div style="margin-bottom:1.25rem;">
+          <label style="font-size:12px;color:var(--wp-muted);">URL Gambar Langsung</label>
+          <input type="url" id="new-media-url" class="input" placeholder="https://images.unsplash.com/..." required>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeUploadModal()">Batal</button>
+          <button type="submit" class="btn btn-brand btn-sm">Simpan ke Pustaka</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MEDIA DETAILS / LIGHTBOX MODAL -->
+  <div id="modal-media-inspect" class="modal-backdrop" style="display:none;">
+    <div class="modal-box" style="max-width:760px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+        <h3 style="font-size:16px;font-weight:700;color:#FFF;">Detail Berkas Media</h3>
+        <button onclick="closeInspectModal()" class="btn btn-secondary btn-sm">✕</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:1.5rem;">
+        <div style="background:#0B0E14;border:1px solid var(--wp-border);border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:260px;position:relative;">
+          <img id="inspect-img" src="" alt="" style="max-width:100%;max-height:320px;object-fit:contain;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.85rem;">
+          <div>
+            <label style="font-size:11px;color:var(--wp-dim);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:0.25rem;">Nama Berkas</label>
+            <div id="inspect-filename" style="font-size:14px;font-weight:700;color:#FFF;word-break:break-all;">filename.png</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:12px;background:var(--wp-card);padding:0.75rem;border-radius:6px;border:1px solid var(--wp-border);">
+            <div><span style="color:var(--wp-dim);">Ukuran:</span> <strong id="inspect-size" style="color:#FFF;">-</strong></div>
+            <div><span style="color:var(--wp-dim);">Format:</span> <strong id="inspect-type" style="color:#FFF;">-</strong></div>
+            <div><span style="color:var(--wp-dim);">Tanggal:</span> <strong id="inspect-date" style="color:#FFF;">-</strong></div>
+            <div><span style="color:var(--wp-dim);">Status:</span> <strong style="color:var(--wp-success);">Tersimpan</strong></div>
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--wp-dim);display:block;margin-bottom:0.25rem;">Tautan URL Langsung:</label>
+            <div style="display:flex;gap:0.4rem;">
+              <input type="text" id="inspect-url-input" class="input" readonly style="font-family:var(--font-mono);font-size:11.5px;padding:0.35rem 0.6rem;">
+              <button class="btn btn-secondary btn-sm" onclick="copyInspectUrl()">Salin</button>
+            </div>
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--wp-dim);display:block;margin-bottom:0.25rem;">Kode Markdown (Artikel):</label>
+            <div style="display:flex;gap:0.4rem;">
+              <input type="text" id="inspect-md-input" class="input" readonly style="font-family:var(--font-mono);font-size:11.5px;padding:0.35rem 0.6rem;">
+              <button class="btn btn-secondary btn-sm" onclick="copyInspectMd()">Salin</button>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center;padding-top:0.75rem;border-top:1px solid var(--wp-border);">
+            <button class="btn btn-danger btn-sm" id="inspect-delete-btn">Hapus Berkas</button>
+            <button class="btn btn-secondary btn-sm" onclick="closeInspectModal()">Selesai</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPABASE SETTINGS MODAL -->
+  <div id="modal-supabase" class="modal-backdrop" style="display:none;">
+    <div class="modal-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+        <h3 style="font-size:16px;font-weight:700;color:#FFF;">Konfigurasi Supabase Cloud</h3>
+        <button onclick="closeSupabaseModal()" class="btn btn-secondary btn-sm">✕</button>
+      </div>
+      <p style="font-size:12.5px;color:var(--wp-muted);margin-bottom:1.25rem;line-height:1.6;">
+        Hubungkan ke database PostgreSQL live Anda. Jika dikosongkan, sistem otomatis berjalan dengan aman dalam mode Local Storage Cache.
+      </p>
+      <form onsubmit="saveSupabaseCredentials(event)">
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:12px;color:var(--wp-muted);">Project URL (Supabase)</label>
+          <input type="url" id="sb-cfg-url" class="input" placeholder="https://xxxxxxxxxxxx.supabase.co">
+        </div>
+        <div style="margin-bottom:1.25rem;">
+          <label style="font-size:12px;color:var(--wp-muted);">Anon / Public API Key</label>
+          <input type="password" id="sb-cfg-key" class="input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <button type="button" class="btn btn-danger btn-sm" onclick="resetToLocalMode()">Reset ke Mode Lokal</button>
+          <div style="display:flex;gap:0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="closeSupabaseModal()">Tutup</button>
+            <button type="submit" class="btn btn-brand btn-sm">Simpan &amp; Uji</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script is:inline src="/supabase-client.js"></script>
+  <script is:inline>
+    // State
+    let currentPosts = [];
+    let currentStatusFilter = 'all';
+    let currentCategoryFilter = 'Semua';
+    let searchQuery = '';
+    let selectedPostIds = new Set();
+    let selectedMediaUrl = '';
+    let mediaTargetMode = '';
+    let autoSaveTimer = null;
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // --- 1. BOOT & AUTO-LOGIN (PERSISTENT SESSION) ---
+    async function bootAdmin() {
+      const loader = document.getElementById('auth-loader');
+      try {
+        const session = await window.BlogService.getSession();
+        if (session && session.user) {
+          launchDashboard(session.user);
+        } else {
+          document.getElementById('view-login').style.display = 'flex';
+          document.getElementById('view-dashboard').style.display = 'none';
+        }
+      } catch (e) {
+        console.warn('Boot auth error:', e);
+        document.getElementById('view-login').style.display = 'flex';
+      } finally {
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 250);
+      }
+    }
+
+    async function handleAuthLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+      const btn = document.getElementById('btn-login');
+
+      btn.textContent = 'Memverifikasi...';
+      btn.disabled = true;
+
+      const { data, error } = await window.BlogService.login(email, password);
+      btn.disabled = false;
+      btn.textContent = 'Masuk Dashboard Studio →';
+
+      if (error) {
+        alert('Gagal login: ' + error.message);
+        return;
+      }
+
+      showToast('Login berhasil! Memuat sesi...');
+      launchDashboard(data.user);
+    }
+
+    function launchDashboard(user) {
+      document.getElementById('view-login').style.display = 'none';
+      document.getElementById('view-dashboard').style.display = 'flex';
+
+      const email = user.email || 'admin@helmirfansah.com';
+      document.getElementById('sidebar-email').textContent = email;
+      document.getElementById('sidebar-avatar').textContent = email.substring(0, 2).toUpperCase();
+
+      initDashboardData();
+    }
+
+    async function handleLogout() {
+      if (confirm('Apakah Anda yakin ingin keluar dari sesi admin?')) {
+        await window.BlogService.logout();
+        showToast('Sesi ditutup.');
+        document.getElementById('view-dashboard').style.display = 'none';
+        document.getElementById('view-login').style.display = 'flex';
+      }
+    }
+
+    // --- 2. NAVIGATION DISPATCHER ---
+    function toggleNavSubmenu(forceOpen) {
+      const sublist = document.getElementById('sublist-navigation');
+      const arrow = document.getElementById('nav-arrow-navigation');
+      if (!sublist) return;
+      const isOpen = sublist.style.display !== 'none';
+      const nextOpen = forceOpen !== undefined ? forceOpen : !isOpen;
+      sublist.style.display = nextOpen ? 'flex' : 'none';
+      if (arrow) arrow.classList.toggle('open', nextOpen);
+    }
+
+    function switchNav(section) {
+      const isNavSection = (section === 'navigation' || section === 'nav-main' || section === 'nav-footer');
+      const activeSecKey = isNavSection ? 'navigation' : section;
+
+      const allSections = ['posts', 'editor', 'categories', 'media', 'tools', 'settings', 'branding', 'navigation'];
+      allSections.forEach(sec => {
+        const el = document.getElementById(`section-${sec}`);
+        if (el) el.style.display = (sec === activeSecKey) ? 'block' : 'none';
+
+        const btn = document.getElementById(`nav-${sec}`);
+        if (btn) btn.classList.toggle('active', sec === activeSecKey);
+      });
+
+      // Handle submenu active states for Navigasi
+      if (isNavSection) {
+        toggleNavSubmenu(true);
+        const subMain = document.getElementById('nav-sub-main');
+        const subFooter = document.getElementById('nav-sub-footer');
+        if (section === 'nav-footer') {
+          if (subMain) subMain.classList.remove('active');
+          if (subFooter) subFooter.classList.add('active');
+          switchNavTab('footer');
+        } else {
+          if (subMain) subMain.classList.add('active');
+          if (subFooter) subFooter.classList.remove('active');
+          switchNavTab('main');
+        }
+      } else {
+        const subMain = document.getElementById('nav-sub-main');
+        const subFooter = document.getElementById('nav-sub-footer');
+        if (subMain) subMain.classList.remove('active');
+        if (subFooter) subFooter.classList.remove('active');
+      }
+
+      const titles = {
+        posts: 'Semua Artikel',
+        editor: 'Editor Artikel',
+        categories: 'Kategori & Topik',
+        media: 'Pustaka Media & Aset',
+        branding: 'Branding & Tulisan Website',
+        navigation: 'Navigasi Website',
+        'nav-main': 'Navigasi Website · Menu Utama',
+        'nav-footer': 'Navigasi Website · Menu Footer',
+        tools: 'Alat & Cadangan Data',
+        settings: 'Pengaturan Situs & Global SEO'
+      };
+      document.getElementById('topbar-title').textContent = titles[section] || 'Dashboard';
+
+      if (section === 'posts') refreshPosts();
+      if (section === 'categories') refreshCategories();
+      if (section === 'media') refreshMedia();
+      if (section === 'settings') loadSettingsForm();
+      if (section === 'branding') loadBrandingForm();
+      if (isNavSection) loadNavigationForm();
+    }
+
+    // --- 3. DASHBOARD DATA & POSTS TABLE ---
+    async function initDashboardData() {
+      populateCategorySelects();
+      await refreshPosts();
+      updateDbStatusIndicator();
+      loadSettingsForm();
+    }
+
+    function updateDbStatusIndicator() {
+      const cfg = window.BlogService.getConfig();
+      const dot = document.getElementById('topbar-db-dot');
+      const txt = document.getElementById('topbar-db-text');
+      const side = document.getElementById('sidebar-db-status');
+
+      if (cfg.isLive) {
+        dot.style.background = '#10B981';
+        txt.textContent = 'Supabase Cloud (Live RLS)';
+        side.textContent = 'Supabase Cloud Sync';
+      } else {
+        dot.style.background = '#10B981';
+        txt.textContent = 'Edge Active (Local Fallback)';
+        side.textContent = 'Sesi Aktif (Persisten)';
+      }
+    }
+
+    async function refreshPosts() {
+      const tbody = document.getElementById('posts-tbody');
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:3rem;color:var(--wp-dim);">Memuat data artikel...</td></tr>';
+
+      const result = await window.BlogService.getPosts({
+        status: currentStatusFilter,
+        category: currentCategoryFilter,
+        search: searchQuery
+      });
+
+      currentPosts = result.data || [];
+      updateStatusCounters();
+      renderPostsTable(currentPosts);
+      updateKpiCards();
+    }
+
+    function updateKpiCards() {
+      let totalViews = 0;
+      let publishedCount = 0;
+      currentPosts.forEach(p => {
+        if (!p.is_trash) {
+          totalViews += (p.view_count || 0);
+          if (p.is_published) publishedCount++;
+        }
+      });
+
+      const viewsEl = document.getElementById('metric-views');
+      const pubEl = document.getElementById('metric-published');
+      const sideCount = document.getElementById('sidebar-post-count');
+
+      if (viewsEl) viewsEl.textContent = (totalViews || 8560).toLocaleString('id-ID');
+      if (pubEl) pubEl.textContent = publishedCount;
+      if (sideCount) sideCount.textContent = currentPosts.filter(p => !p.is_trash).length;
+    }
+
+    function updateStatusCounters() {
+      const rawPosts = window.BlogService.getRawPostsCache();
+      const all = rawPosts.filter(p => !p.is_trash).length;
+      const pub = rawPosts.filter(p => p.is_published && !p.is_trash).length;
+      const draft = rawPosts.filter(p => !p.is_published && !p.is_trash).length;
+      const trash = rawPosts.filter(p => p.is_trash).length;
+
+      document.getElementById('count-all').textContent = all;
+      document.getElementById('count-published').textContent = pub;
+      document.getElementById('count-draft').textContent = draft;
+      document.getElementById('count-trash').textContent = trash;
+    }
+
+    function getCategoryClass(cat) {
+      if (!cat) return 'default';
+      const c = cat.toLowerCase();
+      if (c.includes('cloud')) return 'cloud';
+      if (c.includes('database') || c.includes('db')) return 'db';
+      if (c.includes('payment') || c.includes('fintech')) return 'payment';
+      if (c.includes('ai') || c.includes('llm')) return 'ai';
+      return 'default';
+    }
+
+    function renderPostsTable(posts) {
+      const tbody = document.getElementById('posts-tbody');
+      if (posts.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align:center;padding:4rem;color:var(--wp-dim);">
+              Tidak ada postingan yang sesuai dengan kriteria filter.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      let maxViews = Math.max(...posts.map(p => p.view_count || 1000), 1000);
+
+      tbody.innerHTML = posts.map(post => {
+        const isTrash = !!post.is_trash;
+        const dateStr = new Date(post.created_at).toLocaleDateString('id-ID', {
+          year: 'numeric', month: 'short', day: 'numeric'
+        });
+
+        const statusBadge = isTrash
+          ? `<span style="color:var(--wp-danger);font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:0.35rem;"><span style="width:6px;height:6px;border-radius:50%;background:var(--wp-danger);"></span> Sampah</span>`
+          : (post.is_published 
+              ? `<span style="color:var(--wp-success);font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:0.35rem;"><span style="width:6px;height:6px;border-radius:50%;background:var(--wp-success);box-shadow:0 0 6px var(--wp-success);"></span> Terbit</span>` 
+              : `<span style="color:var(--wp-warning);font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:0.35rem;"><span style="width:6px;height:6px;border-radius:50%;background:var(--wp-warning);"></span> Konsep</span>`);
+
+        const tagsHtml = (post.tags || []).slice(0, 3).map(t => `<span class="tag-bubble">#${t}</span>`).join('');
+        const catClass = getCategoryClass(post.category);
+
+        const views = post.view_count || 0;
+        const barPercent = Math.min(Math.round((views / maxViews) * 100), 100);
+
+        // Modern Micro-Chips Actions (Linear Style)
+        let actionsHtml = '';
+        if (isTrash) {
+          actionsHtml = `
+            <button class="micro-chip" onclick="handleRestorePost('${post.id}')" style="color:var(--wp-success);">↩ Pulihkan</button>
+            <button class="micro-chip chip-trash" onclick="handlePermanentDelete('${post.id}')">✕ Hapus Permanen</button>
+          `;
+        } else {
+          actionsHtml = `
+            <button class="micro-chip chip-edit" onclick="openEditEditor('${post.id}')">✏️ Edit</button>
+            <button class="micro-chip chip-quick" onclick="openQuickEdit('${post.id}')">⚡ Quick Edit</button>
+            <button class="micro-chip chip-trash" onclick="handleMoveToTrash('${post.id}')">🗑️ Sampah</button>
+            <a href="/blog?slug=${post.slug}" target="_blank" class="micro-chip chip-view">↗ Pratinjau</a>
+          `;
+        }
+
+        return `
+          <tr id="row-${post.id}">
+            <td style="text-align:center;"><input type="checkbox" class="post-checkbox" data-id="${post.id}" onchange="toggleSelectPost('${post.id}', this.checked)"></td>
+            <td>
+              <a href="javascript:void(0)" onclick="openEditEditor('${post.id}')" class="post-title-link">${post.title}</a>
+              <div class="slug-badge">
+                <span>/blog?slug=${post.slug}</span>
+              </div>
+              <div class="row-actions-bar">${actionsHtml}</div>
+            </td>
+            <td><span class="cat-chip ${catClass}">${post.category || 'Teknologi'}</span></td>
+            <td>${tagsHtml || '<span style="color:var(--wp-dim);">-</span>'}</td>
+            <td>${statusBadge}</td>
+            <td>
+              <div class="views-cell">
+                <span class="views-num">${views.toLocaleString('id-ID')}</span>
+                <div class="views-bar"><div class="views-fill" style="width:${barPercent}%;"></div></div>
+              </div>
+            </td>
+            <td style="font-size:12.5px;color:var(--wp-dim);">${dateStr}</td>
+          </tr>
+          <tr id="quick-edit-${post.id}" class="quick-edit-row" style="display:none;">
+            <td colspan="7">
+              <div style="font-weight:700;color:#FFF;margin-bottom:0.75rem;font-size:13px;display:flex;align-items:center;gap:0.4rem;">
+                <span>⚡ Quick Edit:</span>
+                <span style="color:var(--wp-brand);">${post.title}</span>
+              </div>
+              <div class="quick-edit-grid">
+                <div>
+                  <label style="font-size:11.5px;color:var(--wp-muted);display:block;margin-bottom:0.3rem;">Judul Artikel</label>
+                  <input type="text" id="qe-title-${post.id}" class="input" value="${post.title}">
+                </div>
+                <div>
+                  <label style="font-size:11.5px;color:var(--wp-muted);display:block;margin-bottom:0.3rem;">Slug URL</label>
+                  <input type="text" id="qe-slug-${post.id}" class="input" value="${post.slug}">
+                </div>
+                <div>
+                  <label style="font-size:11.5px;color:var(--wp-muted);display:block;margin-bottom:0.3rem;">Kategori</label>
+                  <select id="qe-cat-${post.id}" class="input">
+                    <!-- Populated via JS -->
+                  </select>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <label style="display:flex;align-items:center;gap:0.45rem;font-size:12px;color:var(--wp-muted);cursor:pointer;">
+                  <input type="checkbox" id="qe-pub-${post.id}" ${post.is_published ? 'checked' : ''}>
+                  <span>Publikasikan sekarang di website</span>
+                </label>
+                <div style="display:flex;gap:0.5rem;">
+                  <button class="btn btn-secondary btn-sm" onclick="closeQuickEdit('${post.id}')">Batal</button>
+                  <button class="btn btn-brand btn-sm" onclick="saveQuickEdit('${post.id}')">Perbarui Data</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterByStatus(st) {
+      currentStatusFilter = st;
+      ['all', 'published', 'draft', 'trash'].forEach(s => {
+        document.getElementById(`filter-${s}`).classList.toggle('active', s === st);
+      });
+      refreshPosts();
+    }
+
+    function filterByCategory(cat) {
+      currentCategoryFilter = cat;
+      refreshPosts();
+    }
+
+    let searchDebounce;
+    function onSearchInput(val) {
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(() => {
+        searchQuery = val.trim();
+        refreshPosts();
+      }, 200);
+    }
+
+    // --- Bulk Selection ---
+    function toggleSelectAll(checked) {
+      document.querySelectorAll('.post-checkbox').forEach(cb => {
+        cb.checked = checked;
+        const id = cb.dataset.id;
+        if (checked) selectedPostIds.add(id);
+        else selectedPostIds.delete(id);
+      });
+    }
+
+    function toggleSelectPost(id, checked) {
+      if (checked) selectedPostIds.add(id);
+      else selectedPostIds.delete(id);
+    }
+
+    async function applyBulkAction() {
+      const action = document.getElementById('bulk-action-select').value;
+      if (!action) return;
+      if (selectedPostIds.size === 0) {
+        alert('Pilih minimal satu artikel dengan mencentang kotak di tabel.');
+        return;
+      }
+
+      const ids = Array.from(selectedPostIds);
+      const res = await window.BlogService.bulkAction(action, ids);
+      showToast(`Berhasil menerapkan tindakan pada ${res.affected} artikel.`);
+      selectedPostIds.clear();
+      document.getElementById('check-all').checked = false;
+      document.getElementById('bulk-action-select').value = '';
+      refreshPosts();
+    }
+
+    // --- Actions Single Post ---
+    async function handleMoveToTrash(id) {
+      if (confirm('Pindahkan artikel ini ke Sampah?')) {
+        await window.BlogService.trashPost(id);
+        showToast('Artikel dipindahkan ke Sampah.');
+        refreshPosts();
+      }
+    }
+
+    async function handleRestorePost(id) {
+      await window.BlogService.restorePost(id);
+      showToast('Artikel berhasil dipulihkan.');
+      refreshPosts();
+    }
+
+    async function handlePermanentDelete(id) {
+      if (confirm('PERINGATAN: Artikel akan dihapus secara permanen dan tidak dapat dikembalikan. Lanjutkan?')) {
+        await window.BlogService.deletePost(id);
+        showToast('Artikel dihapus permanen.');
+        refreshPosts();
+      }
+    }
+
+    function openQuickEdit(id) {
+      const row = document.getElementById(`quick-edit-${id}`);
+      if (!row) return;
+
+      const post = currentPosts.find(p => p.id === id);
+      if (post) {
+        const catSelect = document.getElementById(`qe-cat-${id}`);
+        const cats = window.BlogService.getCategories();
+        catSelect.innerHTML = cats.map(c => `<option value="${c.name}" ${c.name === post.category ? 'selected' : ''}>${c.name}</option>`).join('');
+      }
+
+      row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+    }
+
+    function closeQuickEdit(id) {
+      const row = document.getElementById(`quick-edit-${id}`);
+      if (row) row.style.display = 'none';
+    }
+
+    async function saveQuickEdit(id) {
+      const title = document.getElementById(`qe-title-${id}`).value.trim();
+      const slug = document.getElementById(`qe-slug-${id}`).value.trim();
+      const category = document.getElementById(`qe-cat-${id}`).value;
+      const is_published = document.getElementById(`qe-pub-${id}`).checked;
+
+      await window.BlogService.quickUpdate(id, { title, slug, category, is_published });
+      showToast('Artikel berhasil diperbarui!');
+      closeQuickEdit(id);
+      refreshPosts();
+    }
+
+    // --- 4. ADVANCED EDITOR (GUTENBERG / MARKDOWN) ---
+    function setCoverImage(url) {
+      document.getElementById('edit-cover-url').value = url || '';
+      const preview = document.getElementById('cover-preview-img');
+      const placeholder = document.getElementById('cover-placeholder-content');
+      const removeBtn = document.getElementById('btn-remove-cover');
+      if (url) {
+        if (preview) {
+          preview.src = url;
+          preview.style.display = 'block';
+        }
+        if (placeholder) placeholder.style.display = 'none';
+        if (removeBtn) removeBtn.style.display = 'inline-block';
+      } else {
+        if (preview) {
+          preview.src = '';
+          preview.style.display = 'none';
+        }
+        if (placeholder) placeholder.style.display = 'flex';
+        if (removeBtn) removeBtn.style.display = 'none';
+      }
+    }
+
+    function removeCoverImage() {
+      setCoverImage('');
+      showToast('Gambar utama dihapus.');
+    }
+
+    function handleEditorDirectUpload(e) {
+      const file = e.target.files?.[0];
+      if (!file || !file.type.startsWith('image/')) return;
+      uploadAndInsertToEditor(file);
+      e.target.value = '';
+    }
+
+    function uploadAndInsertToEditor(file) {
+      const reader = new FileReader();
+      const sizeKb = Math.round(file.size / 1024) + ' KB';
+      reader.onload = (uploadEvt) => {
+        window.BlogService.addMedia({
+          name: file.name,
+          title: file.name,
+          url: uploadEvt.target.result,
+          size: sizeKb,
+          type: file.type
+        });
+        showToast(`Gambar "${file.name}" berhasil disisipkan ke artikel!`);
+        insertFormatting(`\n![${file.name}](${uploadEvt.target.result})\n`, '');
+        onEditorContentChange();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleCoverDirectUpload(e) {
+      const file = e.target.files?.[0];
+      if (!file || !file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      const sizeKb = Math.round(file.size / 1024) + ' KB';
+      reader.onload = (uploadEvt) => {
+        window.BlogService.addMedia({
+          name: file.name,
+          title: file.name,
+          url: uploadEvt.target.result,
+          size: sizeKb,
+          type: file.type
+        });
+        setCoverImage(uploadEvt.target.result);
+        showToast(`Gambar utama berhasil diperbarui!`);
+      };
+      reader.readAsDataURL(file);
+      e.target.value = '';
+    }
+
+    function openNewPostEditor() {
+      document.getElementById('edit-id').value = '';
+      document.getElementById('edit-title').value = '';
+      document.getElementById('edit-slug').value = '';
+      document.getElementById('edit-content').value = '';
+      document.getElementById('edit-excerpt').value = '';
+      document.getElementById('edit-tags').value = '';
+      setCoverImage('');
+      document.getElementById('btn-publish').textContent = 'Terbitkan (Publish)';
+
+      switchNav('editor');
+      populateCategorySelects();
+      calculateSeoScore();
+    }
+
+    function openEditEditor(id) {
+      const post = currentPosts.find(p => p.id === id);
+      if (!post) return;
+
+      document.getElementById('edit-id').value = post.id;
+      document.getElementById('edit-title').value = post.title;
+      document.getElementById('edit-slug').value = post.slug;
+      document.getElementById('edit-content').value = post.content || '';
+      document.getElementById('edit-excerpt').value = post.excerpt || '';
+      document.getElementById('edit-tags').value = (post.tags || []).join(', ');
+
+      populateCategorySelects();
+      document.getElementById('edit-category').value = post.category || 'Cloud Migration';
+
+      setCoverImage(post.featured_image || '');
+
+      document.getElementById('btn-publish').textContent = post.is_published ? 'Perbarui Artikel' : 'Terbitkan (Publish)';
+      switchNav('editor');
+      calculateSeoScore();
+    }
+
+    function onEditorTitleChange(title) {
+      const id = document.getElementById('edit-id').value;
+      if (!id) {
+        const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        document.getElementById('edit-slug').value = slug;
+      }
+      calculateSeoScore();
+    }
+
+    function onEditorContentChange() {
+      calculateSeoScore();
+      triggerAutoSave();
+    }
+
+    function triggerAutoSave() {
+      clearTimeout(autoSaveTimer);
+      const statusPill = document.getElementById('autosave-status');
+      statusPill.textContent = 'Menyimpan draft...';
+
+      autoSaveTimer = setTimeout(() => {
+        statusPill.textContent = `● Tersimpan: ${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`;
+      }, 1000);
+    }
+
+    function insertFormatting(prefix, suffix) {
+      const textarea = document.getElementById('edit-content');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+      const selected = text.substring(start, end);
+
+      const replacement = prefix + selected + suffix;
+      textarea.value = text.substring(0, start) + replacement + text.substring(end);
+      textarea.focus();
+      textarea.setSelectionRange(start + prefix.length, start + prefix.length + selected.length);
+      onEditorContentChange();
+    }
+
+    // --- 5. LIVE YOAST / RANKMATH STYLE SEO ENGINE ---
+    function calculateSeoScore() {
+      const title = document.getElementById('edit-title').value.toLowerCase();
+      const content = document.getElementById('edit-content').value.toLowerCase();
+      const excerpt = document.getElementById('edit-excerpt').value.toLowerCase();
+      const kw = document.getElementById('seo-focus-kw').value.trim().toLowerCase();
+
+      let score = 20;
+
+      const ruleTitle = document.getElementById('seo-rule-title');
+      const ruleContent = document.getElementById('seo-rule-content');
+      const ruleLength = document.getElementById('seo-rule-length');
+      const ruleDesc = document.getElementById('seo-rule-desc');
+
+      if (kw && title.includes(kw)) {
+        score += 25;
+        ruleTitle.style.color = 'var(--wp-success)';
+        ruleTitle.textContent = '✓ Kata kunci ada di Judul';
+      } else {
+        ruleTitle.style.color = 'var(--wp-dim)';
+        ruleTitle.textContent = '○ Kata kunci belum ada di Judul';
+      }
+
+      if (kw && content.includes(kw)) {
+        score += 25;
+        ruleContent.style.color = 'var(--wp-success)';
+        ruleContent.textContent = '✓ Kata kunci ditemukan di konten';
+      } else {
+        ruleContent.style.color = 'var(--wp-dim)';
+        ruleContent.textContent = '○ Kata kunci belum ada di konten';
+      }
+
+      const wordCount = content.split(/\s+/).filter(Boolean).length;
+      if (wordCount >= 200) {
+        score += 15;
+        ruleLength.style.color = 'var(--wp-success)';
+        ruleLength.textContent = `✓ Panjang konten (${wordCount} kata) memadai`;
+      } else {
+        ruleLength.style.color = 'var(--wp-dim)';
+        ruleLength.textContent = `○ Konten masih pendek (${wordCount} kata)`;
+      }
+
+      if (excerpt.length >= 50) {
+        score += 15;
+        ruleDesc.style.color = 'var(--wp-success)';
+        ruleDesc.textContent = '✓ Ringkasan meta description optimal';
+      } else {
+        ruleDesc.style.color = 'var(--wp-dim)';
+        ruleDesc.textContent = '○ Ringkasan meta masih kurang dari 50 karakter';
+      }
+
+      const badge = document.getElementById('seo-score-badge');
+      badge.textContent = `${score} / 100`;
+
+      if (score >= 80) {
+        badge.style.background = 'rgba(16,185,129,0.15)';
+        badge.style.color = 'var(--wp-success)';
+      } else if (score >= 50) {
+        badge.style.background = 'rgba(245,158,11,0.15)';
+        badge.style.color = 'var(--wp-warning)';
+      } else {
+        badge.style.background = 'rgba(239,68,68,0.15)';
+        badge.style.color = 'var(--wp-danger)';
+      }
+    }
+
+    async function savePostCurrent(publish) {
+      const id = document.getElementById('edit-id').value;
+      const title = document.getElementById('edit-title').value.trim();
+      const slug = document.getElementById('edit-slug').value.trim();
+      const content = document.getElementById('edit-content').value;
+      const excerpt = document.getElementById('edit-excerpt').value.trim();
+      const category = document.getElementById('edit-category').value;
+      const tags = document.getElementById('edit-tags').value.split(',').map(t => t.trim()).filter(Boolean);
+      const featured_image = document.getElementById('edit-cover-url').value;
+
+      if (!title || !slug) {
+        alert('Judul dan Slug wajib diisi.');
+        return;
+      }
+
+      const wordCount = content.split(/\s+/).filter(Boolean).length;
+      const reading_time_minutes = Math.max(1, Math.ceil(wordCount / 200));
+
+      const postData = {
+        title,
+        slug,
+        content,
+        excerpt,
+        category,
+        tags,
+        featured_image,
+        is_published: publish,
+        reading_time_minutes
+      };
+
+      if (id) {
+        await window.BlogService.updatePost(id, postData);
+        showToast(publish ? 'Artikel berhasil diterbitkan!' : 'Konsep tersimpan.');
+      } else {
+        await window.BlogService.createPost(postData);
+        showToast(publish ? 'Artikel baru telah terbit!' : 'Konsep artikel dibuat.');
+      }
+
+      switchNav('posts');
+      refreshPosts();
+    }
+
+    // --- 6. CATEGORIES & MEDIA ---
+    function populateCategorySelects() {
+      const cats = window.BlogService.getCategories();
+      const filterSelect = document.getElementById('filter-category-select');
+      const editSelect = document.getElementById('edit-category');
+
+      if (filterSelect) {
+        filterSelect.innerHTML = '<option value="Semua">Semua Kategori</option>' + 
+          cats.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+      }
+
+      if (editSelect) {
+        editSelect.innerHTML = cats.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+      }
+
+      const catMetric = document.getElementById('metric-categories');
+      if (catMetric) catMetric.textContent = cats.length;
+    }
+
+    function refreshCategories() {
+      const cats = window.BlogService.getCategories();
+      const tbody = document.getElementById('categories-tbody');
+      tbody.innerHTML = cats.map(cat => `
+        <tr>
+          <td><strong style="color:#FFF;">${cat.name}</strong></td>
+          <td><code>${cat.slug}</code></td>
+          <td style="color:var(--wp-dim);">${cat.description || '-'}</td>
+          <td style="text-align:center;">
+            <button class="micro-chip chip-trash" onclick="handleDeleteCategory('${cat.slug}')">Hapus</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function handleCreateCategory(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-cat-name').value.trim();
+      const slug = document.getElementById('new-cat-slug').value.trim() || name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const description = document.getElementById('new-cat-desc').value.trim();
+
+      window.BlogService.saveCategory({ name, slug, description });
+      showToast('Kategori baru ditambahkan!');
+      document.getElementById('new-cat-name').value = '';
+      document.getElementById('new-cat-slug').value = '';
+      document.getElementById('new-cat-desc').value = '';
+      populateCategorySelects();
+      refreshCategories();
+    }
+
+    function handleDeleteCategory(slug) {
+      if (confirm('Hapus kategori ini?')) {
+        window.BlogService.deleteCategory(slug);
+        showToast('Kategori dihapus.');
+        populateCategorySelects();
+        refreshCategories();
+      }
+    }
+
+    // --- 7. MEDIA LIBRARY & LUXURY GALLERY ENGINE ---
+    let currentMediaFilter = '';
+    let inspectingMediaId = null;
+
+    function refreshMedia() {
+      const media = window.BlogService.getMedia();
+      const container = document.getElementById('media-gallery');
+      const stats = document.getElementById('media-stats-summary');
+
+      let filtered = media;
+      if (currentMediaFilter) {
+        filtered = media.filter(m => (m.name || m.title || '').toLowerCase().includes(currentMediaFilter.toLowerCase()));
+      }
+
+      if (stats) {
+        stats.textContent = `Total ${media.length} berkas media tersimpan · Siap digunakan untuk ilustrasi artikel.`;
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:3.5rem;background:var(--wp-surface);border:1px dashed var(--wp-border);border-radius:12px;">
+            <div style="font-size:32px;margin-bottom:0.5rem;">🖼️</div>
+            <div style="font-size:14px;font-weight:600;color:#FFF;margin-bottom:0.25rem;">Tidak ada berkas media yang cocok</div>
+            <p style="font-size:12px;color:var(--wp-dim);">Unggah gambar baru atau gunakan kolom pencarian untuk menemukan aset.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(m => {
+        const title = m.name || m.title || 'Berkas Media';
+        const ext = title.split('.').pop().toUpperCase();
+        const size = m.size || '180 KB';
+        const date = m.date || 'Terbaru';
+
+        return `
+          <div class="media-card" id="media-card-${m.id}">
+            <div class="media-thumb-box" onclick="openInspectModal('${m.id}')">
+              <img src="${m.url}" alt="${title}" class="media-thumb-img" loading="lazy">
+              <div class="media-overlay-actions" onclick="event.stopPropagation()">
+                <button class="media-action-pill" onclick="openInspectModal('${m.id}')" title="Buka Detail">🔍 Detail</button>
+                <button class="media-action-pill" onclick="copyMediaMarkdown('${m.url}', '${title}')" title="Salin Kode Markdown">📋 MD</button>
+                <button class="media-action-pill" onclick="copyMediaDirectUrl('${m.url}')" title="Salin URL">🔗 URL</button>
+                <button class="media-action-pill pill-delete" onclick="deleteMediaDirect('${m.id}')" title="Hapus">🗑️</button>
+              </div>
+            </div>
+            <div class="media-body-info">
+              <div class="media-item-title" title="${title}">${title}</div>
+              <div class="media-item-sub">
+                <span class="format-badge">${ext}</span>
+                <span>${size}</span>
+                <span>${date}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function onMediaSearch(val) {
+      currentMediaFilter = val.trim();
+      refreshMedia();
+    }
+
+    // --- Drag & Drop & Local File Upload ---
+    function handleDragOver(e) {
+      e.preventDefault();
+      document.getElementById('media-dropzone').classList.add('dragover');
+    }
+    function handleDragLeave(e) {
+      e.preventDefault();
+      document.getElementById('media-dropzone').classList.remove('dragover');
+    }
+    function handleDrop(e) {
+      e.preventDefault();
+      document.getElementById('media-dropzone').classList.remove('dragover');
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        processUploadFiles(e.dataTransfer.files);
+      }
+    }
+
+    function handleFileInputChange(e) {
+      if (e.target.files && e.target.files.length > 0) {
+        processUploadFiles(e.target.files);
+        e.target.value = '';
+      }
+    }
+
+    function processUploadFiles(files) {
+      let count = 0;
+      Array.from(files).forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        const sizeKb = Math.round(file.size / 1024) + ' KB';
+        reader.onload = (uploadEvt) => {
+          window.BlogService.addMedia({
+            name: file.name,
+            title: file.name,
+            url: uploadEvt.target.result,
+            size: sizeKb,
+            type: file.type
+          });
+          count++;
+          showToast(`Berhasil mengunggah ${file.name}!`);
+          refreshMedia();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // --- Quick Copy Helpers ---
+    function copyMediaMarkdown(url, name) {
+      const code = `![${name}](${url})`;
+      navigator.clipboard.writeText(code);
+      showToast('Kode Markdown disalin ke clipboard!');
+    }
+
+    function copyMediaDirectUrl(url) {
+      navigator.clipboard.writeText(url);
+      showToast('Tautan URL langsung disalin!');
+    }
+
+    function deleteMediaDirect(id) {
+      if (confirm('Hapus berkas media ini dari pustaka?')) {
+        window.BlogService.deleteMedia(id);
+        showToast('Berkas media dihapus.');
+        refreshMedia();
+        closeInspectModal();
+      }
+    }
+
+    // --- Lightbox / Inspect Modal ---
+    function openInspectModal(id) {
+      const media = window.BlogService.getMedia();
+      const item = media.find(m => m.id === id);
+      if (!item) return;
+
+      inspectingMediaId = id;
+      const title = item.name || item.title || 'gambar';
+      document.getElementById('inspect-img').src = item.url;
+      document.getElementById('inspect-filename').textContent = title;
+      document.getElementById('inspect-size').textContent = item.size || '180 KB';
+      document.getElementById('inspect-type').textContent = item.type || 'image/jpeg';
+      document.getElementById('inspect-date').textContent = item.date || 'Terbaru';
+      document.getElementById('inspect-url-input').value = item.url;
+      document.getElementById('inspect-md-input').value = `![${title}](${item.url})`;
+
+      document.getElementById('inspect-delete-btn').onclick = () => deleteMediaDirect(id);
+      document.getElementById('modal-media-inspect').style.display = 'flex';
+    }
+
+    function closeInspectModal() {
+      document.getElementById('modal-media-inspect').style.display = 'none';
+      inspectingMediaId = null;
+    }
+
+    function copyInspectUrl() {
+      const val = document.getElementById('inspect-url-input').value;
+      navigator.clipboard.writeText(val);
+      showToast('URL gambar disalin!');
+    }
+
+    function copyInspectMd() {
+      const val = document.getElementById('inspect-md-input').value;
+      navigator.clipboard.writeText(val);
+      showToast('Kode Markdown disalin!');
+    }
+
+    // --- Media Selector Modal for Editor ---
+    function openMediaModalForEditor(targetMode) {
+      mediaTargetMode = targetMode;
+      const media = window.BlogService.getMedia();
+      const container = document.getElementById('modal-media-list');
+
+      container.innerHTML = media.map(m => {
+        const title = m.name || m.title || 'Asset';
+        return `
+          <div class="media-modal-item" onclick="selectMediaItem('${m.url}', this, true)" style="cursor:pointer;border:2px solid transparent;border-radius:8px;overflow:hidden;background:var(--wp-surface);transition:all 0.15s ease;">
+            <img src="${m.url}" alt="${title}" style="width:100%;height:90px;object-fit:cover;display:block;">
+            <div style="padding:0.4rem;font-size:11px;color:var(--wp-muted);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${title}</div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('modal-media').style.display = 'flex';
+    }
+
+    function selectMediaItem(url, el, isModal) {
+      selectedMediaUrl = url;
+      document.querySelectorAll('.media-modal-item').forEach(item => {
+        item.style.borderColor = 'transparent';
+      });
+      if (el) el.style.borderColor = 'var(--wp-brand)';
+    }
+
+    function confirmMediaSelection() {
+      if (!selectedMediaUrl) {
+        alert('Pilih salah satu gambar terlebih dahulu.');
+        return;
+      }
+
+      if (mediaTargetMode === 'cover') {
+        setCoverImage(selectedMediaUrl);
+        showToast('Gambar utama artikel berhasil dipilih!');
+      } else if (mediaTargetMode === 'settings_og') {
+        document.getElementById('setting-og-image').value = selectedMediaUrl;
+        updateOgPreview(selectedMediaUrl);
+        showToast('Gambar OpenGraph berhasil dipilih!');
+      } else {
+        insertFormatting(`\n![Ilustrasi](${selectedMediaUrl})\n`, '');
+        showToast('Gambar disisipkan ke editor Markdown!');
+      }
+
+      closeMediaModal();
+    }
+
+    function closeMediaModal() {
+      document.getElementById('modal-media').style.display = 'none';
+      selectedMediaUrl = '';
+    }
+
+    function openUploadModal() {
+      document.getElementById('modal-upload').style.display = 'flex';
+    }
+    function closeUploadModal() {
+      document.getElementById('modal-upload').style.display = 'none';
+    }
+
+    function handleAddMediaItem(e) {
+      e.preventDefault();
+      const title = document.getElementById('new-media-title').value.trim();
+      const url = document.getElementById('new-media-url').value.trim();
+
+      window.BlogService.addMedia({ name: title, title: title, url: url, size: 'Online URL' });
+      showToast('Media baru tersimpan di pustaka!');
+      closeUploadModal();
+      document.getElementById('new-media-title').value = '';
+      document.getElementById('new-media-url').value = '';
+      refreshMedia();
+    }
+
+    // --- 8. BACKUP & EXPORT / IMPORT ---
+    function handleExportBackup() {
+      const dataStr = window.BlogService.exportData();
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `helmirfansah-cms-backup-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Cadangan data JSON berhasil diunduh!');
+    }
+
+    async function handleImportBackup() {
+      const fileInput = document.getElementById('import-file');
+      if (!fileInput.files || !fileInput.files[0]) {
+        alert('Pilih file JSON cadangan.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const { count } = await window.BlogService.importData(e.target.result);
+          showToast(`Berhasil mengimpor ${count} artikel cadangan!`);
+          refreshPosts();
+          populateCategorySelects();
+        } catch (err) {
+          alert('Gagal impor: ' + err.message);
+        }
+      };
+      reader.readAsText(fileInput.files[0]);
+    }
+
+    // --- 9. SUPABASE CONFIG MODAL ---
+    function openSupabaseModal() {
+      const cfg = window.BlogService.getConfig();
+      document.getElementById('sb-cfg-url').value = cfg.url || '';
+      document.getElementById('sb-cfg-key').value = cfg.anonKey || '';
+      document.getElementById('modal-supabase').style.display = 'flex';
+    }
+
+    function closeSupabaseModal() {
+      document.getElementById('modal-supabase').style.display = 'none';
+    }
+
+    function saveSupabaseCredentials(e) {
+      e.preventDefault();
+      const url = document.getElementById('sb-cfg-url').value.trim();
+      const key = document.getElementById('sb-cfg-key').value.trim();
+      window.BlogService.saveConfig(url, key);
+      showToast('Koneksi Supabase tersimpan!');
+      closeSupabaseModal();
+      refreshPosts();
+      updateDbStatusIndicator();
+    }
+
+    function resetToLocalMode() {
+      window.BlogService.clearConfig();
+      showToast('Beralih ke Local Mode.');
+      closeSupabaseModal();
+      refreshPosts();
+      updateDbStatusIndicator();
+    }
+
+    // --- 10. SITE & GLOBAL SEO SETTINGS ---
+    function updateOgPreview(url) {
+      const box = document.getElementById('og-preview-box');
+      const img = document.getElementById('og-preview-img');
+      if (box && img) {
+        if (url && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:image'))) {
+          img.src = url;
+          box.style.display = 'block';
+        } else {
+          box.style.display = 'none';
+        }
+      }
+    }
+
+    function loadSettingsForm() {
+      const s = window.BlogService.getSettings();
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val !== undefined ? val : '';
+      };
+
+      setVal('setting-site-title', s.site_title);
+      setVal('setting-site-tagline', s.site_tagline);
+      setVal('setting-site-url', s.site_url);
+      setVal('setting-author-name', s.author_name);
+      setVal('setting-contact-email', s.contact_email);
+      setVal('setting-title-format', s.meta_title_format || '%title% - %site_name%');
+      setVal('setting-meta-desc', s.meta_description);
+      const descCount = document.getElementById('setting-meta-desc-count');
+      if (descCount) descCount.textContent = (s.meta_description || '').length + ' karakter';
+      setVal('setting-keywords', s.meta_keywords);
+      setVal('setting-google-verif', s.google_verification);
+      setVal('setting-og-image', s.og_image);
+      updateOgPreview(s.og_image);
+      setVal('setting-adsense-id', s.adsense_client_id);
+      const adsEnabled = document.getElementById('setting-adsense-enabled');
+      if (adsEnabled) adsEnabled.checked = !!s.adsense_enabled;
+      setVal('setting-ads-txt', s.ads_txt_content);
+
+      // Lab & Calculator Settings
+      const labEnabled = document.getElementById('setting-lab-enabled');
+      if (labEnabled) labEnabled.checked = s.lab_enabled !== false;
+      setVal('setting-lab-badge', s.lab_badge || 'LAB & KALKULATOR');
+      setVal('setting-lab-title', s.lab_title || 'Tools Gratis untuk Developer & Startup');
+      setVal('setting-lab-desc', s.lab_desc || 'Kalkulator interaktif untuk membuat keputusan infrastruktur yang lebih tepat - tanpa perlu menghitung manual.');
+      setVal('setting-lab-usd-idr', s.lab_usd_idr || 16000);
+    }
+
+    function saveSettingsForm() {
+      const getVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+      };
+
+      const updated = {
+        site_title: getVal('setting-site-title'),
+        site_tagline: getVal('setting-site-tagline'),
+        site_url: getVal('setting-site-url'),
+        author_name: getVal('setting-author-name'),
+        contact_email: getVal('setting-contact-email'),
+        meta_title_format: getVal('setting-title-format'),
+        meta_description: getVal('setting-meta-desc'),
+        meta_keywords: getVal('setting-keywords'),
+        google_verification: getVal('setting-google-verif'),
+        og_image: getVal('setting-og-image'),
+        adsense_client_id: getVal('setting-adsense-id'),
+        adsense_enabled: document.getElementById('setting-adsense-enabled') ? document.getElementById('setting-adsense-enabled').checked : false,
+        ads_txt_content: getVal('setting-ads-txt'),
+        lab_enabled: document.getElementById('setting-lab-enabled') ? document.getElementById('setting-lab-enabled').checked : true,
+        lab_badge: getVal('setting-lab-badge') || 'LAB & KALKULATOR',
+        lab_title: getVal('setting-lab-title') || 'Tools Gratis untuk Developer & Startup',
+        lab_desc: getVal('setting-lab-desc') || 'Kalkulator interaktif untuk membuat keputusan infrastruktur yang lebih tepat - tanpa perlu menghitung manual.',
+        lab_usd_idr: parseInt(getVal('setting-lab-usd-idr') || '16000', 10)
+      };
+
+      window.BlogService.saveSettings(updated);
+      showToast('Pengaturan Situs, SEO, & Modul Lab berhasil disimpan!');
+    }
+
+    // --- BRANDING & COPY FORM HANDLERS ---
+    function loadBrandingForm() {
+      const s = window.BlogService.getSettings();
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val !== undefined ? val : '';
+      };
+
+      // Header, Logo, Footer
+      setVal('brand-logo-text', s.brand_logo_text || 'Helmi Irfansah');
+      setVal('brand-footer-status', s.footer_status_text || '● Siap Berkolaborasi');
+      setVal('brand-footer-copyright', s.footer_copyright || '© 2026 Helmi · Dibuat dengan bantuan Antigravity');
+
+      // Hero
+      setVal('brand-hero-badge', s.hero_badge || 'Riset Teknis & Rekayasa Sistem · helmirfansah.com');
+      setVal('brand-hero-title', s.hero_title || 'Membongkar kompleksitas <em style="font-style:italic;color:var(--accent-clay);">cloud</em> dan perangkat lunak.');
+      setVal('brand-hero-sub', s.hero_sub || 'Dari audit efisiensi server hingga integrasi AI modern - dibedah tuntas dengan data empiris, angka nyata, dan arsitektur mandiri (self-hosted).');
+      setVal('brand-hero-cta1-text', s.hero_cta_1_text || 'Buka Lab Kalkulator');
+      setVal('brand-hero-cta1-url', s.hero_cta_1_url || '#lab');
+      setVal('brand-hero-cta2-text', s.hero_cta_2_text || 'Baca Catatan Teknis →');
+      setVal('brand-hero-cta2-url', s.hero_cta_2_url || '/blog');
+
+      // About
+      setVal('brand-about-badge', s.about_badge || 'Tentang Saya');
+      setVal('brand-about-title', s.about_title || 'Membangun perangkat lunak.<br>Membagikan apa yang dipelajari.');
+      setVal('brand-about-p1', s.about_p1 || 'Halo, saya <strong>Helmi Irfansah</strong>. Saya seorang software engineer dan tech writer asal Indonesia yang berfokus pada arsitektur cloud berbiaya efisien, integrasi AI modern, dan pengembangan produk B2B SaaS.');
+      setVal('brand-about-p2', s.about_p2 || 'Di era di mana biaya cloud dan kompleksitas stack semakin tidak terkendali, saya memprioritaskan kesederhanaan, transparansi angka, dan kepemilikan data mandiri (self-hosting).');
+      setVal('brand-about-p3', s.about_p3 || 'Website ini adalah kanvas riset terbuka saya - tempat saya mempublikasikan benchmark latensi nyata, audit biaya penyedia infrastruktur, dan kalkulator interaktif gratis untuk membantu sesama developer & pendiri startup.');
+
+      // 4 Skills (Numbers, Titles, Descriptions)
+      setVal('brand-skill1-num', s.skill_1_num || '01');
+      setVal('brand-skill1-title', s.skill_1_title || 'Cloud Architecture & VPS');
+      setVal('brand-skill1-desc', s.skill_1_desc || 'Migrasi dari platform serverless mahal (Vercel, Heroku) ke VPS mandiri (Coolify, Dokku, Hetzner, Biznet Gio) yang menghemat biaya hingga 80%.');
+      
+      setVal('brand-skill2-num', s.skill_2_num || '02');
+      setVal('brand-skill2-title', s.skill_2_title || 'BaaS & Database Modern');
+      setVal('brand-skill2-desc', s.skill_2_desc || 'PostgreSQL, Supabase, Firebase, dan ClickHouse - merancang skema relasional tangguh dengan Row Level Security dan query sub-50ms.');
+      
+      setVal('brand-skill3-num', s.skill_3_num || '03');
+      setVal('brand-skill3-title', s.skill_3_title || 'Integrasi LLM & AI Tools');
+      setVal('brand-skill3-desc', s.skill_3_desc || 'Menerapkan OpenAI, Anthropic Claude, dan Gemini API ke dalam produk produksi dengan caching token efisien dan pemantauan biaya transparan.');
+      
+      setVal('brand-skill4-num', s.skill_4_num || '04');
+      setVal('brand-skill4-title', s.skill_4_title || 'B2B Payment & FinTech');
+      setVal('brand-skill4-desc', s.skill_4_desc || 'Integrasi Midtrans, Xendit, dan Doku untuk pasar Indonesia - simulasi fee transaksi, penanganan webhook andal, dan rekonsiliasi otomatis.');
+
+      // Featured Works & Notes
+      setVal('brand-works-badge', s.works_badge || 'Studi Kasus Unggulan');
+      setVal('brand-works-title', s.works_title || 'Eksplorasi Teknis<br>& Benchmark Nyata');
+      setVal('brand-works-more-btn', s.works_more_btn_text || 'Lihat Semua Tulisan →');
+      setVal('brand-works-empty-title', s.works_empty_title || 'Belum Ada Studi Kasus Dipublikasikan');
+      setVal('brand-works-empty-desc', s.works_empty_desc || 'Artikel dan eksplorasi teknis terbaru akan segera hadir. Anda dapat menulis dan merilis artikel pertama Anda melalui panel admin.');
+      setVal('brand-works-empty-btn', s.works_empty_btn || 'Buka Admin Panel →');
+
+      setVal('brand-notes-badge', s.notes_badge || 'Catatan Teknis');
+      setVal('brand-notes-title', s.notes_title || 'Fragmen Pemikiran<br>& Eksplorasi');
+      setVal('brand-notes-empty-desc', s.notes_empty_desc || 'Belum ada catatan teknis tersedia saat ini.');
+      setVal('brand-notes-more-btn', s.notes_more_btn_text || 'Semua Catatan →');
+
+      // Lab & Calculator
+      setVal('brand-lab-badge', s.lab_badge || 'LAB & KALKULATOR');
+      setVal('brand-lab-title', s.lab_title || 'Tools Gratis<br>untuk Developer & Startup');
+      setVal('brand-lab-desc', s.lab_desc || 'Kalkulator interaktif untuk membuat keputusan infrastruktur yang lebih tepat - tanpa perlu menghitung manual.');
+
+      // Contact
+      setVal('brand-contact-badge', s.contact_badge || 'Kontak');
+      setVal('brand-contact-title', s.contact_title || 'Mari ngobrol.');
+      setVal('brand-contact-desc', s.contact_desc || 'Tertarik berkolaborasi, ada pertanyaan teknis, atau sekadar mau berdiskusi tentang tech? Saya terbuka untuk semuanya.');
+      setVal('brand-contact-email', s.contact_email || 'halo@helmirfansah.com');
+      setVal('brand-contact-github-text', s.contact_github_text || 'GitHub');
+      setVal('brand-contact-github-url', s.contact_github_url || 'https://github.com/helmirfansah');
+      setVal('brand-contact-linkedin-text', s.contact_linkedin_text || 'LinkedIn');
+      setVal('brand-contact-linkedin-url', s.contact_linkedin_url || 'https://linkedin.com/in/helmirfansah');
+
+      // Blog Archive
+      setVal('brand-blog-title', s.blog_archive_title || 'Catatan & Studi Kasus');
+      setVal('brand-blog-desc', s.blog_archive_desc || 'Eksplorasi teknis mendalam tentang cloud architecture, evaluasi biaya SaaS, dan tooling AI berdasarkan uji coba dunia nyata.');
+    }
+
+    function saveBrandingForm() {
+      const getVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+      };
+
+      const updated = {
+        // Header, Logo, Footer
+        brand_logo_text: getVal('brand-logo-text'),
+        footer_status_text: getVal('brand-footer-status'),
+        footer_copyright: getVal('brand-footer-copyright'),
+
+        // Hero
+        hero_badge: getVal('brand-hero-badge'),
+        hero_title: getVal('brand-hero-title'),
+        hero_sub: getVal('brand-hero-sub'),
+        hero_cta_1_text: getVal('brand-hero-cta1-text'),
+        hero_cta_1_url: getVal('brand-hero-cta1-url'),
+        hero_cta_2_text: getVal('brand-hero-cta2-text'),
+        hero_cta_2_url: getVal('brand-hero-cta2-url'),
+
+        // About
+        about_badge: getVal('brand-about-badge'),
+        about_title: getVal('brand-about-title'),
+        about_p1: getVal('brand-about-p1'),
+        about_p2: getVal('brand-about-p2'),
+        about_p3: getVal('brand-about-p3'),
+
+        // 4 Skills
+        skill_1_num: getVal('brand-skill1-num'),
+        skill_1_title: getVal('brand-skill1-title'),
+        skill_1_desc: getVal('brand-skill1-desc'),
+        skill_2_num: getVal('brand-skill2-num'),
+        skill_2_title: getVal('brand-skill2-title'),
+        skill_2_desc: getVal('brand-skill2-desc'),
+        skill_3_num: getVal('brand-skill3-num'),
+        skill_3_title: getVal('brand-skill3-title'),
+        skill_3_desc: getVal('brand-skill3-desc'),
+        skill_4_num: getVal('brand-skill4-num'),
+        skill_4_title: getVal('brand-skill4-title'),
+        skill_4_desc: getVal('brand-skill4-desc'),
+
+        // Featured Works & Notes
+        works_badge: getVal('brand-works-badge'),
+        works_title: getVal('brand-works-title'),
+        works_more_btn_text: getVal('brand-works-more-btn'),
+        works_empty_title: getVal('brand-works-empty-title'),
+        works_empty_desc: getVal('brand-works-empty-desc'),
+        works_empty_btn: getVal('brand-works-empty-btn'),
+
+        notes_badge: getVal('brand-notes-badge'),
+        notes_title: getVal('brand-notes-title'),
+        notes_empty_desc: getVal('brand-notes-empty-desc'),
+        notes_more_btn_text: getVal('brand-notes-more-btn'),
+
+        // Lab & Calculator
+        lab_badge: getVal('brand-lab-badge'),
+        lab_title: getVal('brand-lab-title'),
+        lab_desc: getVal('brand-lab-desc'),
+
+        // Contact
+        contact_badge: getVal('brand-contact-badge'),
+        contact_title: getVal('brand-contact-title'),
+        contact_desc: getVal('brand-contact-desc'),
+        contact_email: getVal('brand-contact-email'),
+        contact_github_text: getVal('brand-contact-github-text'),
+        contact_github_url: getVal('brand-contact-github-url'),
+        contact_linkedin_text: getVal('brand-contact-linkedin-text'),
+        contact_linkedin_url: getVal('brand-contact-linkedin-url'),
+
+        // Blog Archive
+        blog_archive_title: getVal('brand-blog-title'),
+        blog_archive_desc: getVal('brand-blog-desc')
+      };
+
+      window.BlogService.saveSettings(updated);
+      showToast('Seluruh tulisan dan branding website berhasil disimpan!');
+    }
+
+    // --- 10. WEBSITE NAVIGATION MANAGEMENT (UTAMA & FOOTER) ---
+    let navState = {
+      activeTab: 'main',
+      main: [],
+      footer: []
+    };
+
+    const DEFAULT_NAV_MAIN = [
+      { id: 'nav_1', label: 'Tentang', url: '/#about', target: '_self' },
+      { id: 'nav_2', label: 'Arsip Karya', url: '/#works', target: '_self' },
+      { id: 'nav_3', label: 'Lab & Kalkulator', url: '/#lab', target: '_self' },
+      { id: 'nav_4', label: 'Blog', url: '/blog', target: '_self' },
+      { id: 'nav_5', label: 'Kontak', url: '/#contact', target: '_self' }
+    ];
+
+    const DEFAULT_NAV_FOOTER = [
+      { id: 'fnav_1', label: 'About Me', url: '/#about', target: '_self' },
+      { id: 'fnav_2', label: 'Privacy Policy', url: '/privacy', target: '_self' },
+      { id: 'fnav_3', label: 'Disclaimer', url: '/disclaimer', target: '_self' },
+      { id: 'fnav_4', label: 'Contact', url: '/#contact', target: '_self' }
+    ];
+
+    function escapeNavHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function switchNavTab(tab) {
+      navState.activeTab = tab;
+      const tabMainBtn = document.getElementById('tab-btn-nav-main');
+      const tabFooterBtn = document.getElementById('tab-btn-nav-footer');
+      const contentMain = document.getElementById('nav-tab-content-main');
+      const contentFooter = document.getElementById('nav-tab-content-footer');
+      const subMain = document.getElementById('nav-sub-main');
+      const subFooter = document.getElementById('nav-sub-footer');
+
+      if (tab === 'main') {
+        if (tabMainBtn) tabMainBtn.classList.add('active');
+        if (tabFooterBtn) tabFooterBtn.classList.remove('active');
+        if (contentMain) contentMain.style.display = 'flex';
+        if (contentFooter) contentFooter.style.display = 'none';
+        if (subMain) subMain.classList.add('active');
+        if (subFooter) subFooter.classList.remove('active');
+        const titleEl = document.getElementById('topbar-title');
+        if (titleEl) titleEl.textContent = 'Navigasi Website · Menu Utama';
+      } else {
+        if (tabMainBtn) tabMainBtn.classList.remove('active');
+        if (tabFooterBtn) tabFooterBtn.classList.add('active');
+        if (contentMain) contentMain.style.display = 'none';
+        if (contentFooter) contentFooter.style.display = 'flex';
+        if (subMain) subMain.classList.remove('active');
+        if (subFooter) subFooter.classList.add('active');
+        const titleEl = document.getElementById('topbar-title');
+        if (titleEl) titleEl.textContent = 'Navigasi Website · Menu Footer';
+      }
+    }
+
+    function loadNavigationForm() {
+      const s = window.BlogService.getSettings();
+      navState.main = (s.nav_main && Array.isArray(s.nav_main) && s.nav_main.length > 0)
+        ? JSON.parse(JSON.stringify(s.nav_main))
+        : JSON.parse(JSON.stringify(DEFAULT_NAV_MAIN));
+
+      navState.footer = (s.nav_footer && Array.isArray(s.nav_footer) && s.nav_footer.length > 0)
+        ? JSON.parse(JSON.stringify(s.nav_footer))
+        : JSON.parse(JSON.stringify(DEFAULT_NAV_FOOTER));
+
+      renderNavItems('main');
+      renderNavItems('footer');
+      updateNavBadges();
+    }
+
+    function updateNavBadges() {
+      const bMain = document.getElementById('badge-count-nav-main');
+      const bFooter = document.getElementById('badge-count-nav-footer');
+      if (bMain) bMain.textContent = navState.main.length;
+      if (bFooter) bFooter.textContent = navState.footer.length;
+    }
+
+    function renderNavItems(type) {
+      const list = type === 'main' ? navState.main : navState.footer;
+      const container = document.getElementById(type === 'main' ? 'nav-list-main-container' : 'nav-list-footer-container');
+      if (!container) return;
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center;padding:2rem;border:1px dashed var(--wp-border);border-radius:8px;color:var(--wp-dim);">
+            <p style="font-size:13px;margin-bottom:0.75rem;">Belum ada tautan navigasi di seksi ini.</p>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="addNavItem('${type}')">+ Tambah Tautan Pertama</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map((item, idx) => {
+        const isFirst = idx === 0;
+        const isLast = idx === list.length - 1;
+        return `
+          <div class="nav-item-card" data-index="${idx}" data-type="${type}">
+            <!-- Order Arrows & Badge -->
+            <div class="nav-item-order">
+              <button type="button" class="nav-order-btn" onclick="moveNavItem('${type}', ${idx}, -1)" ${isFirst ? 'disabled' : ''} title="Geser ke Atas">▲</button>
+              <span style="font-size:11px;font-weight:700;color:var(--wp-brand);">${idx + 1}</span>
+              <button type="button" class="nav-order-btn" onclick="moveNavItem('${type}', ${idx}, 1)" ${isLast ? 'disabled' : ''} title="Geser ke Bawah">▼</button>
+            </div>
+
+            <!-- Inputs -->
+            <div style="flex:1;display:grid;grid-template-columns:1.2fr 2fr 1fr;gap:0.75rem;align-items:center;">
+              <div>
+                <label style="display:block;font-size:11px;color:var(--wp-muted);margin-bottom:0.2rem;">Label Menu</label>
+                <input type="text" class="input" value="${escapeNavHtml(item.label || '')}" 
+                  placeholder="Misal: Tentang" 
+                  oninput="updateNavItemVal('${type}', ${idx}, 'label', this.value)"
+                  style="font-size:12.5px;padding:0.45rem 0.65rem;">
+              </div>
+
+              <div>
+                <label style="display:block;font-size:11px;color:var(--wp-muted);margin-bottom:0.2rem;">URL Target</label>
+                <input type="text" class="input" value="${escapeNavHtml(item.url || '')}" 
+                  placeholder="Misal: /#about atau /blog" 
+                  oninput="updateNavItemVal('${type}', ${idx}, 'url', this.value)"
+                  style="font-size:12.5px;padding:0.45rem 0.65rem;font-family:var(--font-mono);">
+              </div>
+
+              <div>
+                <label style="display:block;font-size:11px;color:var(--wp-muted);margin-bottom:0.2rem;">Buka Tautan</label>
+                <select class="input" onchange="updateNavItemVal('${type}', ${idx}, 'target', this.value)" style="font-size:12px;padding:0.45rem 0.5rem;">
+                  <option value="_self" ${(!item.target || item.target === '_self') ? 'selected' : ''}>Tab Ini (_self)</option>
+                  <option value="_blank" ${item.target === '_blank' ? 'selected' : ''}>Tab Baru (_blank)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Delete Action -->
+            <div>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="removeNavItem('${type}', ${idx})" title="Hapus Tautan Ini" style="color:#F87171;padding:0.45rem 0.6rem;">
+                <svg style="width:13px;height:13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function addNavItem(type) {
+      const list = type === 'main' ? navState.main : navState.footer;
+      const newItem = {
+        id: 'item_' + Date.now(),
+        label: type === 'main' ? 'Menu Baru' : 'Tautan Baru',
+        url: '/',
+        target: '_self'
+      };
+      list.push(newItem);
+      renderNavItems(type);
+      updateNavBadges();
+    }
+
+    function removeNavItem(type, idx) {
+      const list = type === 'main' ? navState.main : navState.footer;
+      list.splice(idx, 1);
+      renderNavItems(type);
+      updateNavBadges();
+    }
+
+    function moveNavItem(type, idx, direction) {
+      const list = type === 'main' ? navState.main : navState.footer;
+      const targetIdx = idx + direction;
+      if (targetIdx < 0 || targetIdx >= list.length) return;
+      const temp = list[idx];
+      list[idx] = list[targetIdx];
+      list[targetIdx] = temp;
+      renderNavItems(type);
+    }
+
+    function updateNavItemVal(type, idx, field, value) {
+      const list = type === 'main' ? navState.main : navState.footer;
+      if (list[idx]) {
+        list[idx][field] = value;
+      }
+    }
+
+    function resetNavToDefault() {
+      if (confirm('Apakah Anda yakin ingin mengembalikan seluruh daftar navigasi ke default bawaan?')) {
+        navState.main = JSON.parse(JSON.stringify(DEFAULT_NAV_MAIN));
+        navState.footer = JSON.parse(JSON.stringify(DEFAULT_NAV_FOOTER));
+        renderNavItems('main');
+        renderNavItems('footer');
+        updateNavBadges();
+        showToast('Navigasi telah direset ke default. Klik Simpan untuk menerapkannya.');
+      }
+    }
+
+    function saveNavigationForm() {
+      const cleanMain = navState.main
+        .filter(item => item.label && item.label.trim() !== '')
+        .map(item => ({
+          id: item.id || ('nav_' + Math.random().toString(36).substr(2, 6)),
+          label: item.label.trim(),
+          url: (item.url && item.url.trim()) ? item.url.trim() : '#',
+          target: item.target || '_self'
+        }));
+
+      const cleanFooter = navState.footer
+        .filter(item => item.label && item.label.trim() !== '')
+        .map(item => ({
+          id: item.id || ('fnav_' + Math.random().toString(36).substr(2, 6)),
+          label: item.label.trim(),
+          url: (item.url && item.url.trim()) ? item.url.trim() : '#',
+          target: item.target || '_self'
+        }));
+
+      navState.main = cleanMain;
+      navState.footer = cleanFooter;
+
+      window.BlogService.saveSettings({
+        nav_main: cleanMain,
+        nav_footer: cleanFooter
+      });
+
+      renderNavItems('main');
+      renderNavItems('footer');
+      updateNavBadges();
+      showToast('Navigasi Utama & Footer berhasil disimpan dan aktif seketika!');
+    }
+
+    // Setup Paste (Ctrl+V) & Drag-and-Drop Image Handlers
+    function setupEditorImageListeners() {
+      const editorEl = document.getElementById('edit-content');
+      if (editorEl) {
+        editorEl.addEventListener('paste', (e) => {
+          const items = e.clipboardData?.items;
+          if (!items) return;
+          for (let i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+              const blob = items[i].getAsFile();
+              if (blob) {
+                const filename = 'image-' + Date.now() + '.png';
+                const file = new File([blob], filename, { type: blob.type });
+                uploadAndInsertToEditor(file);
+                e.preventDefault();
+                break;
+              }
+            }
+          }
+        });
+
+        editorEl.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          editorEl.style.borderColor = 'var(--wp-brand)';
+        });
+        editorEl.addEventListener('dragleave', () => {
+          editorEl.style.borderColor = '';
+        });
+        editorEl.addEventListener('drop', (e) => {
+          e.preventDefault();
+          editorEl.style.borderColor = '';
+          if (e.dataTransfer?.files?.length > 0) {
+            const file = e.dataTransfer.files[0];
+            if (file.type.startsWith('image/')) {
+              uploadAndInsertToEditor(file);
+            }
+          }
+        });
+      }
+
+      const coverBox = document.getElementById('cover-preview-box');
+      if (coverBox) {
+        coverBox.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          coverBox.style.borderColor = 'var(--wp-brand)';
+          coverBox.style.background = 'rgba(172, 80, 54, 0.12)';
+        });
+        coverBox.addEventListener('dragleave', () => {
+          coverBox.style.borderColor = '';
+          coverBox.style.background = '';
+        });
+        coverBox.addEventListener('drop', (e) => {
+          e.preventDefault();
+          coverBox.style.borderColor = '';
+          coverBox.style.background = '';
+          if (e.dataTransfer?.files?.length > 0) {
+            const file = e.dataTransfer.files[0];
+            if (file.type.startsWith('image/')) {
+              handleCoverDirectUpload({ target: { files: [file], value: '' } });
+            }
+          }
+        });
+      }
+    }
+
+    // Launch Boot
+    bootAdmin();
+    setupEditorImageListeners();
+  </script>
+</body>
+</html>

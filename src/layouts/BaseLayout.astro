@@ -1,0 +1,202 @@
+---
+// src/layouts/BaseLayout.astro
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogType?: string;
+  schema?: Record<string, any>;
+}
+
+const {
+  title = "Helmi Irfansah · Tech Notes & Web Lab",
+  description = "Helmi Irfansah: developer Indonesia yang menulis studi teknis mendalam tentang cloud infrastructure, SaaS tools, AI, dan web development.",
+  canonical = Astro.url.href,
+  ogType = "website",
+  schema
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="author" content="Helmi Irfansah" />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+  <meta name="theme-color" content="#F6F1E4" id="theme-color-meta" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content={ogType} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:locale" content="id_ID" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@helmirfansah" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+
+  {schema && (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  )}
+</head>
+<body class="light" data-theme="light">
+
+  <!-- Ambient Generative Canvas & Cursor Trail -->
+  <div id="canvas-wall" aria-hidden="true"></div>
+  <div id="trail-canvas" aria-hidden="true"></div>
+
+  <!-- Header & Nav -->
+  <header id="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo" aria-label="Helmi Irfansah - Halaman Utama">
+        <span class="logo-mark" data-brand-key="brand_logo_text">Helmi Irfansah</span>
+      </a>
+
+      <nav id="main-nav" aria-label="Navigasi Utama">
+        <ul id="header-nav-list">
+          <li><a href="/#about">Tentang</a></li>
+          <li><a href="/#works">Arsip Karya</a></li>
+          <li><a href="/#lab">Lab &amp; Kalkulator</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/#contact">Kontak</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-controls">
+        <button id="theme-toggle" aria-label="Ganti tema terang/gelap" title="Ganti tema">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <button id="hamburger" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="mobile-nav-drawer">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Fullscreen Navigation Drawer (Direct child of body to escape header stacking context) -->
+  <div id="mobile-nav-drawer" class="mobile-drawer" aria-hidden="true">
+    <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop"></div>
+    <div class="mobile-drawer-content">
+      <div class="mobile-drawer-header">
+        <span class="logo-mark" data-brand-key="brand_logo_text">Helmi Irfansah</span>
+        <button id="mobile-drawer-close" class="mobile-close-icon" aria-label="Tutup menu">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <nav class="mobile-drawer-nav">
+        <ul class="mobile-drawer-list" id="drawer-nav-list">
+          <li><a href="/#about" class="mobile-drawer-link"><span class="link-idx">01</span><span class="link-text">Tentang</span></a></li>
+          <li><a href="/#works" class="mobile-drawer-link"><span class="link-idx">02</span><span class="link-text">Arsip Karya</span></a></li>
+          <li><a href="/#lab" class="mobile-drawer-link"><span class="link-idx">03</span><span class="link-text">Lab &amp; Kalkulator</span></a></li>
+          <li><a href="/blog" class="mobile-drawer-link"><span class="link-idx">04</span><span class="link-text">Blog</span></a></li>
+          <li><a href="/#contact" class="mobile-drawer-link"><span class="link-idx">05</span><span class="link-text">Kontak</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="mobile-drawer-footer">
+        <p data-brand-key="drawer_copyright">© 2026 Helmi Irfansah</p>
+        <span class="status-badge" data-brand-key="footer_status_text">● Siap Berkolaborasi</span>
+      </div>
+    </div>
+  </div>
+
+  <slot />
+
+  <!-- Footer -->
+  <footer id="site-footer">
+    <div class="footer-inner">
+      <p data-brand-key="footer_copyright">© 2026 <strong>Helmi</strong> · Dibuat dengan bantuan Antigravity</p>
+      <nav aria-label="Footer navigation" id="footer-nav-list">
+        <a href="/#about">About Me</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/disclaimer">Disclaimer</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script is:inline src="/supabase-client.js"></script>
+  <script is:inline src="/canvas-engine.js"></script>
+  <script is:inline src="/tools.js"></script>
+
+  <!-- Dynamic Branding & Navigation Hydration Script -->
+  <script is:inline>
+    (function() {
+      function applyBranding() {
+        if (!window.BlogService) return;
+        const s = window.BlogService.getSettings();
+        if (!s) return;
+
+        // 1. Text & Link Attributes
+        document.querySelectorAll('[data-brand-key]').forEach(el => {
+          const key = el.getAttribute('data-brand-key');
+          const val = s[key];
+          if (val !== undefined && val !== null && val !== '') {
+            const hrefKey = el.getAttribute('data-brand-href');
+            if (hrefKey && s[hrefKey]) {
+              el.setAttribute('href', s[hrefKey]);
+            }
+            if (key === 'contact_email' && el.tagName === 'A') {
+              el.setAttribute('href', 'mailto:' + val);
+            }
+            el.innerHTML = val;
+          }
+        });
+
+        // 2. Navigasi Utama (Header & Mobile Drawer)
+        if (s.nav_main && Array.isArray(s.nav_main) && s.nav_main.length > 0) {
+          const headerNav = document.getElementById('header-nav-list');
+          if (headerNav) {
+            headerNav.innerHTML = s.nav_main.map(item => `
+              <li><a href="${item.url}" target="${item.target || '_self'}">${item.label}</a></li>
+            `).join('');
+          }
+          const drawerNav = document.getElementById('drawer-nav-list');
+          if (drawerNav) {
+            drawerNav.innerHTML = s.nav_main.map((item, idx) => {
+              const num = String(idx + 1).padStart(2, '0');
+              return `
+                <li>
+                  <a href="${item.url}" class="mobile-drawer-link" target="${item.target || '_self'}">
+                    <span class="link-idx">${num}</span>
+                    <span class="link-text">${item.label}</span>
+                  </a>
+                </li>
+              `;
+            }).join('');
+          }
+        }
+
+        // 3. Navigasi Footer
+        if (s.nav_footer && Array.isArray(s.nav_footer) && s.nav_footer.length > 0) {
+          const footerNav = document.getElementById('footer-nav-list');
+          if (footerNav) {
+            footerNav.innerHTML = s.nav_footer.map(item => `
+              <a href="${item.url}" target="${item.target || '_self'}">${item.label}</a>
+            `).join('');
+          }
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applyBranding);
+      } else {
+        applyBranding();
+      }
+      window.addEventListener('hi_settings_updated', applyBranding);
+    })();
+  </script>
+</body>
+</html>
