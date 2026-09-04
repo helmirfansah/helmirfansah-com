@@ -318,6 +318,50 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       document.getElementById('post-views').textContent = `👁️ ${(post.view_count || 0) + 1} pembaca`;
       document.getElementById('post-content').innerHTML = parseMarkdown(post.content);
 
+      // Dynamic SEO Meta Tags Update
+      const postExcerpt = post.excerpt || post.title;
+      const descMeta = document.querySelector('meta[name="description"]');
+      if (descMeta) descMeta.setAttribute('content', postExcerpt);
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', post.title);
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute('content', postExcerpt);
+      const ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogUrl) ogUrl.setAttribute('content', window.location.href);
+      const twTitle = document.querySelector('meta[name="twitter:title"]');
+      if (twTitle) twTitle.setAttribute('content', post.title);
+      const twDesc = document.querySelector('meta[name="twitter:description"]');
+      if (twDesc) twDesc.setAttribute('content', postExcerpt);
+
+      // Inject Schema.org BlogPosting for Google Rich Results
+      let ldScript = document.getElementById('article-jsonld');
+      if (!ldScript) {
+        ldScript = document.createElement('script');
+        ldScript.id = 'article-jsonld';
+        ldScript.type = 'application/ld+json';
+        document.head.appendChild(ldScript);
+      }
+      ldScript.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "description": postExcerpt,
+        "datePublished": post.created_at,
+        "dateModified": post.updated_at || post.created_at,
+        "author": {
+          "@type": "Person",
+          "name": "Helmi Irfansah",
+          "url": "https://helmirfansah.com"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Helmi Irfansah",
+          "url": "https://helmirfansah.com"
+        },
+        "mainEntityOfPage": window.location.href,
+        "keywords": (post.tags && post.tags.length > 0) ? post.tags.join(', ') : (post.category || 'Tech')
+      });
+
       // Social Share
       const shareUrl = encodeURIComponent(window.location.href);
       const shareTitle = encodeURIComponent(post.title);
@@ -335,7 +379,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     function showArchive() {
       window.history.pushState({}, '', '/blog');
-      document.title = 'Blog & Studi Kasus Teknis - Helmi Irfansah';
+      document.title = 'Catatan & Studi Kasus - Helmi Irfansah';
+      const descMeta = document.querySelector('meta[name="description"]');
+      if (descMeta) descMeta.setAttribute('content', 'Eksplorasi teknis mendalam tentang cloud architecture, evaluasi biaya SaaS, dan tooling AI berdasarkan uji coba dunia nyata.');
+      const ldScript = document.getElementById('article-jsonld');
+      if (ldScript) ldScript.remove();
       singleView.style.display = 'none';
       archiveView.style.display = 'block';
       loadArticles();

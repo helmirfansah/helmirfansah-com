@@ -47,6 +47,13 @@ const {
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
 
+  <!-- Google Search Console Verification -->
+  <meta name="google-site-verification" content="" id="meta-google-verification" />
+
+  <!-- Sitemap & RSS Discovery -->
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+  <link rel="alternate" type="application/rss+xml" title="Helmi Irfansah - RSS Feed" href="/rss.xml" />
+
   {schema && (
     <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   )}
@@ -195,6 +202,12 @@ const {
               <a href="${item.url}" target="${item.target || '_self'}">${item.label}</a>
             `).join('');
           }
+        }
+
+        // 4. Google Search Console Verification
+        if (s.google_verification) {
+          const gMeta = document.getElementById('meta-google-verification');
+          if (gMeta) gMeta.setAttribute('content', s.google_verification);
         }
       }
 
