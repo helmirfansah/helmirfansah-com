@@ -883,27 +883,104 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
       margin-bottom: 1rem;
     }
 
-    /* Gutenberg / Editor Toolbar */
+    /* Gutenberg / Visual Editor Layout & Modes */
     .editor-split-container {
       display: grid;
       grid-template-columns: 1fr 340px;
       gap: 1.5rem;
       margin-top: 1rem;
     }
+    @media (max-width: 1024px) {
+      .editor-split-container {
+        grid-template-columns: 1fr;
+      }
+    }
     .editor-main-col { display: flex; flex-direction: column; }
     .editor-sidebar-col { display: flex; flex-direction: column; gap: 1rem; }
 
-    .editor-toolbar {
+    /* Mode Navigation Bar (Visual vs Markdown vs Split) */
+    .editor-mode-bar {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 0.35rem;
       background: var(--wp-card);
       border: 1px solid var(--wp-border);
       border-bottom: none;
-      padding: 0.45rem 0.75rem;
+      padding: 0.5rem 0.85rem;
       border-top-left-radius: 8px;
       border-top-right-radius: 8px;
+      gap: 1rem;
       flex-wrap: wrap;
+    }
+    .editor-mode-pills {
+      display: flex;
+      gap: 0.35rem;
+      background: rgba(0,0,0,0.3);
+      padding: 0.25rem;
+      border-radius: 6px;
+      border: 1px solid var(--wp-border);
+    }
+    .mode-pill {
+      background: none;
+      border: none;
+      color: var(--wp-muted);
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .mode-pill:hover {
+      color: #FFF;
+      background: rgba(255,255,255,0.06);
+    }
+    .mode-pill.active {
+      background: var(--wp-brand);
+      color: #FFF;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(172, 80, 54, 0.4);
+    }
+    .editor-live-stats {
+      font-size: 11.5px;
+      color: var(--wp-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .stat-sep { color: rgba(255,255,255,0.15); }
+
+    /* Advanced Toolbar */
+    .editor-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #14110f;
+      border: 1px solid var(--wp-border);
+      border-bottom: none;
+      padding: 0.45rem 0.75rem;
+      flex-wrap: wrap;
+    }
+    .toolbar-sep {
+      width: 1px;
+      height: 18px;
+      background: var(--wp-border);
+      margin: 0 0.25rem;
+    }
+    #toolbar-heading-select {
+      background: var(--wp-card);
+      border: 1px solid var(--wp-border);
+      color: var(--wp-text);
+      font-size: 12px;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      outline: none;
+      font-family: inherit;
     }
     .toolbar-btn {
       background: none;
@@ -914,17 +991,256 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
       font-size: 12px;
       cursor: pointer;
       font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.15s;
     }
     .toolbar-btn:hover { background: var(--wp-hover); color: #FFF; }
+    .toolbar-btn.btn-action-highlight {
+      color: #FFF;
+      background: rgba(172, 80, 54, 0.25);
+      border: 1px solid rgba(172, 80, 54, 0.5);
+      font-weight: 600;
+    }
+    .toolbar-btn.btn-action-highlight:hover {
+      background: var(--wp-brand);
+    }
+
+    /* Editor Work Area & Panes */
+    .editor-work-area {
+      position: relative;
+      background: var(--wp-canvas);
+      border: 1px solid var(--wp-border);
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      overflow: hidden;
+    }
+    .editor-pane-markdown, .editor-pane-visual {
+      width: 100%;
+      min-height: 520px;
+    }
+    /* Mode switching visibility */
+    .editor-work-area.mode-visual .editor-pane-markdown { display: none; }
+    .editor-work-area.mode-visual .editor-pane-visual { display: block; }
+    .editor-work-area.mode-markdown .editor-pane-markdown { display: block; }
+    .editor-work-area.mode-markdown .editor-pane-visual { display: none; }
+    .editor-work-area.mode-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--wp-border);
+    }
+    .editor-work-area.mode-split .editor-pane-markdown,
+    .editor-work-area.mode-split .editor-pane-visual {
+      display: block;
+      background: var(--wp-canvas);
+      overflow-y: auto;
+      max-height: 700px;
+    }
 
     #edit-content {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      min-height: 480px;
+      width: 100%;
+      min-height: 520px;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      padding: 1.25rem 1.5rem;
       font-family: var(--font-mono);
       font-size: 13.5px;
-      line-height: 1.6;
+      line-height: 1.65;
+      color: #e6e2da;
       resize: vertical;
+      outline: none;
+    }
+
+    /* Visual Canvas (WordPress/Blogger WYSIWYG) */
+    .visual-canvas {
+      padding: 1.5rem 2rem;
+      min-height: 520px;
+      color: #e8e4dc;
+      line-height: 1.8;
+      font-size: 15px;
+      outline: none;
+    }
+    .visual-canvas:empty:before {
+      content: attr(data-placeholder);
+      color: var(--wp-dim);
+      font-style: italic;
+    }
+    .visual-canvas h1, .visual-canvas h2, .visual-canvas h3, .visual-canvas h4 {
+      color: #FFF;
+      font-weight: 700;
+      margin-top: 1.75rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.35;
+    }
+    .visual-canvas h2 { font-size: 1.45rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.4rem; }
+    .visual-canvas h3 { font-size: 1.25rem; }
+    .visual-canvas p { margin-bottom: 1.2rem; }
+    .visual-canvas ul, .visual-canvas ol { margin: 1rem 0 1.2rem 1.5rem; }
+    .visual-canvas li { margin-bottom: 0.35rem; }
+    .visual-canvas strong { color: #FFF; font-weight: 600; }
+    .visual-canvas em { color: #f0eae1; font-style: italic; }
+    .visual-canvas code {
+      background: rgba(255,255,255,0.08);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #f7a072;
+    }
+    .visual-canvas pre {
+      background: #110e0c;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+    }
+    .visual-canvas pre code { background: none; padding: 0; color: #a5d6a7; }
+    .visual-canvas blockquote {
+      border-left: 3px solid var(--wp-brand);
+      padding: 0.5rem 1rem;
+      margin: 1.25rem 0;
+      background: rgba(172, 80, 54, 0.08);
+      border-radius: 0 6px 6px 0;
+      color: #ddd;
+    }
+    .visual-canvas .v-callout {
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+    .visual-canvas hr {
+      border: none;
+      border-top: 1px dashed rgba(255,255,255,0.15);
+      margin: 2rem 0;
+    }
+    .visual-canvas table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+      font-size: 13.5px;
+    }
+    .visual-canvas th, .visual-canvas td {
+      border: 1px solid var(--wp-border);
+      padding: 0.6rem 0.85rem;
+      text-align: left;
+    }
+    .visual-canvas th { background: rgba(255,255,255,0.04); font-weight: 600; color: #FFF; }
+
+    /* Interactive Visual Image Card */
+    .visual-img-card {
+      margin: 1.75rem 0;
+      background: #151210;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      transition: border-color 0.2s;
+    }
+    .visual-img-card:hover {
+      border-color: var(--wp-brand);
+    }
+    .visual-img-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.45rem 0.85rem;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 11.5px;
+      color: var(--wp-muted);
+    }
+    .visual-img-body {
+      padding: 0.75rem;
+      text-align: center;
+      background: #0d0a09;
+    }
+    .visual-rendered-img {
+      max-width: 100%;
+      max-height: 440px;
+      object-fit: contain;
+      border-radius: 6px;
+      display: block;
+      margin: 0 auto;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+    .visual-img-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0.85rem;
+      background: rgba(255,255,255,0.02);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .visual-img-caption {
+      font-size: 12px;
+      color: var(--wp-dim);
+      font-style: italic;
+    }
+    .visual-img-actions {
+      display: flex;
+      gap: 0.35rem;
+    }
+    .vimg-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #eee;
+      font-size: 11px;
+      padding: 0.25rem 0.55rem;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: all 0.15s;
+    }
+    .vimg-btn:hover {
+      background: rgba(255,255,255,0.15);
+      color: #FFF;
+    }
+    .vimg-btn.danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    /* Markdown Image Shelf Tray */
+    .markdown-img-tray {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.5rem 0.85rem;
+      background: rgba(0,0,0,0.25);
+      border-bottom: 1px solid var(--wp-border);
+      overflow-x: auto;
+      align-items: center;
+    }
+    .img-tray-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--wp-border);
+      padding: 0.25rem 0.55rem;
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--wp-text);
+      white-space: nowrap;
+    }
+    .img-tray-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 3px;
+      object-fit: cover;
     }
 
     /* Modals & Popups */
@@ -1534,23 +1850,91 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
               <input type="text" id="edit-slug" class="input" style="width:auto;flex:1;padding:0.3rem 0.6rem;font-size:12px;font-family:var(--font-mono);" placeholder="slug-artikel">
             </div>
 
-            <!-- Toolbar -->
-            <div class="editor-toolbar">
-              <button type="button" class="toolbar-btn" title="Bold" onclick="insertFormatting('**', '**')"><strong>B</strong></button>
-              <button type="button" class="toolbar-btn" title="Italic" onclick="insertFormatting('*', '*')"><em>I</em></button>
-              <button type="button" class="toolbar-btn" title="Heading 2" onclick="insertFormatting('## ', '')">H2</button>
-              <button type="button" class="toolbar-btn" title="Heading 3" onclick="insertFormatting('### ', '')">H3</button>
-              <button type="button" class="toolbar-btn" title="Kutipan" onclick="insertFormatting('> ', '')">Quote</button>
-              <button type="button" class="toolbar-btn" title="Code block" onclick="insertFormatting('```ts\n', '\n```')">Code</button>
-              <button type="button" class="toolbar-btn" title="Bullet list" onclick="insertFormatting('- ', '')">List</button>
-              <button type="button" class="toolbar-btn" title="Table" onclick="insertFormatting('\n| Kolom 1 | Kolom 2 |\n|---|---|\n| Nilai A | Nilai B |\n', '')">Tabel</button>
-              <input type="file" id="editor-direct-upload" accept="image/*" style="display:none;" onchange="handleEditorDirectUpload(event)">
-              <button type="button" class="toolbar-btn" title="Unggah Gambar dari Komputer (atau Ctrl+V di editor)" onclick="document.getElementById('editor-direct-upload').click()" style="color:#FFF;background:rgba(172,80,54,0.3);border:1px solid rgba(172,80,54,0.5);font-weight:600;">📷 Unggah Gambar</button>
-              <button type="button" class="toolbar-btn" title="Pilih dari Pustaka Media" onclick="openMediaModalForEditor('insert')" style="color:var(--wp-muted);">🖼️ Pustaka Media</button>
+            <!-- Editor Mode Bar (WordPress vs Markdown vs Split) -->
+            <div class="editor-mode-bar">
+              <div class="editor-mode-pills">
+                <button type="button" class="mode-pill active" id="btn-mode-visual" onclick="setEditorMode('visual')" title="Tampilan Nyata seperti WordPress / Blogger">
+                  <span>👁️</span> Visual (WordPress)
+                </button>
+                <button type="button" class="mode-pill" id="btn-mode-markdown" onclick="setEditorMode('markdown')" title="Tampilan Kode Sumber Markdown">
+                  <span>✍️</span> Markdown (Teks)
+                </button>
+                <button type="button" class="mode-pill" id="btn-mode-split" onclick="setEditorMode('split')" title="Tulis di Kiri, Lihat Hasil & Gambar Nyata di Kanan">
+                  <span>⚡</span> Berdampingan (Split)
+                </button>
+              </div>
+              <div class="editor-live-stats" id="editor-stats-bar">
+                <span id="stat-words">0 kata</span>
+                <span class="stat-sep">•</span>
+                <span id="stat-time">1 mnt baca</span>
+                <span class="stat-sep">•</span>
+                <span id="stat-images">0 gambar</span>
+              </div>
             </div>
 
-            <!-- Textarea -->
-            <textarea id="edit-content" class="input" placeholder="Mulai menulis artikel dalam format Markdown..." oninput="onEditorContentChange()"></textarea>
+            <!-- Advanced Gutenberg / WordPress Toolbar -->
+            <div class="editor-toolbar">
+              <!-- Heading Selector -->
+              <select id="toolbar-heading-select" onchange="applyHeadingFormat(this.value)" title="Format Teks">
+                <option value="" disabled selected>Format Teks</option>
+                <option value="p">¶ Paragraf</option>
+                <option value="h1">H1 Judul Artikel</option>
+                <option value="h2">H2 Subjudul Besar</option>
+                <option value="h3">H3 Subjudul Sedang</option>
+                <option value="h4">H4 Subjudul Kecil</option>
+              </select>
+
+              <span class="toolbar-sep"></span>
+
+              <!-- Inline Styles -->
+              <button type="button" class="toolbar-btn" title="Tebal (Bold) - Ctrl+B" onclick="insertFormatting('**', '**')"><strong>B</strong></button>
+              <button type="button" class="toolbar-btn" title="Miring (Italic) - Ctrl+I" onclick="insertFormatting('*', '*')"><em>I</em></button>
+              <button type="button" class="toolbar-btn" title="Coret (Strikethrough)" onclick="insertFormatting('~~', '~~')"><span style="text-decoration:line-through;">S</span></button>
+              <button type="button" class="toolbar-btn" title="Kode Inline" onclick="insertFormatting('`', '`')"><code>&lt;&gt;</code></button>
+
+              <span class="toolbar-sep"></span>
+
+              <!-- Lists & Quotes -->
+              <button type="button" class="toolbar-btn" title="Daftar Poin (Bullet List)" onclick="insertFormatting('- ', '')">• List</button>
+              <button type="button" class="toolbar-btn" title="Daftar Bernomor (Numbered List)" onclick="insertFormatting('1. ', '')">1. List</button>
+              <button type="button" class="toolbar-btn" title="Kutipan (Blockquote)" onclick="insertFormatting('> ', '')">❝ Quote</button>
+
+              <span class="toolbar-sep"></span>
+
+              <!-- Blocks -->
+              <button type="button" class="toolbar-btn" title="Kotak Catatan / Highlight (Callout)" onclick="insertFormatting('\n> [!NOTE]\n> ', '\n')">💡 Callout</button>
+              <button type="button" class="toolbar-btn" title="Blok Kode Lengkap" onclick="insertFormatting('```javascript\n', '\n```')">💻 Code</button>
+              <button type="button" class="toolbar-btn" title="Tabel Markdown" onclick="insertFormatting('\n| Kolom 1 | Kolom 2 | Kolom 3 |\n|---|---|---|\n| Nilai A | Nilai B | Nilai C |\n', '')">📊 Tabel</button>
+              <button type="button" class="toolbar-btn" title="Garis Pemisah (Divider)" onclick="insertFormatting('\n---\n\n', '')">➖ Garis</button>
+
+              <span class="toolbar-sep"></span>
+
+              <!-- Media & Links -->
+              <button type="button" class="toolbar-btn" title="Sisipkan Tautan Web (Ctrl+K)" onclick="openInsertLinkModal()">🔗 Link</button>
+              <input type="file" id="editor-direct-upload" accept="image/*" style="display:none;" onchange="handleEditorDirectUpload(event)">
+              <button type="button" class="toolbar-btn btn-action-highlight" id="btn-editor-upload-img" title="Unggah Gambar dari Komputer (Auto-Compress & Supabase CDN)" onclick="document.getElementById('editor-direct-upload').click()">
+                📷 Unggah Gambar
+              </button>
+              <button type="button" class="toolbar-btn" title="Pilih dari Pustaka Media" onclick="openMediaModalForEditor('insert')">
+                🖼️ Pustaka Media
+              </button>
+            </div>
+
+            <!-- Editor Work Area (Visual vs Markdown vs Split) -->
+            <div class="editor-work-area mode-visual" id="editor-work-area">
+              <!-- Markdown Source Pane -->
+              <div class="editor-pane-markdown" id="pane-markdown">
+                <div id="markdown-img-tray" class="markdown-img-tray" style="display:none;"></div>
+                <textarea id="edit-content" placeholder="Mulai menulis artikel dalam format Markdown atau alihkan ke Mode Visual..." oninput="onEditorContentChange()"></textarea>
+              </div>
+
+              <!-- Visual WYSIWYG / Live Preview Canvas -->
+              <div class="editor-pane-visual" id="pane-visual">
+                <div id="editor-visual-canvas" class="visual-canvas" data-placeholder="Mulai menulis artikel atau unggah gambar untuk melihat tampilannya secara nyata di sini...">
+                  <!-- Live Rendered Content with Interactive Visual Images -->
+                </div>
+              </div>
+            </div>
 
             <!-- Live Excerpt Box -->
             <div style="margin-top:1.25rem;">
@@ -2439,6 +2823,30 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
     </div>
   </div>
 
+  <!-- INSERT LINK MODAL -->
+  <div id="modal-insert-link" class="modal-backdrop" style="display:none;">
+    <div class="modal-box" style="max-width:440px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <h3 style="font-size:15px;font-weight:700;color:#FFF;">🔗 Sisipkan Tautan Web (Link)</h3>
+        <button onclick="closeInsertLinkModal()" class="btn btn-secondary btn-sm">✕</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.25rem;">
+        <div>
+          <label style="display:block;font-size:11.5px;color:var(--wp-dim);margin-bottom:0.25rem;">Alamat URL Web:</label>
+          <input type="url" id="link-modal-url" class="input" placeholder="https://example.com" style="font-size:13px;">
+        </div>
+        <div>
+          <label style="display:block;font-size:11.5px;color:var(--wp-dim);margin-bottom:0.25rem;">Teks Tautan (Opsional):</label>
+          <input type="text" id="link-modal-text" class="input" placeholder="Kunjungi situs web ini..." style="font-size:13px;">
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+        <button class="btn btn-secondary btn-sm" onclick="closeInsertLinkModal()">Batal</button>
+        <button class="btn btn-brand btn-sm" onclick="confirmInsertLink()">Sisipkan Tautan</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MEDIA SELECTOR MODAL (FOR EDITOR) -->
   <div id="modal-media" class="modal-backdrop" style="display:none;">
     <div class="modal-box" style="max-width:700px;">
@@ -3046,6 +3454,192 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
       showToast('Gambar utama dihapus.');
     }
 
+    // --- VISUAL & WORDPRESS-STYLE EDITOR ENGINE ---
+    let currentEditorMode = 'visual';
+
+    function setEditorMode(mode) {
+      currentEditorMode = mode;
+      const workArea = document.getElementById('editor-work-area');
+      if (workArea) {
+        workArea.className = `editor-work-area mode-${mode}`;
+      }
+
+      // Update active pills
+      ['visual', 'markdown', 'split'].forEach(m => {
+        const btn = document.getElementById(`btn-mode-${m}`);
+        if (btn) btn.classList.toggle('active', m === mode);
+      });
+
+      if (mode === 'visual' || mode === 'split') {
+        renderVisualPreview();
+      } else {
+        const ta = document.getElementById('edit-content');
+        if (ta) ta.focus();
+      }
+    }
+
+    function renderVisualPreview() {
+      const textarea = document.getElementById('edit-content');
+      const canvas = document.getElementById('editor-visual-canvas');
+      const tray = document.getElementById('markdown-img-tray');
+      if (!textarea || !canvas) return;
+
+      const rawMd = textarea.value;
+      if (!rawMd.trim()) {
+        canvas.innerHTML = '<p style="color:var(--wp-dim);font-style:italic;">Editor kosong. Mulai menulis artikel di sini atau gunakan tombol toolbar di atas.</p>';
+        if (tray) tray.style.display = 'none';
+        updateEditorWordStats('', 0);
+        return;
+      }
+
+      // Detect images: ![alt](url)
+      const imageRegex = /!\[(.*?)\]\((.*?)\)/g;
+      const imagesFound = [];
+      let match;
+      while ((match = imageRegex.exec(rawMd)) !== null) {
+        imagesFound.push({ alt: match[1] || 'Gambar Artikel', src: match[2] });
+      }
+
+      // Update image count & shelf tray
+      if (tray) {
+        if (imagesFound.length > 0) {
+          tray.style.display = 'flex';
+          tray.innerHTML = '<span style="font-size:11px;color:var(--wp-muted);font-weight:600;margin-right:0.25rem;">🖼️ Gambar Tersemat:</span>' +
+            imagesFound.map((img) => `
+              <div class="img-tray-item" title="${img.alt}">
+                <img src="${img.src}" class="img-tray-thumb" alt="${img.alt}">
+                <span>${img.alt.length > 18 ? img.alt.substring(0, 15) + '...' : img.alt}</span>
+                <button type="button" onclick="removeImageFromContent('${img.src.replace(/'/g, "\\'")}')" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:12px;padding:0;" title="Hapus gambar ini">✕</button>
+              </div>
+            `).join('');
+        } else {
+          tray.style.display = 'none';
+          tray.innerHTML = '';
+        }
+      }
+
+      // Parse markdown to HTML for Visual Canvas
+      let html = rawMd
+        // Images with rich interactive card
+        .replace(/!\[(.*?)\]\((.*?)\)/g, (m, alt, src) => {
+          const isBase64 = src.startsWith('data:');
+          const badgeText = isBase64 ? '📁 Lokal (Base64)' : '☁️ Supabase CDN';
+          return `
+            <div class="visual-img-card" data-img-src="${src}">
+              <div class="visual-img-header">
+                <span>🖼️ ${alt || 'Gambar'}</span>
+                <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--wp-dim);">${badgeText}</span>
+              </div>
+              <div class="visual-img-body">
+                <img src="${src}" alt="${alt}" class="visual-rendered-img" loading="lazy">
+              </div>
+              <div class="visual-img-footer">
+                <span class="visual-img-caption">📌 ${alt || 'Tanpa keterangan'}</span>
+                <div class="visual-img-actions">
+                  <button type="button" class="vimg-btn" onclick="window.open('${src}', '_blank')" title="Buka Gambar Resolusi Penuh">🔍 Lihat</button>
+                  <button type="button" class="vimg-btn" onclick="copyImageUrl('${src.replace(/'/g, "\\'")}')" title="Salin URL Gambar">📋 Salin Link</button>
+                  <button type="button" class="vimg-btn danger" onclick="removeImageFromContent('${src.replace(/'/g, "\\'")}')" title="Hapus Gambar dari Artikel">🗑️ Hapus</button>
+                </div>
+              </div>
+            </div>
+          `;
+        })
+        .replace(/#### (.*?)\n/g, '<h4>$1</h4>')
+        .replace(/### (.*?)\n/g, '<h3>$1</h3>')
+        .replace(/## (.*?)\n/g, '<h2>$1</h2>')
+        .replace(/# (.*?)\n/g, '<h1>$1</h1>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/~~(.*?)~~/g, '<del>$1</del>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/```([a-z]*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener" style="color:var(--wp-brand);text-decoration:underline;">$1</a>')
+        .replace(/^>\s*\[!NOTE\]\s*(.*?)$/gm, '<div class="v-callout"><span style="font-size:1.2rem;">💡</span><div>$1</div></div>')
+        .replace(/^>\s*\[!WARNING\]\s*(.*?)$/gm, '<div class="v-callout" style="background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.25);"><span style="font-size:1.2rem;">⚠️</span><div>$1</div></div>')
+        .replace(/^>\s*(.*?)$/gm, '<blockquote><p>$1</p></blockquote>')
+        .replace(/^---\s*$/gm, '<hr>')
+        .replace(/\n\n/g, '</p><p>');
+
+      canvas.innerHTML = '<p>' + html + '</p>';
+      updateEditorWordStats(rawMd, imagesFound.length);
+    }
+
+    function updateEditorWordStats(text, imageCount) {
+      const words = text.split(/\s+/).filter(Boolean).length;
+      const readTime = Math.max(1, Math.ceil(words / 200));
+
+      const wEl = document.getElementById('stat-words');
+      const tEl = document.getElementById('stat-time');
+      const iEl = document.getElementById('stat-images');
+
+      if (wEl) wEl.textContent = `${words} kata`;
+      if (tEl) tEl.textContent = `${readTime} mnt baca`;
+      if (iEl) iEl.textContent = `${imageCount} gambar`;
+    }
+
+    function removeImageFromContent(imgUrl) {
+      if (!confirm('Hapus gambar ini dari artikel?')) return;
+      const ta = document.getElementById('edit-content');
+      if (!ta) return;
+
+      const escaped = imgUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const pattern = new RegExp(`\\n*!\\[.*?\\]\\(${escaped}\\)\\n*`, 'g');
+      ta.value = ta.value.replace(pattern, '\n\n');
+      onEditorContentChange();
+      showToast('Gambar dihapus dari artikel.');
+    }
+
+    function copyImageUrl(url) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url);
+        showToast('Tautan URL gambar berhasil disalin ke clipboard!');
+      } else {
+        prompt('Salin tautan gambar:', url);
+      }
+    }
+
+    function applyHeadingFormat(tag) {
+      if (!tag) return;
+      if (tag === 'p') {
+        insertFormatting('', '');
+      } else if (tag === 'h1') {
+        insertFormatting('\n# ', '\n');
+      } else if (tag === 'h2') {
+        insertFormatting('\n## ', '\n');
+      } else if (tag === 'h3') {
+        insertFormatting('\n### ', '\n');
+      } else if (tag === 'h4') {
+        insertFormatting('\n#### ', '\n');
+      }
+    }
+
+    function openInsertLinkModal() {
+      const modal = document.getElementById('modal-insert-link');
+      if (modal) {
+        document.getElementById('link-modal-url').value = '';
+        document.getElementById('link-modal-text').value = '';
+        modal.style.display = 'flex';
+        document.getElementById('link-modal-url').focus();
+      }
+    }
+
+    function closeInsertLinkModal() {
+      const modal = document.getElementById('modal-insert-link');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function confirmInsertLink() {
+      const url = document.getElementById('link-modal-url').value.trim();
+      const text = document.getElementById('link-modal-text').value.trim();
+      if (!url) {
+        alert('Mohon masukkan alamat URL web.');
+        return;
+      }
+      const label = text || url;
+      insertFormatting(`[${label}](${url})`, '');
+      closeInsertLinkModal();
+    }
+
     function handleEditorDirectUpload(e) {
       const file = e.target.files?.[0];
       if (!file || !file.type.startsWith('image/')) return;
@@ -3053,41 +3647,59 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
       e.target.value = '';
     }
 
-    function uploadAndInsertToEditor(file) {
-      const reader = new FileReader();
-      const sizeKb = Math.round(file.size / 1024) + ' KB';
-      reader.onload = (uploadEvt) => {
-        window.BlogService.addMedia({
-          name: file.name,
-          title: file.name,
-          url: uploadEvt.target.result,
-          size: sizeKb,
-          type: file.type
-        });
-        showToast(`Gambar "${file.name}" berhasil disisipkan ke artikel!`);
-        insertFormatting(`\n![${file.name}](${uploadEvt.target.result})\n`, '');
+    async function uploadAndInsertToEditor(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+
+      const uploadBtn = document.getElementById('btn-editor-upload-img');
+      const origHtml = uploadBtn ? uploadBtn.innerHTML : '';
+      if (uploadBtn) {
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = '⏳ Mengunggah...';
+      }
+
+      showToast(`Mengoptimalkan & mengunggah "${file.name}"...`);
+
+      try {
+        const result = await window.BlogService.uploadMediaFile(file);
+        const imageUrl = result.url;
+        const cleanTitle = file.name.replace(/\.[^/.]+$/, '');
+
+        insertFormatting(`\n![${cleanTitle}](${imageUrl})\n`, '');
         onEditorContentChange();
-      };
-      reader.readAsDataURL(file);
+
+        // Switch automatically to Visual Mode if in markdown so user sees real picture!
+        if (currentEditorMode === 'visual' || currentEditorMode === 'split') {
+          renderVisualPreview();
+        }
+
+        if (result.isSupabase) {
+          showToast(`✅ Gambar berhasil diunggah ke Supabase CDN!`);
+        } else {
+          showToast(`📁 Gambar disisipkan! (${result.message || ''})`);
+        }
+      } catch (err) {
+        console.error('[Upload Error]', err);
+        showToast(`⚠️ Gagal unggah gambar: ${err.message || 'Error'}`);
+      } finally {
+        if (uploadBtn) {
+          uploadBtn.disabled = false;
+          uploadBtn.innerHTML = origHtml;
+        }
+      }
     }
 
-    function handleCoverDirectUpload(e) {
+    async function handleCoverDirectUpload(e) {
       const file = e.target.files?.[0];
       if (!file || !file.type.startsWith('image/')) return;
-      const reader = new FileReader();
-      const sizeKb = Math.round(file.size / 1024) + ' KB';
-      reader.onload = (uploadEvt) => {
-        window.BlogService.addMedia({
-          name: file.name,
-          title: file.name,
-          url: uploadEvt.target.result,
-          size: sizeKb,
-          type: file.type
-        });
-        setCoverImage(uploadEvt.target.result);
+      showToast(`Mengunggah gambar sampul "${file.name}"...`);
+      try {
+        const result = await window.BlogService.uploadMediaFile(file);
+        setCoverImage(result.url);
         showToast(`Gambar utama berhasil diperbarui!`);
-      };
-      reader.readAsDataURL(file);
+      } catch (err) {
+        console.error('Cover upload error:', err);
+        showToast(`Gagal unggah sampul: ${err.message}`);
+      }
       e.target.value = '';
     }
 
@@ -3102,7 +3714,9 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
       document.getElementById('btn-publish').textContent = 'Terbitkan (Publish)';
 
       switchNav('editor');
+      setEditorMode('visual');
       populateCategorySelects();
+      renderVisualPreview();
       calculateSeoScore();
     }
 
@@ -3124,6 +3738,8 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
 
       document.getElementById('btn-publish').textContent = post.is_published ? 'Perbarui Artikel' : 'Terbitkan (Publish)';
       switchNav('editor');
+      setEditorMode('visual');
+      renderVisualPreview();
       calculateSeoScore();
     }
 
@@ -3137,6 +3753,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
     }
 
     function onEditorContentChange() {
+      renderVisualPreview();
       calculateSeoScore();
       triggerAutoSave();
     }
@@ -4131,11 +4748,11 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
       showToast('Navigasi Utama & Footer berhasil disimpan dan aktif seketika!');
     }
 
-    // Setup Paste (Ctrl+V) & Drag-and-Drop Image Handlers
+    // Setup Paste (Ctrl+V), Drag-and-Drop & Shortcuts Handlers
     function setupEditorImageListeners() {
-      const editorEl = document.getElementById('edit-content');
-      if (editorEl) {
-        editorEl.addEventListener('paste', (e) => {
+      const attachMediaDropPaste = (el) => {
+        if (!el) return;
+        el.addEventListener('paste', (e) => {
           const items = e.clipboardData?.items;
           if (!items) return;
           for (let i = 0; i < items.length; i++) {
@@ -4152,16 +4769,16 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
           }
         });
 
-        editorEl.addEventListener('dragover', (e) => {
+        el.addEventListener('dragover', (e) => {
           e.preventDefault();
-          editorEl.style.borderColor = 'var(--wp-brand)';
+          el.style.borderColor = 'var(--wp-brand)';
         });
-        editorEl.addEventListener('dragleave', () => {
-          editorEl.style.borderColor = '';
+        el.addEventListener('dragleave', () => {
+          el.style.borderColor = '';
         });
-        editorEl.addEventListener('drop', (e) => {
+        el.addEventListener('drop', (e) => {
           e.preventDefault();
-          editorEl.style.borderColor = '';
+          el.style.borderColor = '';
           if (e.dataTransfer?.files?.length > 0) {
             const file = e.dataTransfer.files[0];
             if (file.type.startsWith('image/')) {
@@ -4169,7 +4786,35 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
             }
           }
         });
-      }
+      };
+
+      attachMediaDropPaste(document.getElementById('edit-content'));
+      attachMediaDropPaste(document.getElementById('editor-visual-canvas'));
+      attachMediaDropPaste(document.getElementById('editor-work-area'));
+
+      // Keyboard Shortcuts for Writer
+      window.addEventListener('keydown', (e) => {
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        const modKey = isMac ? e.metaKey : e.ctrlKey;
+
+        // Check if editor view is active
+        const editorView = document.getElementById('view-editor');
+        if (!editorView || editorView.style.display === 'none') return;
+
+        if (modKey && e.key === 's') {
+          e.preventDefault();
+          savePostCurrent(false);
+        } else if (modKey && e.key === 'b') {
+          e.preventDefault();
+          insertFormatting('**', '**');
+        } else if (modKey && e.key === 'i') {
+          e.preventDefault();
+          insertFormatting('*', '*');
+        } else if (modKey && e.key === 'k') {
+          e.preventDefault();
+          openInsertLinkModal();
+        }
+      });
 
       const coverBox = document.getElementById('cover-preview-box');
       if (coverBox) {

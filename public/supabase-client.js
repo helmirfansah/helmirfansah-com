@@ -414,7 +414,132 @@ class SupabaseBlogService {
     return cats;
   }
 
-  // --- WordPress-Style Media Library ---
+  // --- Client-Side Image Optimizer (Canvas Compression & Resize) ---
+  async optimizeImage(file, maxWidth = 1600, maxHeight = 1600, quality = 0.85) {
+    if (!file || !file.type || !file.type.startsWith('image/')) return file;
+    if (file.type === 'image/svg+xml' || file.size < 120 * 1024) return file;
+
+    return new Promise((resolve) => {
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > maxWidth || height > maxHeight) {
+            if (width > height) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            } else {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const outType = file.type === 'image/png' && file.size < 400 * 1024 ? 'image/png' : 'image/jpeg';
+          canvas.toBlob((blob) => {
+            if (blob && blob.size < file.size) {
+              const ext = outType === 'image/png' ? '.png' : '.jpg';
+              const cleanFileName = file.name.replace(/\.[^.]+$/, ext);
+              resolve(new File([blob], cleanFileName, { type: outType }));
+            } else {
+              resolve(file);
+            }
+          }, outType, quality);
+        };
+        img.onerror = () => resolve(file);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // --- WordPress-Style Media Library & Supabase Storage ---
+  async uploadMediaFile(file) {
+    const optimized = await this.optimizeImage(file);
+    const cleanBaseName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const timestamp = Date.now();
+    const filePath = `blog/${timestamp}_${cleanBaseName}`;
+
+    // 1. Coba upload langsung ke Supabase Storage (Bucket 'media')
+    if (this.isLive && this.client && this.client.storage) {
+      try {
+        const { data, error } = await this.client.storage
+          .from('media')
+          .upload(filePath, optimized, {
+            contentType: optimized.type || file.type || 'image/jpeg',
+            cacheControl: '31536000',
+            upsert: true
+          });
+
+        if (!error && data) {
+          const { data: pubData } = this.client.storage
+            .from('media')
+            .getPublicUrl(filePath);
+
+          if (pubData && pubData.publicUrl) {
+            const cleanUrl = pubData.publicUrl;
+            const newItem = {
+              id: 'm-' + timestamp,
+              name: file.name,
+              title: file.name,
+              url: cleanUrl,
+              size: Math.round(optimized.size / 1024) + ' KB',
+              type: optimized.type,
+              storage: 'supabase',
+              date: new Date().toISOString().split('T')[0]
+            };
+            this.addMedia(newItem);
+            return {
+              success: true,
+              url: cleanUrl,
+              isSupabase: true,
+              item: newItem,
+              message: 'Berhasil diunggah ke Supabase Storage (CDN)!'
+            };
+          }
+        } else {
+          console.warn('[Supabase Storage] Notice upload:', error?.message);
+        }
+      } catch (err) {
+        console.warn('[Supabase Storage Exception]:', err);
+      }
+    }
+
+    // 2. Fallback Lokal (Offline / Bucket 'media' belum dibuat)
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        const newItem = {
+          id: 'm-' + timestamp,
+          name: file.name,
+          title: file.name,
+          url: dataUrl,
+          size: Math.round(optimized.size / 1024) + ' KB',
+          type: optimized.type,
+          storage: 'local',
+          date: new Date().toISOString().split('T')[0]
+        };
+        this.addMedia(newItem);
+        resolve({
+          success: true,
+          url: dataUrl,
+          isSupabase: false,
+          item: newItem,
+          message: 'Tersimpan lokal di browser. Buat bucket "media" (Public) di Supabase Storage untuk link CDN pendek.'
+        });
+      };
+      reader.readAsDataURL(optimized);
+    });
+  }
+
   getMedia() {
     const defaultMedia = [];
     const stored = localStorage.getItem('hi_media');
@@ -432,12 +557,13 @@ class SupabaseBlogService {
   addMedia(item) {
     const media = this.getMedia();
     const newItem = {
-      id: 'm-' + Date.now(),
+      id: item.id || ('m-' + Date.now()),
       name: item.name || 'uploaded-asset.jpg',
       url: item.url,
       size: item.size || '150 KB',
       type: item.type || 'image/jpeg',
-      date: new Date().toISOString().split('T')[0]
+      storage: item.storage || 'local',
+      date: item.date || new Date().toISOString().split('T')[0]
     };
     media.unshift(newItem);
     localStorage.setItem('hi_media', JSON.stringify(media));

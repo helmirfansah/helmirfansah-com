@@ -169,6 +169,83 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       border-color: rgba(214, 120, 96, 0.35);
       color: var(--ink);
     }
+    /* Rich Article Content Typography & Media */
+    .post-img-figure {
+      margin: 2.25rem 0;
+      text-align: center;
+    }
+    .post-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      display: block;
+      margin: 0 auto;
+    }
+    .post-img-caption {
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      margin-top: 0.65rem;
+      font-style: italic;
+    }
+    .post-callout {
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+      padding: 1.1rem 1.35rem;
+      border-radius: 8px;
+      margin: 1.75rem 0;
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+    .post-callout.note {
+      background: rgba(43, 107, 110, 0.08);
+      border: 1px solid rgba(43, 107, 110, 0.25);
+      color: var(--ink);
+    }
+    .post-callout.warning {
+      background: rgba(200, 90, 50, 0.08);
+      border: 1px solid rgba(200, 90, 50, 0.25);
+      color: var(--ink);
+    }
+    .post-callout .callout-icon {
+      font-size: 1.25rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    blockquote {
+      border-left: 3px solid var(--accent-clay);
+      padding: 0.5rem 1.25rem;
+      margin: 1.75rem 0;
+      color: var(--ink-secondary);
+      font-style: italic;
+      background: var(--bg-alt);
+      border-radius: 0 6px 6px 0;
+    }
+    .post-divider {
+      border: none;
+      border-top: 1px dashed var(--border-strong);
+      margin: 2.5rem 0;
+    }
+    .table-responsive {
+      overflow-x: auto;
+      margin: 1.75rem 0;
+    }
+    .table-responsive table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .table-responsive th, .table-responsive td {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    .table-responsive th {
+      background: var(--bg-alt);
+      font-weight: 600;
+    }
   </style>
 
   <script is:inline src="/supabase-client.js"></script>
@@ -182,7 +259,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       if (bar) bar.style.width = scrolled + '%';
     });
 
-    // Simple Markdown Parser
+    // Enhanced Markdown Parser with Image & Callout Support
     function parseMarkdown(md) {
       if (!md) return '';
       // Sanitize dangerous HTML & protocols
@@ -190,21 +267,28 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
         .replace(/javascript\s*:/gi, 'blocked:');
 
+      // First, parse images BEFORE regular links
       let html = sanitized
+        .replace(/!\[(.*?)\]\((.*?)\)/g, '<figure class="post-img-figure"><img src="$2" alt="$1" loading="lazy" class="post-img" /><figcaption class="post-img-caption">$1</figcaption></figure>')
         .replace(/### (.*?)\n/g, '<h3>$1</h3>')
         .replace(/## (.*?)\n/g, '<h2>$1</h2>')
         .replace(/# (.*?)\n/g, '<h1>$1</h1>')
-        .replace(/\*\*(.*?)\*/g, '<strong>$1</strong>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/~~(.*?)~~/g, '<del>$1</del>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
         .replace(/`([^`]+)`/g, '<code>$1</code>')
-        .replace(/```([a-z]*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+        .replace(/```([a-z]*)\n([\s\S]*?)```/g, '<pre><code class="lang-$1">$2</code></pre>')
         .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+        .replace(/^>\s*\[!NOTE\]\s*(.*?)$/gm, '<div class="post-callout note"><span class="callout-icon">💡</span><div>$1</div></div>')
+        .replace(/^>\s*\[!WARNING\]\s*(.*?)$/gm, '<div class="post-callout warning"><span class="callout-icon">⚠️</span><div>$1</div></div>')
+        .replace(/^>\s*(.*?)$/gm, '<blockquote><p>$1</p></blockquote>')
+        .replace(/^---\s*$/gm, '<hr class="post-divider" />')
         .replace(/\n\n/g, '</p><p>');
 
       if (html.includes('|')) {
         const lines = html.split('\n');
         let inTable = false;
-        let tableHtml = '<table>';
+        let tableHtml = '<div class="table-responsive"><table>';
         const newLines = [];
         for (let line of lines) {
           if (line.trim().startsWith('|') && line.trim().endsWith('|')) {
@@ -219,15 +303,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           } else {
             if (inTable) {
               inTable = false;
-              tableHtml += '</tbody></table>';
+              tableHtml += '</tbody></table></div>';
               newLines.push(tableHtml);
-              tableHtml = '<table>';
+              tableHtml = '<div class="table-responsive"><table>';
             }
             newLines.push(line);
           }
         }
         if (inTable) {
-          tableHtml += '</tbody></table>';
+          tableHtml += '</tbody></table></div>';
           newLines.push(tableHtml);
         }
         html = newLines.join('\n');
