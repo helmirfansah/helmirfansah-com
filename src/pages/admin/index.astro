@@ -1,5 +1,7 @@
 ---
 // src/pages/admin/index.astro
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
 ---
 <!doctype html>
 <html lang="id">
@@ -2556,6 +2558,11 @@
     </div>
   </div>
 
+  <script is:inline define:vars={{ supabaseUrl, supabaseAnonKey }}>
+    if (supabaseUrl) window.__PUBLIC_SUPABASE_URL__ = supabaseUrl;
+    if (supabaseAnonKey) window.__PUBLIC_SUPABASE_ANON_KEY__ = supabaseAnonKey;
+  </script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script is:inline src="/supabase-client.js"></script>
   <script is:inline>
     // State
