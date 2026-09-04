@@ -55,7 +55,7 @@ const {
   <link rel="alternate" type="application/rss+xml" title="Helmi Irfansah - RSS Feed" href="/rss.xml" />
 
   {schema && (
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
   )}
 </head>
 <body class="light" data-theme="light">
