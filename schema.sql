@@ -27,12 +27,14 @@ CREATE TABLE IF NOT EXISTS public.posts (
 ALTER TABLE public.posts ENABLE ROW LEVEL SECURITY;
 
 -- 3. Policy: Siapa saja (publik) boleh membaca postingan yang berstatus 'is_published = true' dan bukan di sampah
+DROP POLICY IF EXISTS "Public users can view published posts" ON public.posts;
 CREATE POLICY "Public users can view published posts" 
 ON public.posts 
 FOR SELECT 
 USING (is_published = true AND (is_trash IS NULL OR is_trash = false));
 
 -- 4. Policy: Pengguna yang sudah login (Authenticated) boleh melakukan SELECT, INSERT, UPDATE, DELETE
+DROP POLICY IF EXISTS "Authenticated users can manage all posts" ON public.posts;
 CREATE POLICY "Authenticated users can manage all posts" 
 ON public.posts 
 FOR ALL 
@@ -40,12 +42,17 @@ TO authenticated
 USING (true) 
 WITH CHECK (true);
 
+-- Policy Opsional: Jika ingin mengizinkan akses penuh lewat API anon (Anon Key)
+-- Hapus tanda komentar dua baris di bawah jika ingin bisa mengelola artikel tanpa login Supabase Auth:
+-- DROP POLICY IF EXISTS "Anon users can manage posts" ON public.posts;
+-- CREATE POLICY "Anon users can manage posts" ON public.posts FOR ALL TO anon USING (true) WITH CHECK (true);
+
 -- Indeks untuk pencarian cepat berdasarkan slug dan kategori
 CREATE INDEX IF NOT EXISTS idx_posts_slug ON public.posts(slug);
 CREATE INDEX IF NOT EXISTS idx_posts_category ON public.posts(category);
 CREATE INDEX IF NOT EXISTS idx_posts_published ON public.posts(is_published);
 
--- 4. Trigger untuk mengupdate kolom 'updated_at' secara otomatis saat ada perubahan
+-- Trigger untuk mengupdate kolom 'updated_at' secara otomatis saat ada perubahan
 CREATE OR REPLACE FUNCTION update_modified_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -54,10 +61,26 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+DROP TRIGGER IF EXISTS update_posts_modtime ON public.posts;
 CREATE TRIGGER update_posts_modtime
 BEFORE UPDATE ON public.posts
 FOR EACH ROW
 EXECUTE FUNCTION update_modified_column();
+
+-- Function & RPC untuk menaikkan view_count secara atomik dan aman untuk publik
+CREATE OR REPLACE FUNCTION increment_post_views(post_id UUID)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  UPDATE public.posts
+  SET view_count = COALESCE(view_count, 0) + 1
+  WHERE id = post_id;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION increment_post_views(UUID) TO anon, authenticated;
 
 -- 5. Storage Bucket untuk Media & Gambar (Opsional jika upload ke Supabase Storage)
 INSERT INTO storage.buckets (id, name, public) 
@@ -115,5 +138,14 @@ FOR ALL
 TO authenticated 
 USING (true) 
 WITH CHECK (true);
+
+-- Policy Opsional: Jika ingin sinkronisasi branding/settings lewat anon key tanpa login Auth:
+-- DROP POLICY IF EXISTS "Anon users can manage site_settings" ON public.site_settings;
+-- CREATE POLICY "Anon users can manage site_settings" ON public.site_settings FOR ALL TO anon USING (true) WITH CHECK (true);
+
+-- Baris data default untuk 'global'
+INSERT INTO public.site_settings (id, data) 
+VALUES ('global', '{}'::jsonb) 
+ON CONFLICT (id) DO NOTHING;
 
 

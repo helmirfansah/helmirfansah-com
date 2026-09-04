@@ -208,10 +208,13 @@ class SupabaseBlogService {
   async incrementViews(id, currentCount) {
     if (this.isLive && this.client) {
       try {
-        await this.client
-          .from('posts')
-          .update({ view_count: currentCount + 1 })
-          .eq('id', id);
+        const { error } = await this.client.rpc('increment_post_views', { post_id: id });
+        if (error) {
+          await this.client
+            .from('posts')
+            .update({ view_count: (currentCount || 0) + 1 })
+            .eq('id', id);
+        }
       } catch (e) {
         console.warn('[Supabase] Increment view gagal:', e);
       }
