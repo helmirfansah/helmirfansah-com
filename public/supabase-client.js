@@ -113,6 +113,10 @@ class SupabaseBlogService {
     localStorage.setItem(LOCAL_POSTS_STORAGE_KEY, JSON.stringify(posts));
   }
 
+  getRawPostsCache() {
+    return this.getLocalPosts();
+  }
+
   // --- Post Operations ---
   async getPosts(options = {}) {
     const { category, search, includeDrafts = false, status = 'all' } = options;
@@ -143,7 +147,12 @@ class SupabaseBlogService {
 
         const { data, error } = await query;
         if (error) throw error;
-        return { data: data || [], isLive: true };
+        const normalized = (data || []).map(p => ({
+          ...p,
+          cover_image: p.cover_image || p.featured_image || '',
+          featured_image: p.cover_image || p.featured_image || ''
+        }));
+        return { data: normalized, isLive: true };
       } catch (err) {
         console.warn('[Supabase] Query gagal, memuat dari local cache:', err);
       }
@@ -223,23 +232,42 @@ class SupabaseBlogService {
 
   async createPost(postData) {
     const slug = postData.slug || this.slugify(postData.title);
-    const newPost = {
-      ...postData,
+    const cover_image = postData.cover_image || postData.featured_image || null;
+
+    // Payload strictly matching Supabase public.posts columns
+    const dbPayload = {
+      title: postData.title,
       slug,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      view_count: 0
+      content: postData.content || '',
+      excerpt: postData.excerpt || '',
+      category: postData.category || 'Infrastructure',
+      tags: Array.isArray(postData.tags) ? postData.tags : [],
+      reading_time_minutes: postData.reading_time_minutes || 5,
+      cover_image: cover_image,
+      seo_focus_keyword: postData.seo_focus_keyword || '',
+      meta_description: postData.meta_description || postData.excerpt || '',
+      is_published: postData.is_published !== false,
+      is_trash: false
     };
 
     if (this.isLive && this.client) {
       try {
         const { data, error } = await this.client
           .from('posts')
-          .insert([newPost])
+          .insert([dbPayload])
           .select()
           .single();
         if (error) throw error;
-        return { data, isLive: true };
+        const normalized = {
+          ...data,
+          cover_image: data.cover_image || '',
+          featured_image: data.cover_image || ''
+        };
+        // Update local cache
+        const posts = this.getLocalPosts();
+        posts.unshift(normalized);
+        this.saveLocalPosts(posts);
+        return { data: normalized, isLive: true };
       } catch (err) {
         console.error('[Supabase] Gagal membuat postingan:', err);
         throw err;
@@ -247,29 +275,51 @@ class SupabaseBlogService {
     }
 
     // Local fallback
-    newPost.id = 'local-' + Date.now();
+    const localPost = {
+      ...dbPayload,
+      id: 'local-' + Date.now(),
+      cover_image: cover_image || '',
+      featured_image: cover_image || '',
+      view_count: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
     const posts = this.getLocalPosts();
-    posts.unshift(newPost);
+    posts.unshift(localPost);
     this.saveLocalPosts(posts);
-    return { data: newPost, isLive: false };
+    return { data: localPost, isLive: false };
   }
 
   async updatePost(id, updateData) {
-    const payload = {
-      ...updateData,
-      updated_at: new Date().toISOString()
-    };
+    const cover_image = (updateData.cover_image !== undefined)
+      ? updateData.cover_image
+      : (updateData.featured_image !== undefined ? updateData.featured_image : undefined);
 
-    if (this.isLive && this.client) {
+    const dbPayload = { ...updateData };
+    delete dbPayload.featured_image;
+    if (cover_image !== undefined) dbPayload.cover_image = cover_image;
+    dbPayload.updated_at = new Date().toISOString();
+
+    if (this.isLive && this.client && !String(id).startsWith('local-')) {
       try {
         const { data, error } = await this.client
           .from('posts')
-          .update(payload)
+          .update(dbPayload)
           .eq('id', id)
           .select()
           .single();
         if (error) throw error;
-        return { data, isLive: true };
+        const normalized = {
+          ...data,
+          cover_image: data.cover_image || '',
+          featured_image: data.cover_image || ''
+        };
+        // Update local cache
+        const posts = this.getLocalPosts();
+        const idx = posts.findIndex(p => p.id === id);
+        if (idx !== -1) posts[idx] = { ...posts[idx], ...normalized };
+        this.saveLocalPosts(posts);
+        return { data: normalized, isLive: true };
       } catch (err) {
         console.error('[Supabase] Gagal mengupdate postingan:', err);
         throw err;
@@ -280,7 +330,13 @@ class SupabaseBlogService {
     const posts = this.getLocalPosts();
     const idx = posts.findIndex(p => p.id === id);
     if (idx !== -1) {
-      posts[idx] = { ...posts[idx], ...payload };
+      posts[idx] = {
+        ...posts[idx],
+        ...updateData,
+        cover_image: cover_image !== undefined ? cover_image : (posts[idx].cover_image || ''),
+        featured_image: cover_image !== undefined ? cover_image : (posts[idx].featured_image || ''),
+        updated_at: new Date().toISOString()
+      };
       this.saveLocalPosts(posts);
       return { data: posts[idx], isLive: false };
     }

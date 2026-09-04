@@ -1517,8 +1517,8 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
             <span class="autosave-pill" id="autosave-status" style="font-size:12px;color:var(--wp-dim);">● Draft tersimpan otomatis</span>
           </div>
           <div style="display:flex;gap:0.5rem;">
-            <button class="btn btn-secondary btn-sm" onclick="savePostCurrent(false)">Simpan Konsep</button>
-            <button class="btn btn-brand btn-sm" id="btn-publish" onclick="savePostCurrent(true)">Terbitkan (Publish)</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-save-draft" onclick="savePostCurrent(false)">Simpan Konsep</button>
+            <button type="button" class="btn btn-brand btn-sm" id="btn-publish" onclick="savePostCurrent(true)">Terbitkan (Publish)</button>
           </div>
         </div>
 
@@ -2772,16 +2772,24 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
     }
 
     function updateStatusCounters() {
-      const rawPosts = window.BlogService.getRawPostsCache();
+      const rawPosts = (typeof window.BlogService?.getRawPostsCache === 'function')
+        ? window.BlogService.getRawPostsCache()
+        : (typeof window.BlogService?.getLocalPosts === 'function')
+          ? window.BlogService.getLocalPosts()
+          : (currentPosts || []);
       const all = rawPosts.filter(p => !p.is_trash).length;
       const pub = rawPosts.filter(p => p.is_published && !p.is_trash).length;
       const draft = rawPosts.filter(p => !p.is_published && !p.is_trash).length;
       const trash = rawPosts.filter(p => p.is_trash).length;
 
-      document.getElementById('count-all').textContent = all;
-      document.getElementById('count-published').textContent = pub;
-      document.getElementById('count-draft').textContent = draft;
-      document.getElementById('count-trash').textContent = trash;
+      const cAll = document.getElementById('count-all');
+      const cPub = document.getElementById('count-published');
+      const cDraft = document.getElementById('count-draft');
+      const cTrash = document.getElementById('count-trash');
+      if (cAll) cAll.textContent = all;
+      if (cPub) cPub.textContent = pub;
+      if (cDraft) cDraft.textContent = draft;
+      if (cTrash) cTrash.textContent = trash;
     }
 
     function getCategoryClass(cat) {
@@ -3224,45 +3232,73 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
     }
 
     async function savePostCurrent(publish) {
-      const id = document.getElementById('edit-id').value;
-      const title = document.getElementById('edit-title').value.trim();
-      const slug = document.getElementById('edit-slug').value.trim();
-      const content = document.getElementById('edit-content').value;
-      const excerpt = document.getElementById('edit-excerpt').value.trim();
-      const category = document.getElementById('edit-category').value;
-      const tags = document.getElementById('edit-tags').value.split(',').map(t => t.trim()).filter(Boolean);
-      const featured_image = document.getElementById('edit-cover-url').value;
+      const btnPublish = document.getElementById('btn-publish');
+      const btnDraft = document.getElementById('btn-save-draft');
+      const origPubText = btnPublish ? btnPublish.textContent : 'Terbitkan (Publish)';
+      const origDraftText = btnDraft ? btnDraft.textContent : 'Simpan Konsep';
 
-      if (!title || !slug) {
-        alert('Judul dan Slug wajib diisi.');
-        return;
+      try {
+        const id = document.getElementById('edit-id').value;
+        const title = document.getElementById('edit-title').value.trim();
+        const slug = document.getElementById('edit-slug').value.trim();
+        const content = document.getElementById('edit-content').value || '';
+        const excerpt = document.getElementById('edit-excerpt').value.trim();
+        const category = document.getElementById('edit-category').value || 'Cloud Migration';
+        const tagsInput = document.getElementById('edit-tags').value;
+        const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()).filter(Boolean) : [];
+        const cover_image = document.getElementById('edit-cover-url') ? document.getElementById('edit-cover-url').value : '';
+        const kwEl = document.getElementById('seo-focus-kw');
+        const seo_focus_keyword = kwEl ? kwEl.value.trim() : '';
+
+        if (!title) {
+          alert('Mohon isi Judul Artikel terlebih dahulu.');
+          const titleInput = document.getElementById('edit-title');
+          if (titleInput) titleInput.focus();
+          return;
+        }
+
+        const cleanSlug = slug || window.BlogService.slugify(title);
+        const slugInput = document.getElementById('edit-slug');
+        if (slugInput) slugInput.value = cleanSlug;
+
+        const wordCount = content.split(/\s+/).filter(Boolean).length;
+        const reading_time_minutes = Math.max(1, Math.ceil(wordCount / 200));
+
+        const postData = {
+          title,
+          slug: cleanSlug,
+          content,
+          excerpt,
+          category,
+          tags,
+          cover_image,
+          featured_image: cover_image,
+          seo_focus_keyword,
+          meta_description: excerpt,
+          is_published: publish,
+          reading_time_minutes
+        };
+
+        if (btnPublish) { btnPublish.disabled = true; btnPublish.textContent = 'Menyimpan...'; }
+        if (btnDraft) { btnDraft.disabled = true; btnDraft.textContent = 'Menyimpan...'; }
+
+        if (id) {
+          await window.BlogService.updatePost(id, postData);
+          showToast(publish ? 'Artikel berhasil diterbitkan!' : 'Konsep tersimpan.');
+        } else {
+          await window.BlogService.createPost(postData);
+          showToast(publish ? 'Artikel baru telah terbit!' : 'Konsep artikel dibuat.');
+        }
+
+        switchNav('posts');
+        await refreshPosts();
+      } catch (err) {
+        console.error('Error saat menyimpan artikel:', err);
+        alert('Gagal menyimpan artikel: ' + (err.message || err));
+      } finally {
+        if (btnPublish) { btnPublish.disabled = false; btnPublish.textContent = origPubText; }
+        if (btnDraft) { btnDraft.disabled = false; btnDraft.textContent = origDraftText; }
       }
-
-      const wordCount = content.split(/\s+/).filter(Boolean).length;
-      const reading_time_minutes = Math.max(1, Math.ceil(wordCount / 200));
-
-      const postData = {
-        title,
-        slug,
-        content,
-        excerpt,
-        category,
-        tags,
-        featured_image,
-        is_published: publish,
-        reading_time_minutes
-      };
-
-      if (id) {
-        await window.BlogService.updatePost(id, postData);
-        showToast(publish ? 'Artikel berhasil diterbitkan!' : 'Konsep tersimpan.');
-      } else {
-        await window.BlogService.createPost(postData);
-        showToast(publish ? 'Artikel baru telah terbit!' : 'Konsep artikel dibuat.');
-      }
-
-      switchNav('posts');
-      refreshPosts();
     }
 
     // --- 6. CATEGORIES & MEDIA ---
