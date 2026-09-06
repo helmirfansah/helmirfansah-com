@@ -689,7 +689,22 @@ class SupabaseBlogService {
       return defaultSettings;
     }
     try {
-      return { ...defaultSettings, ...JSON.parse(stored) };
+      const parsed = JSON.parse(stored);
+      // Auto-migrate outdated nav labels cached in user browser
+      if (parsed.nav_main && Array.isArray(parsed.nav_main)) {
+        parsed.nav_main = parsed.nav_main.map(item => {
+          if (item.url === '/tools' || item.label.includes('Lab')) {
+            return { ...item, label: 'Kalkulator & Tools', url: '/tools' };
+          }
+          if (item.url === '/#works' && item.label.includes('Studi Kasus')) {
+            return { ...item, label: 'Arsip Karya' };
+          }
+          return item;
+        });
+      } else {
+        parsed.nav_main = defaultSettings.nav_main;
+      }
+      return { ...defaultSettings, ...parsed };
     } catch {
       return defaultSettings;
     }

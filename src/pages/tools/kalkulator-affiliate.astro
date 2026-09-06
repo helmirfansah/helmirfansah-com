@@ -69,36 +69,38 @@ const schema = {
   canonical={pageCanonical}
   schema={schema}
 >
-  <main id="main-content" style="padding-top: 2rem; padding-bottom: 5rem;">
+  <main id="main-content" style="padding-top: 6.5rem; padding-bottom: 5rem;">
     
     <!-- ── BREADCRUMB & HERO ── -->
-    <section style="max-width: var(--max-w); margin: 0 auto; padding: 1.5rem 1.5rem 1rem;">
-      <nav aria-label="Breadcrumb" style="font-size: 0.825rem; color: var(--ink-muted); margin-bottom: 0.75rem;">
-        <a href="/" style="color: var(--ink-muted);">Beranda</a> &rsaquo; 
-        <a href="/tools" style="color: var(--ink-muted);">Tools</a> &rsaquo; 
+    <section style="max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem 1.75rem;">
+      <nav aria-label="Breadcrumb" style="font-size: 0.825rem; color: var(--ink-muted); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <a href="/" style="color: var(--ink-muted); text-decoration: none;">Beranda</a>
+        <span style="opacity: 0.4;">/</span>
+        <a href="/tools" style="color: var(--ink-muted); text-decoration: none;">Kalkulator &amp; Tools</a>
+        <span style="opacity: 0.4;">/</span>
         <span style="color: var(--accent-clay); font-weight: 600;">Kalkulator Affiliate</span>
       </nav>
 
-      <!-- Topic Switcher Pills -->
-      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
-        <span style="font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--accent-clay); color: #fff;">
-          💰 Komisi Afiliasi (Aktif)
+      <!-- Sleek Segmented Switcher -->
+      <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.75rem; background: var(--bg-alt); border: 1px solid var(--border); padding: 0.35rem; border-radius: 8px; width: fit-content; max-width: 100%;">
+        <span style="font-size: 0.8rem; font-weight: 600; padding: 0.4rem 0.85rem; border-radius: 6px; background: var(--accent-clay); color: #fff;">
+          💰 Komisi Afiliasi
         </span>
-        <a href="/tools/kalkulator-engagement-rate" style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--bg-alt); border: 1px solid var(--border); color: var(--ink-secondary);">
-          📊 ER &amp; Rate Card Medsos &rarr;
+        <a href="/tools/kalkulator-engagement-rate" style="font-size: 0.8rem; font-weight: 500; padding: 0.4rem 0.85rem; border-radius: 6px; color: var(--ink-secondary); text-decoration: none;">
+          📊 ER &amp; Rate Card
         </a>
-        <a href="/tools/kalkulator-cloud-vps" style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--bg-alt); border: 1px solid var(--border); color: var(--ink-secondary);">
-          ☁️ Cloud VPS Server &rarr;
+        <a href="/tools/kalkulator-cloud-vps" style="font-size: 0.8rem; font-weight: 500; padding: 0.4rem 0.85rem; border-radius: 6px; color: var(--ink-secondary); text-decoration: none;">
+          ☁️ Cloud VPS
         </a>
-        <a href="/tools/kalkulator-token-ai" style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--bg-alt); border: 1px solid var(--border); color: var(--ink-secondary);">
-          🤖 Token API AI &rarr;
+        <a href="/tools/kalkulator-token-ai" style="font-size: 0.8rem; font-weight: 500; padding: 0.4rem 0.85rem; border-radius: 6px; color: var(--ink-secondary); text-decoration: none;">
+          🤖 Token AI
         </a>
       </div>
 
       <h1 style="font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.15; color: var(--ink); margin-bottom: 0.75rem;">
         Kalkulator Komisi <em style="font-style: italic; color: var(--accent-clay);">Affiliate Marketing</em>
       </h1>
-      <p style="font-size: 1.05rem; color: var(--ink-secondary); max-width: 760px; line-height: 1.6; margin-bottom: 1.5rem;">
+      <p style="font-size: 1.05rem; color: var(--ink-secondary); max-width: 760px; line-height: 1.6; margin-bottom: 0;">
         Simulasikan proyeksi penghasilan bersih affiliate Shopee, TikTok Shop, SaaS, dan Web3. Hitung estimasi cuan per bulan, total GMV omset penjualan, EPC (Earnings Per Click), dan RPM dari traffic konten Anda.
       </p>
     </section>
