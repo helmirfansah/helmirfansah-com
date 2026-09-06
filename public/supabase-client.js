@@ -145,6 +145,62 @@ Faktor pengali harga meliputi orisinalitas konsep, kualitas produksi audio-visua
   }
 ];
 
+// Koleksi Default Tools & Kalkulator Interaktif Website (Dapat di-CRUD di Admin Panel)
+const DEFAULT_TOOLS = [
+  {
+    id: 'tool_affiliate',
+    name: 'Kalkulator Komisi Affiliate Marketing',
+    icon: '💰',
+    category: 'Affiliate Marketing',
+    slug: '/tools/kalkulator-affiliate',
+    description: 'Simulasikan proyeksi penghasilan bersih affiliate Shopee, TikTok Shop, SaaS, dan Web3. Hitung estimasi cuan per bulan, GMV, EPC, dan RPM traffic konten.',
+    target_keyword: 'kalkulator komisi affiliate, komisi shopee affiliate, komisi tiktok shop affiliate, epc affiliate calculator',
+    meta_description: 'Simulasikan estimasi komisi bersih affiliate Shopee, TikTok Shop, SaaS, dan Web3. Hitung cuan, GMV, dan EPC dari traffic konten Anda.',
+    badge: 'Populer',
+    is_active: true,
+    order: 1
+  },
+  {
+    id: 'tool_er',
+    name: 'Kalkulator Engagement Rate & Rate Card Medsos',
+    icon: '📊',
+    category: 'Social Media',
+    slug: '/tools/kalkulator-engagement-rate',
+    description: 'Ukur tingkat interaksi akun TikTok, Instagram, YouTube, dan 𝕏 Anda. Ketahui status kesehatan akun serta rekomendasi tarif endorse wajar di Indonesia.',
+    target_keyword: 'kalkulator engagement rate, rumus er tiktok instagram, estimasi rate card endorse influencer indonesia',
+    meta_description: 'Hitung persentase Engagement Rate akun TikTok, IG, YT, X dan periksa rekomendasi tarif endorse influencer wajar di Indonesia.',
+    badge: 'Unggulan',
+    is_active: true,
+    order: 2
+  },
+  {
+    id: 'tool_vps',
+    name: 'Kalkulator Biaya Cloud Server VPS (IDR)',
+    icon: '☁️',
+    category: 'Infrastructure',
+    slug: '/tools/kalkulator-cloud-vps',
+    description: 'Bandingkan harga sewa VPS dari 6 provider terkemuka (DigitalOcean, AWS EC2, Vultr, GCP, Biznet Gio, IDCloudHost) dalam Rupiah.',
+    target_keyword: 'kalkulator vps murah rupiah, biaya cloud server aws vs digitalocean indonesia, sewa cloud vps',
+    meta_description: 'Bandingkan harga sewa VPS DigitalOcean, AWS, Vultr, GCP, Biznet Gio, dan IDCloudHost dalam Rupiah secara transparan.',
+    badge: 'Utility',
+    is_active: true,
+    order: 3
+  },
+  {
+    id: 'tool_ai',
+    name: 'Kalkulator Biaya Token API AI (IDR)',
+    icon: '🤖',
+    category: 'AI & LLM',
+    slug: '/tools/kalkulator-token-ai',
+    description: 'Simulasikan pengeluaran harian dan bulanan penggunaan model LLM populer (OpenAI GPT-4o, Claude 3.7 Sonnet, Gemini 2.5 Flash) dalam Rupiah.',
+    target_keyword: 'kalkulator token openai gpt-4o claude gemini, estimasi harga api token llm rupiah, biaya api ai',
+    meta_description: 'Hitung estimasi pengeluaran token API AI (GPT-4o, Claude 3.7, Gemini) harian dan bulanan dalam Rupiah.',
+    badge: 'AI Dev',
+    is_active: true,
+    order: 4
+  }
+];
+
 // Auto-purge cache dummy lama dari pengujian lokal sebelumnya
 if (typeof localStorage !== 'undefined' && !localStorage.getItem('hi_prod_cleaned_v2')) {
   localStorage.removeItem(LOCAL_POSTS_STORAGE_KEY);
@@ -877,7 +933,10 @@ class SupabaseBlogService {
         { id: 'fnav_4', label: 'Privacy Policy', url: '/privacy', target: '_self' },
         { id: 'fnav_5', label: 'Disclaimer', url: '/disclaimer', target: '_self' },
         { id: 'fnav_6', label: 'Contact', url: '/#contact', target: '_self' }
-      ]
+      ],
+
+      // Daftar Tools & Kalkulator Interaktif Website (Dapat di-CRUD di Admin)
+      site_tools: DEFAULT_TOOLS
     };
     const stored = localStorage.getItem('hi_site_settings');
     if (!stored) {
@@ -900,6 +959,12 @@ class SupabaseBlogService {
       } else {
         parsed.nav_main = defaultSettings.nav_main;
       }
+
+      // Auto-migrate site_tools
+      if (!parsed.site_tools || !Array.isArray(parsed.site_tools) || parsed.site_tools.length === 0) {
+        parsed.site_tools = DEFAULT_TOOLS;
+      }
+
       return { ...defaultSettings, ...parsed };
     } catch {
       return defaultSettings;
@@ -932,6 +997,54 @@ class SupabaseBlogService {
     }
 
     return updated;
+  }
+
+  // --- Lab & Tools CRUD Methods ---
+  getTools() {
+    const s = this.getSettings();
+    if (s.site_tools && Array.isArray(s.site_tools) && s.site_tools.length > 0) {
+      return s.site_tools;
+    }
+    return DEFAULT_TOOLS;
+  }
+
+  saveTool(tool) {
+    const tools = [...this.getTools()];
+    if (tool.id) {
+      const idx = tools.findIndex(t => t.id === tool.id);
+      if (idx !== -1) {
+        tools[idx] = { ...tools[idx], ...tool };
+      } else {
+        tools.push(tool);
+      }
+    } else {
+      const newTool = {
+        ...tool,
+        id: 'tool_' + Date.now(),
+        order: tools.length + 1,
+        is_active: tool.is_active !== undefined ? tool.is_active : true
+      };
+      tools.push(newTool);
+    }
+    this.saveSettings({ site_tools: tools });
+    return tools;
+  }
+
+  toggleToolStatus(id) {
+    const tools = this.getTools().map(t => {
+      if (t.id === id) {
+        return { ...t, is_active: !t.is_active };
+      }
+      return t;
+    });
+    this.saveSettings({ site_tools: tools });
+    return tools;
+  }
+
+  deleteTool(id) {
+    const tools = this.getTools().filter(t => t.id !== id);
+    this.saveSettings({ site_tools: tools });
+    return tools;
   }
 
   // --- WordPress-Style Tools: Export & Import ---

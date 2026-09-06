@@ -2062,19 +2062,23 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
         </div>
       </div>
 
-      <!-- VIEW 3.5: LAB & TOOLS INTERAKTIF -->
+      <!-- VIEW 3.5: LAB & TOOLS INTERAKTIF (FULL CRUD) -->
       <div class="content-area" id="section-lab-tools" style="display:none;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
           <div>
             <h2 style="font-size:18px;font-weight:700;color:#FFF;line-height:1.2;display:flex;align-items:center;gap:0.5rem;">
-              <span>🧪 Lab &amp; Tools Interaktif Website</span>
-              <span class="badge" style="background:rgba(184, 80, 56, 0.2);color:#f87171;font-size:11px;font-weight:700;">4 Tools Aktif</span>
+              <span>🧪 Manajemen Lab &amp; Tools Website</span>
+              <span id="tools-kpi-badge" class="badge" style="background:rgba(184, 80, 56, 0.2);color:#f87171;font-size:11px;font-weight:700;">4 Tools</span>
             </h2>
             <p style="font-size:12.5px;color:var(--wp-dim);margin-top:0.25rem;">
-              Kumpulan kalkulator dan alat bantu interaktif yang terpasang di helmirfansah.com. Ditenagai kalkulasi instan client-side dan teroptimasi SEO Schema (SoftwareApplication &amp; FAQPage).
+              Kelola seluruh tools kalkulator interaktif, atur target keyword SEO, deskripsi SERP, aktifkan atau nonaktifkan tools, serta tambahkan tools baru ke situs.
             </p>
           </div>
-          <div style="display:flex;gap:0.6rem;">
+          <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+            <button type="button" class="btn btn-brand btn-sm" onclick="openCreateToolModal()" style="display:inline-flex;align-items:center;gap:0.4rem;">
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>+ Tambah Tool Baru</span>
+            </button>
             <a href="/tools" target="_blank" class="btn btn-secondary btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.4rem;">
               <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               <span>Buka Hub /tools ↗</span>
@@ -2083,138 +2087,46 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
         </div>
 
         <!-- Metric KPI Cards -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:1rem;margin-bottom:1.5rem;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:1rem;margin-bottom:1.5rem;">
           <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:10px;padding:1.15rem;">
-            <div style="font-size:11px;color:var(--wp-dim);text-transform:uppercase;font-weight:600;letter-spacing:0.5px;">Total Tools Aktif</div>
-            <div style="font-size:24px;font-weight:800;color:#FFF;margin-top:0.25rem;">4 Unit</div>
-            <div style="font-size:11px;color:#10B981;margin-top:0.25rem;">● 100% Siap Digunakan Publik</div>
+            <div style="font-size:11px;color:var(--wp-dim);text-transform:uppercase;font-weight:600;letter-spacing:0.5px;">Total Tools</div>
+            <div id="stat-tools-total" style="font-size:24px;font-weight:800;color:#FFF;margin-top:0.25rem;">4 Unit</div>
+            <div style="font-size:11px;color:var(--wp-muted);margin-top:0.25rem;">Koleksi interaktif</div>
           </div>
           <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:10px;padding:1.15rem;">
-            <div style="font-size:11px;color:var(--wp-dim);text-transform:uppercase;font-weight:600;letter-spacing:0.5px;">URL Terindeks SEO</div>
-            <div style="font-size:24px;font-weight:800;color:#FFF;margin-top:0.25rem;">5 Halaman</div>
-            <div style="font-size:11px;color:var(--wp-muted);margin-top:0.25rem;">1 Hub + 4 Halaman Khusus</div>
+            <div style="font-size:11px;color:var(--wp-dim);text-transform:uppercase;font-weight:600;letter-spacing:0.5px;">Tools Aktif (Live)</div>
+            <div id="stat-tools-active" style="font-size:24px;font-weight:800;color:#10B981;margin-top:0.25rem;">4 Unit</div>
+            <div style="font-size:11px;color:#10B981;margin-top:0.25rem;">● Tampil ke Publik</div>
           </div>
           <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:10px;padding:1.15rem;">
-            <div style="font-size:11px;color:var(--wp-dim);text-transform:uppercase;font-weight:600;letter-spacing:0.5px;">Mesin Komputasi</div>
-            <div style="font-size:24px;font-weight:800;color:#FFF;margin-top:0.25rem;">Client-Side</div>
-            <div style="font-size:11px;color:#38BDF8;margin-top:0.25rem;">⚡ 0ms Latensi Tanpa Beban Server</div>
+            <div style="font-size:11px;color:var(--wp-dim);text-transform:uppercase;font-weight:600;letter-spacing:0.5px;">Tools Nonaktif (Draft)</div>
+            <div id="stat-tools-inactive" style="font-size:24px;font-weight:800;color:#F59E0B;margin-top:0.25rem;">0 Unit</div>
+            <div style="font-size:11px;color:var(--wp-dim);margin-top:0.25rem;">Disembunyikan</div>
           </div>
           <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:10px;padding:1.15rem;">
-            <div style="font-size:11px;color:var(--wp-dim);text-transform:uppercase;font-weight:600;letter-spacing:0.5px;">Fokus Branding</div>
-            <div style="font-size:17px;font-weight:700;color:#FFF;margin-top:0.4rem;line-height:1.2;">Medsos &amp; Afiliasi</div>
-            <div style="font-size:11px;color:var(--wp-muted);margin-top:0.25rem;">+ Cloud VPS &amp; Token AI</div>
+            <div style="font-size:11px;color:var(--wp-dim);text-transform:uppercase;font-weight:600;letter-spacing:0.5px;">Target Keywords SEO</div>
+            <div id="stat-tools-keywords" style="font-size:24px;font-weight:800;color:#38BDF8;margin-top:0.25rem;">4 Terpasang</div>
+            <div style="font-size:11px;color:#38BDF8;margin-top:0.25rem;">🎯 Teroptimasi SERP</div>
           </div>
         </div>
 
-        <!-- Tools Cards Grid -->
-        <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem;">
-          
-          <!-- Tool 1: Affiliate -->
-          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.25rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
-            <div style="display:flex;align-items:flex-start;gap:1rem;max-width:650px;">
-              <div style="font-size:28px;background:var(--wp-bg);border:1px solid var(--wp-border);border-radius:10px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                💰
-              </div>
-              <div>
-                <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
-                  <h3 style="font-size:15px;font-weight:700;color:#FFF;margin:0;">Kalkulator Komisi Affiliate Marketing</h3>
-                  <span style="font-size:10.5px;padding:2px 8px;border-radius:999px;background:rgba(16,185,129,0.15);color:#34D399;font-weight:600;">Aktif</span>
-                  <span style="font-size:10.5px;padding:2px 8px;border-radius:999px;background:var(--wp-border);color:var(--wp-muted);">Affiliate Marketing</span>
-                </div>
-                <p style="font-size:12px;color:var(--wp-muted);margin:0.35rem 0 0.5rem;line-height:1.5;">
-                  Simulasi proyeksi cuan affiliate Shopee, TikTok Shop, SaaS, dan Web3. Menghitung Views, CTR, CVR, AOV, estimasi komisi bersih, GMV, EPC, dan RPM traffic.
-                </p>
-                <div style="font-size:11px;color:var(--wp-dim);display:flex;gap:1rem;flex-wrap:wrap;">
-                  <span>🔗 URL: <code style="color:#FFF;background:var(--wp-bg);padding:2px 6px;border-radius:4px;">/tools/kalkulator-affiliate</code></span>
-                  <span>⚙️ Preset: Shopee, TikTok, SaaS, Web3</span>
-                </div>
-              </div>
-            </div>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <a href="/tools/kalkulator-affiliate" target="_blank" class="btn btn-secondary btn-sm" style="text-decoration:none;">Buka Halaman ↗</a>
-              <button type="button" class="btn btn-brand btn-sm" onclick="openMiniSimulator('affiliate')">Test Simulasi</button>
-            </div>
+        <!-- Filter & Search Toolbar -->
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:10px;padding:0.75rem 1rem;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem;">
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <span style="font-size:12px;font-weight:600;color:var(--wp-muted);">Filter Status:</span>
+            <button type="button" class="btn btn-secondary btn-sm active" id="btn-filter-tool-all" onclick="setToolsFilter('all')">Semua</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-filter-tool-active" onclick="setToolsFilter('active')">🟢 Aktif</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-filter-tool-inactive" onclick="setToolsFilter('inactive')">⚪ Nonaktif</button>
           </div>
-
-          <!-- Tool 2: Engagement Rate & Rate Card -->
-          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.25rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
-            <div style="display:flex;align-items:flex-start;gap:1rem;max-width:650px;">
-              <div style="font-size:28px;background:var(--wp-bg);border:1px solid var(--wp-border);border-radius:10px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                📊
-              </div>
-              <div>
-                <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
-                  <h3 style="font-size:15px;font-weight:700;color:#FFF;margin:0;">Kalkulator Engagement Rate &amp; Rate Card Medsos</h3>
-                  <span style="font-size:10.5px;padding:2px 8px;border-radius:999px;background:rgba(16,185,129,0.15);color:#34D399;font-weight:600;">Aktif</span>
-                  <span style="font-size:10.5px;padding:2px 8px;border-radius:999px;background:var(--wp-border);color:var(--wp-muted);">Social Media</span>
-                </div>
-                <p style="font-size:12px;color:var(--wp-muted);margin:0.35rem 0 0.5rem;line-height:1.5;">
-                  Ukur persentase ER konten TikTok, Instagram, YouTube, dan 𝕏. Memberikan analisis kesehatan interaksi akun serta rekomendasi tarif endorse wajar (Nano, Micro, Mid, Macro).
-                </p>
-                <div style="font-size:11px;color:var(--wp-dim);display:flex;gap:1rem;flex-wrap:wrap;">
-                  <span>🔗 URL: <code style="color:#FFF;background:var(--wp-bg);padding:2px 6px;border-radius:4px;">/tools/kalkulator-engagement-rate</code></span>
-                  <span>⚙️ Benchmark: Standar Kreator Indonesia 2026</span>
-                </div>
-              </div>
-            </div>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <a href="/tools/kalkulator-engagement-rate" target="_blank" class="btn btn-secondary btn-sm" style="text-decoration:none;">Buka Halaman ↗</a>
-              <button type="button" class="btn btn-brand btn-sm" onclick="openMiniSimulator('er')">Test Simulasi</button>
-            </div>
+          <div class="search-input-wrapper" style="width:260px;">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="tools-search-input" class="input" placeholder="Cari nama, kategori, atau keyword..." oninput="onToolsSearch(this.value)">
           </div>
+        </div>
 
-          <!-- Tool 3: Cloud VPS -->
-          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.25rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
-            <div style="display:flex;align-items:flex-start;gap:1rem;max-width:650px;">
-              <div style="font-size:28px;background:var(--wp-bg);border:1px solid var(--wp-border);border-radius:10px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                ☁️
-              </div>
-              <div>
-                <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
-                  <h3 style="font-size:15px;font-weight:700;color:#FFF;margin:0;">Kalkulator Biaya Cloud Server VPS (IDR)</h3>
-                  <span style="font-size:10.5px;padding:2px 8px;border-radius:999px;background:rgba(16,185,129,0.15);color:#34D399;font-weight:600;">Aktif</span>
-                  <span style="font-size:10.5px;padding:2px 8px;border-radius:999px;background:var(--wp-border);color:var(--wp-muted);">Infrastructure</span>
-                </div>
-                <p style="font-size:12px;color:var(--wp-muted);margin:0.35rem 0 0.5rem;line-height:1.5;">
-                  Bandingkan estimasi harga sewa VPS dari 6 provider (DigitalOcean, AWS EC2, Vultr, GCP, Biznet Gio, IDCloudHost) dalam Rupiah berdasarkan vCPU, RAM, SSD, dan bandwidth.
-                </p>
-                <div style="font-size:11px;color:var(--wp-dim);display:flex;gap:1rem;flex-wrap:wrap;">
-                  <span>🔗 URL: <code style="color:#FFF;background:var(--wp-bg);padding:2px 6px;border-radius:4px;">/tools/kalkulator-cloud-vps</code></span>
-                  <span>⚙️ Provider: AWS, DO, Vultr, GCP, Biznet, IDCloudHost</span>
-                </div>
-              </div>
-            </div>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <a href="/tools/kalkulator-cloud-vps" target="_blank" class="btn btn-secondary btn-sm" style="text-decoration:none;">Buka Halaman ↗</a>
-            </div>
-          </div>
-
-          <!-- Tool 4: Token AI -->
-          <div style="background:var(--wp-surface);border:1px solid var(--wp-border);border-radius:12px;padding:1.25rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
-            <div style="display:flex;align-items:flex-start;gap:1rem;max-width:650px;">
-              <div style="font-size:28px;background:var(--wp-bg);border:1px solid var(--wp-border);border-radius:10px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                🤖
-              </div>
-              <div>
-                <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
-                  <h3 style="font-size:15px;font-weight:700;color:#FFF;margin:0;">Kalkulator Biaya Token API AI (IDR)</h3>
-                  <span style="font-size:10.5px;padding:2px 8px;border-radius:999px;background:rgba(16,185,129,0.15);color:#34D399;font-weight:600;">Aktif</span>
-                  <span style="font-size:10.5px;padding:2px 8px;border-radius:999px;background:var(--wp-border);color:var(--wp-muted);">AI &amp; LLM</span>
-                </div>
-                <p style="font-size:12px;color:var(--wp-muted);margin:0.35rem 0 0.5rem;line-height:1.5;">
-                  Simulasi biaya pemakaian token model AI mutakhir (GPT-4o, Claude 3.7 Sonnet, Gemini 2.5 Flash) berdasarkan estimasi input dan output token harian.
-                </p>
-                <div style="font-size:11px;color:var(--wp-dim);display:flex;gap:1rem;flex-wrap:wrap;">
-                  <span>🔗 URL: <code style="color:#FFF;background:var(--wp-bg);padding:2px 6px;border-radius:4px;">/tools/kalkulator-token-ai</code></span>
-                  <span>⚙️ Model: OpenAI GPT-4o, Claude 3.7, Gemini 2.5</span>
-                </div>
-              </div>
-            </div>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <a href="/tools/kalkulator-token-ai" target="_blank" class="btn btn-secondary btn-sm" style="text-decoration:none;">Buka Halaman ↗</a>
-            </div>
-          </div>
-
+        <!-- Dynamic Tools Container -->
+        <div id="admin-tools-container" style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem;">
+          <!-- Populated via renderToolsAdmin() -->
         </div>
 
         <!-- Mini Interactive Simulator Widget inside Admin -->
@@ -3193,6 +3105,98 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
     </div>
   </div>
 
+  <!-- TOOL EDITOR MODAL (CRUD FOR LAB & TOOLS) -->
+  <div id="modal-tool-editor" class="modal-backdrop" style="display:none;">
+    <div class="modal-box" style="max-width: 650px; max-height: 90vh; overflow-y: auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;border-bottom:1px solid var(--wp-border);padding-bottom:0.75rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <span style="font-size:20px;" id="tool-modal-icon-badge">⚙️</span>
+          <h3 style="font-size:16px;font-weight:700;color:#FFF;margin:0;" id="tool-modal-title">Kelola Tool &amp; Target SEO</h3>
+        </div>
+        <button type="button" onclick="closeToolModal()" class="btn btn-secondary btn-sm" style="border-radius:50%;width:28px;height:28px;padding:0;display:flex;align-items:center;justify-content:center;">✕</button>
+      </div>
+
+      <form id="tool-editor-form" onsubmit="saveToolForm(event)">
+        <input type="hidden" id="tool-form-id" value="">
+
+        <div style="display:grid;grid-template-columns: 80px 1fr;gap:0.75rem;margin-bottom:1rem;">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#FFF;display:block;margin-bottom:0.35rem;">Ikon / Emoji</label>
+            <input type="text" id="tool-form-icon" class="input" placeholder="💰" style="text-align:center;font-size:18px;" required>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#FFF;display:block;margin-bottom:0.35rem;">Nama Tool / Kalkulator</label>
+            <input type="text" id="tool-form-name" class="input" placeholder="misal: Kalkulator Komisi Affiliate Shopee & TikTok" required>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns: 1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#FFF;display:block;margin-bottom:0.35rem;">Kategori Tool</label>
+            <select id="tool-form-category" class="input">
+              <option value="Affiliate Marketing">Affiliate Marketing</option>
+              <option value="Social Media">Social Media</option>
+              <option value="Cloud Infrastructure">Cloud Infrastructure</option>
+              <option value="AI Engineering">AI Engineering</option>
+              <option value="Web3 &amp; Crypto">Web3 &amp; Crypto</option>
+              <option value="E-Commerce">E-Commerce</option>
+              <option value="Utilitas Lainnya">Utilitas Lainnya</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#FFF;display:block;margin-bottom:0.35rem;">Badge Label (Opsional)</label>
+            <input type="text" id="tool-form-badge" class="input" placeholder="misal: 🔥 POPULER, NEW, PRO">
+          </div>
+        </div>
+
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:12px;font-weight:600;color:#FFF;display:block;margin-bottom:0.35rem;">URL Path / Slug Halaman</label>
+          <input type="text" id="tool-form-slug" class="input" placeholder="/tools/kalkulator-affiliate" required>
+          <span style="font-size:11px;color:var(--wp-dim);display:block;margin-top:0.25rem;">Rute URL langsung ke halaman tool khusus (misal: /tools/nama-tool-baru)</span>
+        </div>
+
+        <!-- SEO SETTINGS SECTION -->
+        <div style="background:rgba(56, 189, 248, 0.05);border:1px solid rgba(56, 189, 248, 0.2);border-radius:8px;padding:1rem;margin-bottom:1rem;">
+          <div style="font-size:12.5px;font-weight:700;color:#38BDF8;display:flex;align-items:center;gap:0.4rem;margin-bottom:0.75rem;">
+            <span>🎯 Target Keyword SEO &amp; SERP Snippet</span>
+          </div>
+
+          <div style="margin-bottom:0.75rem;">
+            <label style="font-size:11.5px;font-weight:600;color:#FFF;display:block;margin-bottom:0.3rem;">Target Keyword Utama (SEO Target)</label>
+            <input type="text" id="tool-form-keyword" class="input" placeholder="misal: kalkulator affiliate shopee, komisi affiliate tiktok">
+            <span style="font-size:10.5px;color:var(--wp-dim);display:block;margin-top:0.2rem;">Kata kunci yang ditargetkan untuk ranking mesin pencari Google</span>
+          </div>
+
+          <div>
+            <label style="font-size:11.5px;font-weight:600;color:#FFF;display:block;margin-bottom:0.3rem;">Meta Deskripsi SERP (Search Snippet)</label>
+            <textarea id="tool-form-meta-desc" class="input" rows="2" placeholder="Deskripsi ringkas yang muncul pada hasil pencarian Google (120-160 karakter)..."></textarea>
+          </div>
+        </div>
+
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:12px;font-weight:600;color:#FFF;display:block;margin-bottom:0.35rem;">Deskripsi Singkat Fitur Tool</label>
+          <textarea id="tool-form-desc" class="input" rows="2" placeholder="Jelaskan fungsi kalkulator ini untuk kartu preview pengunjung..."></textarea>
+        </div>
+
+        <div style="margin-bottom:1.25rem;background:var(--wp-bg);padding:0.75rem 1rem;border-radius:8px;border:1px solid var(--wp-border);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:12.5px;font-weight:700;color:#FFF;">Status Publikasi Tool</div>
+            <div style="font-size:11px;color:var(--wp-dim);">Jika dinonaktifkan, tool akan disembunyikan dari halaman publik dan hub /tools.</div>
+          </div>
+          <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;user-select:none;">
+            <input type="checkbox" id="tool-form-active" checked onchange="updateToolFormActiveLabel(this.checked)" style="accent-color:var(--wp-brand);width:16px;height:16px;">
+            <span id="tool-form-active-label" style="font-size:12px;font-weight:700;color:#10B981;">🟢 Aktif (Live)</span>
+          </label>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:0.6rem;border-top:1px solid var(--wp-border);padding-top:1rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeToolModal()">Batal</button>
+          <button type="submit" class="btn btn-brand btn-sm">💾 Simpan Perubahan Tool</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script is:inline define:vars={{ supabaseUrl, supabaseAnonKey }}>
     if (supabaseUrl) window.__PUBLIC_SUPABASE_URL__ = supabaseUrl;
     if (supabaseAnonKey) window.__PUBLIC_SUPABASE_ANON_KEY__ = supabaseAnonKey;
@@ -3341,6 +3345,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
 
       if (section === 'posts') refreshPosts();
       if (section === 'categories') refreshCategories();
+      if (section === 'lab-tools') renderToolsAdmin();
       if (section === 'media') refreshMedia();
       if (section === 'settings') loadSettingsForm();
       if (section === 'branding') loadBrandingForm();
@@ -3351,6 +3356,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
     async function initDashboardData() {
       populateCategorySelects();
       await refreshPosts();
+      renderToolsAdmin();
       updateDbStatusIndicator();
       loadSettingsForm();
     }
@@ -4597,6 +4603,278 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
       closeSupabaseModal();
       refreshPosts();
       updateDbStatusIndicator();
+    }
+
+    // --- 9.5 LAB & TOOLS MANAGEMENT (FULL CRUD) ---
+    let currentToolsFilter = 'all';
+    let currentToolsSearch = '';
+
+    function setToolsFilter(filter) {
+      currentToolsFilter = filter;
+      const btns = {
+        all: document.getElementById('btn-filter-tool-all'),
+        active: document.getElementById('btn-filter-tool-active'),
+        inactive: document.getElementById('btn-filter-tool-inactive')
+      };
+      Object.keys(btns).forEach(key => {
+        if (btns[key]) {
+          btns[key].classList.toggle('active', key === filter);
+          if (key === filter) {
+            btns[key].style.background = 'var(--wp-brand)';
+            btns[key].style.color = '#FFF';
+          } else {
+            btns[key].style.background = '';
+            btns[key].style.color = '';
+          }
+        }
+      });
+      renderToolsAdmin();
+    }
+
+    function onToolsSearch(val) {
+      currentToolsSearch = (val || '').toLowerCase().trim();
+      renderToolsAdmin();
+    }
+
+    function renderToolsAdmin() {
+      if (!window.BlogService || !window.BlogService.getTools) return;
+      const allTools = window.BlogService.getTools() || [];
+
+      // Update Metric KPI
+      const total = allTools.length;
+      const active = allTools.filter(t => t.is_active !== false).length;
+      const inactive = total - active;
+      const kwCount = allTools.filter(t => t.target_keyword && t.target_keyword.trim().length > 0).length;
+
+      const elTotal = document.getElementById('stat-tools-total');
+      const elActive = document.getElementById('stat-tools-active');
+      const elInactive = document.getElementById('stat-tools-inactive');
+      const elKw = document.getElementById('stat-tools-keywords');
+      const elBadge = document.getElementById('tools-kpi-badge');
+
+      if (elTotal) elTotal.textContent = `${total} Unit`;
+      if (elActive) elActive.textContent = `${active} Unit`;
+      if (elInactive) elInactive.textContent = `${inactive} Unit`;
+      if (elKw) elKw.textContent = `${kwCount} Terpasang`;
+      if (elBadge) elBadge.textContent = `${total} Tools`;
+
+      // Filter
+      let list = [...allTools];
+      if (currentToolsFilter === 'active') {
+        list = list.filter(t => t.is_active !== false);
+      } else if (currentToolsFilter === 'inactive') {
+        list = list.filter(t => t.is_active === false);
+      }
+
+      if (currentToolsSearch) {
+        list = list.filter(t =>
+          (t.name || '').toLowerCase().includes(currentToolsSearch) ||
+          (t.category || '').toLowerCase().includes(currentToolsSearch) ||
+          (t.target_keyword || '').toLowerCase().includes(currentToolsSearch) ||
+          (t.description || '').toLowerCase().includes(currentToolsSearch) ||
+          (t.slug || '').toLowerCase().includes(currentToolsSearch)
+        );
+      }
+
+      const container = document.getElementById('admin-tools-container');
+      if (!container) return;
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div style="background:var(--wp-surface);border:1px dashed var(--wp-border);border-radius:12px;padding:3rem 1.5rem;text-align:center;">
+            <div style="font-size:32px;margin-bottom:0.75rem;">🔍</div>
+            <h4 style="font-size:15px;font-weight:700;color:#FFF;margin-bottom:0.35rem;">Tidak Ada Tool yang Cocok</h4>
+            <p style="font-size:12px;color:var(--wp-dim);max-width:400px;margin:0 auto 1.25rem;">
+              ${currentToolsSearch ? `Tidak ditemukan tool yang cocok dengan pencarian "${currentToolsSearch}".` : 'Belum ada tools yang terdaftar pada filter status ini.'}
+            </p>
+            <button type="button" class="btn btn-brand btn-sm" onclick="openCreateToolModal()">+ Tambah Tool Baru</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(t => {
+        const isActive = t.is_active !== false;
+        return `
+          <div style="background:var(--wp-surface);border:1px solid ${isActive ? 'var(--wp-border)' : 'rgba(239, 68, 68, 0.4)'};border-radius:12px;padding:1.25rem;display:flex;flex-direction:column;gap:1rem;position:relative;transition:border-color 0.2s;">
+            <!-- Header row -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.75rem;">
+              <div style="display:flex;align-items:center;gap:0.85rem;">
+                <div style="width:46px;height:46px;background:var(--wp-bg);border:1px solid var(--wp-border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">
+                  ${t.icon || '⚙️'}
+                </div>
+                <div>
+                  <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                    <h4 style="font-size:15px;font-weight:700;color:#FFF;margin:0;">${t.name}</h4>
+                    <span class="badge" style="background:rgba(255,255,255,0.06);color:var(--wp-muted);font-size:11px;">${t.category || 'Tools'}</span>
+                    ${t.badge ? `<span class="badge" style="background:rgba(184,80,56,0.2);color:#f87171;font-size:10px;font-weight:700;">${t.badge}</span>` : ''}
+                    <span class="badge" style="font-size:10.5px;font-weight:700;background:${isActive ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)'};color:${isActive ? '#34D399' : '#F87171'};">
+                      ${isActive ? '🟢 LIVE (Aktif)' : '⚪ DRAFT (Nonaktif)'}
+                    </span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:0.6rem;margin-top:0.35rem;font-size:11.5px;color:var(--wp-dim);">
+                    <span>Slug URL: <a href="${t.slug}" target="_blank" style="color:var(--wp-brand);text-decoration:none;font-family:var(--font-mono,monospace);font-weight:600;">${t.slug} ↗</a></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                <button type="button" class="btn ${isActive ? 'btn-secondary' : 'btn-brand'} btn-sm" onclick="handleToggleTool('${t.id}')" style="font-size:11.5px;padding:0.35rem 0.75rem;">
+                  ${isActive ? 'Nonaktifkan' : 'Aktifkan'}
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="openEditToolModal('${t.id}')" style="font-size:11.5px;padding:0.35rem 0.75rem;">
+                  ✏️ Edit &amp; SEO
+                </button>
+                ${(t.id === 'tool_affiliate' || t.id === 'tool_er') ? `
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="openMiniSimulator('${t.id === 'tool_affiliate' ? 'affiliate' : 'er'}')" style="font-size:11.5px;padding:0.35rem 0.75rem;background:rgba(56,189,248,0.1);color:#38BDF8;border-color:rgba(56,189,248,0.3);">
+                    ⚡ Simulasi
+                  </button>
+                ` : ''}
+                <a href="${t.slug}" target="_blank" class="btn btn-secondary btn-sm" style="font-size:11.5px;padding:0.35rem 0.6rem;text-decoration:none;">
+                  ↗ Buka
+                </a>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="handleDeleteTool('${t.id}')" style="font-size:11.5px;padding:0.35rem 0.6rem;color:#f87171;" title="Hapus Tool">
+                  🗑️
+                </button>
+              </div>
+            </div>
+
+            <!-- SEO Info & Meta Row -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:0.75rem;background:var(--wp-bg);padding:0.85rem 1rem;border-radius:8px;border:1px solid var(--wp-border);">
+              <div>
+                <div style="font-size:10.5px;color:var(--wp-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.25rem;">
+                  🎯 Target Keyword SEO:
+                </div>
+                <div style="font-size:12px;color:${t.target_keyword ? '#38BDF8' : 'var(--wp-dim)'};font-weight:600;">
+                  ${t.target_keyword ? `<code>${t.target_keyword}</code>` : '<em>(Belum ditentukan)</em>'}
+                </div>
+              </div>
+              <div>
+                <div style="font-size:10.5px;color:var(--wp-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.25rem;">
+                  📄 Meta Deskripsi SERP:
+                </div>
+                <div style="font-size:12px;color:var(--wp-dim);line-height:1.4;">
+                  ${t.meta_description || t.description || '<em>(Belum ada deskripsi)</em>'}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openCreateToolModal() {
+      document.getElementById('tool-form-id').value = '';
+      document.getElementById('tool-form-name').value = '';
+      document.getElementById('tool-form-icon').value = '⚙️';
+      document.getElementById('tool-form-category').value = 'Affiliate Marketing';
+      document.getElementById('tool-form-badge').value = '';
+      document.getElementById('tool-form-slug').value = '/tools/kalkulator-';
+      document.getElementById('tool-form-keyword').value = '';
+      document.getElementById('tool-form-meta-desc').value = '';
+      document.getElementById('tool-form-desc').value = '';
+      document.getElementById('tool-form-active').checked = true;
+      updateToolFormActiveLabel(true);
+
+      document.getElementById('tool-modal-title').textContent = 'Tambah Tool Baru ke Lab';
+      document.getElementById('tool-modal-icon-badge').textContent = '✨';
+      document.getElementById('modal-tool-editor').style.display = 'flex';
+    }
+
+    function openEditToolModal(id) {
+      if (!window.BlogService) return;
+      const tools = window.BlogService.getTools() || [];
+      const tool = tools.find(t => t.id === id);
+      if (!tool) {
+        showToast('Tool tidak ditemukan!');
+        return;
+      }
+
+      document.getElementById('tool-form-id').value = tool.id || '';
+      document.getElementById('tool-form-name').value = tool.name || '';
+      document.getElementById('tool-form-icon').value = tool.icon || '⚙️';
+      document.getElementById('tool-form-category').value = tool.category || 'Affiliate Marketing';
+      document.getElementById('tool-form-badge').value = tool.badge || '';
+      document.getElementById('tool-form-slug').value = tool.slug || '/tools/';
+      document.getElementById('tool-form-keyword').value = tool.target_keyword || '';
+      document.getElementById('tool-form-meta-desc').value = tool.meta_description || '';
+      document.getElementById('tool-form-desc').value = tool.description || '';
+      const isActive = tool.is_active !== false;
+      document.getElementById('tool-form-active').checked = isActive;
+      updateToolFormActiveLabel(isActive);
+
+      document.getElementById('tool-modal-title').textContent = `Edit Tool: ${tool.name}`;
+      document.getElementById('tool-modal-icon-badge').textContent = tool.icon || '✏️';
+      document.getElementById('modal-tool-editor').style.display = 'flex';
+    }
+
+    function closeToolModal() {
+      const modal = document.getElementById('modal-tool-editor');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function updateToolFormActiveLabel(isChecked) {
+      const label = document.getElementById('tool-form-active-label');
+      if (label) {
+        label.textContent = isChecked ? '🟢 Aktif (Live)' : '⚪ Nonaktif (Disembunyikan)';
+        label.style.color = isChecked ? '#10B981' : '#F87171';
+      }
+    }
+
+    function saveToolForm(e) {
+      e.preventDefault();
+      if (!window.BlogService) return;
+
+      const id = document.getElementById('tool-form-id').value.trim();
+      const name = document.getElementById('tool-form-name').value.trim();
+      const icon = document.getElementById('tool-form-icon').value.trim() || '⚙️';
+      const category = document.getElementById('tool-form-category').value;
+      const badge = document.getElementById('tool-form-badge').value.trim();
+      let slug = document.getElementById('tool-form-slug').value.trim();
+      if (!slug.startsWith('/')) slug = '/' + slug;
+
+      const target_keyword = document.getElementById('tool-form-keyword').value.trim();
+      const meta_description = document.getElementById('tool-form-meta-desc').value.trim();
+      const description = document.getElementById('tool-form-desc').value.trim();
+      const is_active = document.getElementById('tool-form-active').checked;
+
+      const toolPayload = {
+        name,
+        icon,
+        category,
+        badge,
+        slug,
+        target_keyword,
+        meta_description,
+        description,
+        is_active
+      };
+
+      if (id) {
+        toolPayload.id = id;
+      }
+
+      window.BlogService.saveTool(toolPayload);
+      closeToolModal();
+      showToast(id ? 'Tool berhasil diperbarui & disimpan!' : 'Tool baru berhasil ditambahkan!');
+      renderToolsAdmin();
+    }
+
+    function handleToggleTool(id) {
+      if (!window.BlogService) return;
+      window.BlogService.toggleToolStatus(id);
+      showToast('Status tool berhasil diperbarui!');
+      renderToolsAdmin();
+    }
+
+    function handleDeleteTool(id) {
+      if (!window.BlogService) return;
+      if (confirm('Apakah Anda yakin ingin menghapus tool ini dari Lab & Tools?')) {
+        window.BlogService.deleteTool(id);
+        showToast('Tool berhasil dihapus!');
+        renderToolsAdmin();
+      }
     }
 
     // Mini Interactive Simulator for Lab & Tools View

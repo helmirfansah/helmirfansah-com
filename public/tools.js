@@ -639,6 +639,8 @@ function initTabs() {
     else if (target === 'ai') renderAIResults();
   }
 
+  window.__activateTab = activateTab;
+
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const target = tab.dataset.tab;
@@ -807,6 +809,48 @@ function applyLabSettings() {
   if (s.lab_usd_idr) {
     USD_IDR = parseInt(s.lab_usd_idr, 10) || 16000;
   }
+
+  // Synchronize individual tool active / inactive status
+  const tools = window.BlogService?.getTools ? window.BlogService.getTools() : null;
+  if (tools && Array.isArray(tools)) {
+    const slugToTab = {
+      '/tools/kalkulator-affiliate': 'affiliate',
+      '/tools/kalkulator-engagement-rate': 'social',
+      '/tools/kalkulator-cloud-vps': 'cloud',
+      '/tools/kalkulator-token-ai': 'ai'
+    };
+
+    tools.forEach(tool => {
+      const tabKey = slugToTab[tool.slug] || (tool.id ? tool.id.replace('tool_', '') : '');
+      const isVisible = tool.is_active !== false;
+
+      // 1. Hide/show tab button in calculator container
+      const tabBtn = document.querySelector(`.calc-tab[data-tab="${tabKey}"]`);
+      if (tabBtn) {
+        tabBtn.style.display = isVisible ? '' : 'none';
+      }
+
+      // 2. Hide/show tool link cards on homepage & tools hub
+      const links = document.querySelectorAll(`a[href="${tool.slug}"], a[href="${tool.slug}/"]`);
+      links.forEach(a => {
+        const card = a.closest('.tool-card, article, [style*="border-radius: 4px"]') || a;
+        if (!isVisible) {
+          card.style.display = 'none';
+        } else {
+          card.style.display = '';
+        }
+      });
+    });
+
+    // If currently active tab became hidden, switch to the first visible tab
+    const currentActiveTab = document.querySelector('.calc-tab.active');
+    if (currentActiveTab && currentActiveTab.style.display === 'none') {
+      const firstVisible = document.querySelector('.calc-tab:not([style*="display: none"])');
+      if (firstVisible && typeof window.__activateTab === 'function') {
+        window.__activateTab(firstVisible.dataset.tab);
+      }
+    }
+  }
 }
 
 function initTools() {
@@ -828,3 +872,6 @@ if (document.readyState === 'loading') {
 } else {
   initTools();
 }
+
+window.addEventListener('hi_settings_updated', applyLabSettings);
+
