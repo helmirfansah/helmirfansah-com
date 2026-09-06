@@ -15,6 +15,136 @@ const DEFAULT_SUPABASE_ANON_KEY = '';
 // Clean Slate: 0 Dummy Content untuk Peluncuran Produksi
 const INITIAL_SEED_POSTS = [];
 
+// Sample Artikel Resmi untuk Eksplorasi & Demo (Bisa diisi via 1-click di Admin)
+const SAMPLE_ARTICLES = [
+  {
+    id: 'post_sample_1',
+    slug: 'halo-dunia-perkenalan-helmi-irfansah',
+    title: 'Halo Dunia: Membangun Audiens Organik, Riset Afiliasi, dan Eksplorasi Web3',
+    excerpt: 'Selamat datang di helmirfansah.com. Catatan strategi seputar social media growth, corong konversi affiliate marketing, serta pengujian adopsi Web3 dan AI tools.',
+    content: `## Selamat Datang di Ruang Eksplorasi Saya
+
+Halo! Saya **Helmi Irfansah**. Selamat datang di website dan lab digital pribadi saya.
+
+Situs ini saya bangun sebagai ruang dokumentasi teknis dan strategi empiris seputar:
+1. **Pertumbuhan Audiens Media Sosial Organik:** Membedah algoritma TikTok, Instagram Reels, dan format konten video pendek yang konsisten mendatangkan atensi audiens tertarget.
+2. **Corong Konversi Affiliate Marketing:** Menganalisis metrik nyata (Views, CTR, CVR, AOV, dan EPC) untuk memaksimalkan komisi bersih tanpa harus bergantung pada endorse berbayar.
+3. **Eksplorasi Web3 & Crypto:** Mempelajari bagaimana prinsip social media dan affiliate distribution dapat diterapkan pada ekosistem blockchain terdesentralisasi.
+4. **Tools & Kalkulator Interaktif:** Mengembangkan kalkulator gratis seperti [Kalkulator Komisi Affiliate](/tools/kalkulator-affiliate) dan [Kalkulator Engagement Rate](/tools/kalkulator-engagement-rate) untuk membantu kreator mengukur performa.
+
+> [!NOTE]
+> Filosofi utama di balik blog ini adalah **kejujuran data dan hasil empiris**. Kami tidak membagikan tips tanpa uji coba langsung, metrik yang transparan, dan studi kasus nyata.
+
+Silakan jelajahi tulisan dan tools yang ada, dan mari terhubung melalui media sosial atau kontak di bawah!`,
+    category: 'Affiliate Marketing',
+    tags: ['Perkenalan', 'Social Media', 'Affiliate Marketing', 'Web3'],
+    reading_time_minutes: 3,
+    cover_image: '',
+    featured_image: '',
+    seo_focus_keyword: 'Helmi Irfansah',
+    meta_description: 'Selamat datang di helmirfansah.com. Ruang eksplorasi seputar social media growth, corong konversi affiliate marketing, dan adopsi Web3.',
+    is_published: true,
+    view_count: 35,
+    created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'post_sample_2',
+    slug: 'strategi-corong-affiliate-marketing-2026',
+    title: 'Strategi Corong Affiliate Marketing 2026: Mengubah Views Medsos Menjadi Konversi Omset Nyata',
+    excerpt: 'Views jutaan tidak menjamin komisi besar jika corong konversinya bocor. Pelajari cara menghitung rasio CTR dan CVR serta strategi storytelling produk yang terbukti closing.',
+    content: `## Mengapa Views Jutaan Bisa Berujung Nol Penjualan?
+
+Banyak kreator pemula terjebak dalam perangkap *vanity metrics*—merasa puas ketika videonya menembus ratusan ribu penonton, namun kecewa saat membuka dashboard afiliasi dan mendapati komisi hanya beberapa ribu rupiah.
+
+Kunci sukses affiliate marketing bukan hanya seberapa banyak orang yang menonton, melainkan seberapa kuat **daya pikat konversi (conversion intent)** dari konten yang Anda sajikan.
+
+---
+
+### Anatomi Rumus Cuan Afiliasi
+
+Penghasilan bersih affiliate dihitung dari perkalian 5 variabel kunci:
+
+$$\\text{Komisi} = \\text{Total Views} \\times \\text{CTR Link} \\times \\text{CVR Pembelian} \\times \\text{AOV} \\times \\text{Komisi \\%}$$
+
+- **CTR (Click-Through Rate):** Persentase penonton yang terdorong mengklik link di bio atau keranjang kuning.
+- **CVR (Conversion Rate):** Persentase pengunjung yang benar-benar menyelesaikan pembayaran di marketplace.
+- **AOV (Average Order Value):** Rata-rata nilai belanja keranjang pembeli.
+- **Komisi %:** Persentase bagi hasil dari penjual/platform (misal Shopee 5-10%, TikTok 7-15%, SaaS 20-30%).
+
+> [!TIP]
+> Anda dapat mencoba menyimulasikan berbagai skenario views dan persentase komisi secara instan menggunakan [Kalkulator Komisi Affiliate Kami](/tools/kalkulator-affiliate).
+
+---
+
+### 3 Pilar Storytelling yang Meningkatkan CVR
+
+1. **Hook Berbasis Masalah (The Pain Hook):** Tunjukkan frustrasi nyata penonton dalam 3 detik pertama sebelum menyebutkan solusi produk.
+2. **Demonstrasi Tanpa Teori (Show, Don't Tell):** Perlihatkan bagaimana produk menyelesaikan masalah tersebut secara visual.
+3. **Call-To-Action yang Mengarahkan (Specific CTA):** Jangan sekadar bilang "klik link di bio", berikan alasan mendesak seperti promo terbatas atau voucher khusus.`,
+    category: 'Affiliate Marketing',
+    tags: ['Affiliate Marketing', 'Konversi', 'TikTok Shop', 'Shopee Affiliate'],
+    reading_time_minutes: 5,
+    cover_image: '',
+    featured_image: '',
+    seo_focus_keyword: 'Affiliate Marketing 2026',
+    meta_description: 'Pelajari formula corong affiliate marketing 2026 untuk mengubah views media sosial menjadi komisi bersih nyata dengan optimasi CTR dan CVR.',
+    is_published: true,
+    view_count: 82,
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'post_sample_3',
+    slug: 'cara-hitung-engagement-rate-dan-rate-card-medsos',
+    title: 'Panduan Menghitung Engagement Rate & Menentukan Nilai Wajar Rate Card Influencer di Indonesia',
+    excerpt: 'Berapa tarif endorse yang pantas untuk akun Anda? Pelajari rumus ER standar industri dan tolak ukur rate card endorsement untuk kreator Nano hingga Macro.',
+    content: `## Menentukan Nilai Jual Akun Anda di Depan Brand
+
+Banyak kreator bingung saat pertama kali dihubungi agensi atau brand untuk penawaran *endorsement* atau *sponsored post*. Menetapkan harga terlalu tinggi berisiko membuat brand kabur, sedangkan menetapkan harga terlalu rendah merugikan kerja keras Anda.
+
+Untuk menentukan tarif endorse yang profesional dan dapat dipertanggungjawabkan, metrik utama yang dijadikan patokan oleh brand manager adalah **Engagement Rate (ER)**.
+
+---
+
+### Rumus Standar Engagement Rate
+
+Engagement Rate mengukur seberapa aktif audiens berinteraksi dengan postingan Anda dibandingkan jumlah total pengikut (*followers*):
+
+$$\\text{ER (\\%)} = \\frac{\\text{Total Interaksi (Likes + Comments + Shares + Saves)}}{\\text{Total Followers}} \\times 100\\%$$
+
+- **Di atas 6%:** Sangat Tinggi (Viral / Super Sehat)
+- **3.5% - 6%:** Sehat & Kinerja Baik (Standar Ideal Brand)
+- **1.5% - 3.5%:** Rata-rata Pasar (Wajar untuk Akun Mid/Macro)
+- **Di bawah 1.5%:** Butuh Optimasi Konten
+
+> [!TIP]
+> Coba hitung skor interaksi akun Anda dan periksa estimasi rate card yang disarankan secara otomatis melalui [Kalkulator Engagement Rate](/tools/kalkulator-engagement-rate).
+
+---
+
+### Kisaran Rate Card Wajar di Pasar Indonesia (2026)
+
+- **Nano Creator (1.000 – 10.000 followers):** Rp 150.000 – Rp 600.000 per video/post.
+- **Micro Creator (10.000 – 50.000 followers):** Rp 500.000 – Rp 2.500.000 per video/post.
+- **Mid-Tier Creator (50.000 – 200.000 followers):** Rp 1.500.000 – Rp 6.500.000 per video/post.
+- **Macro Creator (200.000+ followers):** Rp 6.500.000 ke atas per video/post.
+
+Faktor pengali harga meliputi orisinalitas konsep, kualitas produksi audio-visual, serta hak pakai iklan (*whitelisting/usage rights*).`,
+    category: 'Social Media Strategy',
+    tags: ['Social Media', 'Engagement Rate', 'Rate Card', 'Endorsement', 'Influencer'],
+    reading_time_minutes: 4,
+    cover_image: '',
+    featured_image: '',
+    seo_focus_keyword: 'Engagement Rate Medsos',
+    meta_description: 'Cara menghitung Engagement Rate media sosial dan menentukan nilai wajar rate card endorsement kreator di pasar Indonesia tahun 2026.',
+    is_published: true,
+    view_count: 64,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
 // Auto-purge cache dummy lama dari pengujian lokal sebelumnya
 if (typeof localStorage !== 'undefined' && !localStorage.getItem('hi_prod_cleaned_v2')) {
   localStorage.removeItem(LOCAL_POSTS_STORAGE_KEY);
@@ -33,8 +163,74 @@ class SupabaseBlogService {
   getConfig() {
     return {
       url: localStorage.getItem(SUPABASE_STORAGE_KEY_URL) || (typeof window !== 'undefined' && window.__PUBLIC_SUPABASE_URL__) || DEFAULT_SUPABASE_URL || '',
-      anonKey: localStorage.getItem(SUPABASE_STORAGE_KEY_ANON) || (typeof window !== 'undefined' && window.__PUBLIC_SUPABASE_ANON_KEY__) || DEFAULT_SUPABASE_ANON_KEY || ''
+      anonKey: localStorage.getItem(SUPABASE_STORAGE_KEY_ANON) || (typeof window !== 'undefined' && window.__PUBLIC_SUPABASE_ANON_KEY__) || DEFAULT_SUPABASE_ANON_KEY || '',
+      isLive: this.isLive
     };
+  }
+
+  async testConnection(url, anonKey) {
+    const targetUrl = (url || this.getConfig().url || '').trim();
+    const targetKey = (anonKey || this.getConfig().anonKey || '').trim();
+    if (!targetUrl || !targetKey) {
+      return { success: false, message: 'URL atau Anon Key Supabase masih kosong. Silakan isi terlebih dahulu.' };
+    }
+    try {
+      if (!window.supabase || !window.supabase.createClient) {
+        return { success: false, message: 'Library Supabase JS belum siap.' };
+      }
+      const testClient = window.supabase.createClient(targetUrl, targetKey);
+      const { data, error } = await testClient.from('posts').select('id, title, is_published').limit(5);
+      if (error) {
+        if (error.code === '42P01' || error.message.includes('does not exist') || error.message.includes('relation')) {
+          return {
+            success: false,
+            tableMissing: true,
+            message: 'Terkoneksi ke Supabase, TETAPI tabel "posts" belum dibuat! Silakan jalankan script schema.sql di Supabase SQL Editor.'
+          };
+        }
+        return { success: false, message: 'Supabase Error: ' + error.message };
+      }
+      return {
+        success: true,
+        count: (data || []).length,
+        message: `Terhubung ke Supabase! Ditemukan ${(data || []).length} artikel aktif di cloud database.`
+      };
+    } catch (e) {
+      return { success: false, message: 'Gagal menghubungi server Supabase: ' + e.message };
+    }
+  }
+
+  async seedSampleArticles() {
+    if (this.isLive && this.client) {
+      try {
+        for (const post of SAMPLE_ARTICLES) {
+          await this.client.from('posts').upsert({
+            slug: post.slug,
+            title: post.title,
+            excerpt: post.excerpt,
+            content: post.content,
+            category: post.category,
+            tags: post.tags,
+            reading_time_minutes: post.reading_time_minutes,
+            cover_image: post.cover_image,
+            featured_image: post.featured_image,
+            seo_focus_keyword: post.seo_focus_keyword,
+            meta_description: post.meta_description,
+            is_published: post.is_published,
+            view_count: post.view_count
+          }, { onConflict: 'slug' });
+        }
+        return { success: true, count: SAMPLE_ARTICLES.length, mode: 'supabase' };
+      } catch (e) {
+        console.warn('Gagal seed Supabase, fallback ke lokal:', e);
+      }
+    }
+    const current = this.getLocalPosts();
+    const existingSlugs = new Set(current.map(p => p.slug));
+    const toAdd = SAMPLE_ARTICLES.filter(p => !existingSlugs.has(p.slug));
+    const merged = [...toAdd, ...current];
+    this.saveLocalPosts(merged);
+    return { success: true, count: toAdd.length, mode: 'local' };
   }
 
   saveConfig(url, anonKey) {
