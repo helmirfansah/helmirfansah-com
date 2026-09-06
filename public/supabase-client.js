@@ -916,11 +916,22 @@ class SupabaseBlogService {
       blog_archive_title: 'Catatan & Studi Kasus',
       blog_archive_desc: 'Eksplorasi strategi social media growth, teknik konversi affiliate marketing, serta riset implementasi Web3 dunia nyata.',
 
-      // Navigasi Menu Utama (Header & Mobile Drawer)
+      // Navigasi Menu Utama (Header & Mobile Drawer) dengan Dukungan Submenu
       nav_main: [
         { id: 'nav_1', label: 'Tentang', url: '/#about', target: '_self' },
         { id: 'nav_2', label: 'Arsip Karya', url: '/#works', target: '_self' },
-        { id: 'nav_3', label: 'Kalkulator & Tools', url: '/tools', target: '_self' },
+        { 
+          id: 'nav_3', 
+          label: 'Kalkulator & Tools', 
+          url: '/tools', 
+          target: '_self',
+          children: [
+            { id: 'sub_aff', label: 'Kalkulator Komisi Affiliate', url: '/tools/kalkulator-affiliate', target: '_self' },
+            { id: 'sub_er', label: 'Kalkulator ER & Rate Card', url: '/tools/kalkulator-engagement-rate', target: '_self' },
+            { id: 'sub_cloud', label: 'Kalkulator Cloud VPS', url: '/tools/kalkulator-cloud-vps', target: '_self' },
+            { id: 'sub_ai', label: 'Kalkulator Token AI', url: '/tools/kalkulator-token-ai', target: '_self' }
+          ]
+        },
         { id: 'nav_4', label: 'Blog', url: '/blog', target: '_self' },
         { id: 'nav_5', label: 'Kontak', url: '/#contact', target: '_self' }
       ],
@@ -949,7 +960,10 @@ class SupabaseBlogService {
       if (parsed.nav_main && Array.isArray(parsed.nav_main)) {
         parsed.nav_main = parsed.nav_main.map(item => {
           if (item.url === '/tools' || item.label.includes('Lab')) {
-            return { ...item, label: 'Kalkulator & Tools', url: '/tools' };
+            const children = (item.children && Array.isArray(item.children) && item.children.length > 0)
+              ? item.children
+              : defaultSettings.nav_main.find(d => d.id === 'nav_3')?.children || [];
+            return { ...item, label: 'Kalkulator & Tools', url: '/tools', children };
           }
           if (item.url === '/#works' && item.label.includes('Studi Kasus')) {
             return { ...item, label: 'Arsip Karya' };

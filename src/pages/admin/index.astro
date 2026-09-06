@@ -5273,7 +5273,18 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
     const DEFAULT_NAV_MAIN = [
       { id: 'nav_1', label: 'Tentang', url: '/#about', target: '_self' },
       { id: 'nav_2', label: 'Arsip Karya', url: '/#works', target: '_self' },
-      { id: 'nav_3', label: 'Lab & Kalkulator', url: '/#lab', target: '_self' },
+      { 
+        id: 'nav_3', 
+        label: 'Kalkulator & Tools', 
+        url: '/tools', 
+        target: '_self',
+        children: [
+          { id: 'sub_aff', label: 'Kalkulator Komisi Affiliate', url: '/tools/kalkulator-affiliate', target: '_self' },
+          { id: 'sub_er', label: 'Kalkulator ER & Rate Card', url: '/tools/kalkulator-engagement-rate', target: '_self' },
+          { id: 'sub_cloud', label: 'Kalkulator Cloud VPS', url: '/tools/kalkulator-cloud-vps', target: '_self' },
+          { id: 'sub_ai', label: 'Kalkulator Token AI', url: '/tools/kalkulator-token-ai', target: '_self' }
+        ]
+      },
       { id: 'nav_4', label: 'Blog', url: '/blog', target: '_self' },
       { id: 'nav_5', label: 'Kontak', url: '/#contact', target: '_self' }
     ];
@@ -5365,48 +5376,113 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
       container.innerHTML = list.map((item, idx) => {
         const isFirst = idx === 0;
         const isLast = idx === list.length - 1;
+        const hasChildren = type === 'main' && item.children && Array.isArray(item.children) && item.children.length > 0;
+
         return `
-          <div class="nav-item-card" data-index="${idx}" data-type="${type}">
-            <!-- Order Arrows & Badge -->
-            <div class="nav-item-order">
-              <button type="button" class="nav-order-btn" onclick="moveNavItem('${type}', ${idx}, -1)" ${isFirst ? 'disabled' : ''} title="Geser ke Atas">▲</button>
-              <span style="font-size:11px;font-weight:700;color:var(--wp-brand);">${idx + 1}</span>
-              <button type="button" class="nav-order-btn" onclick="moveNavItem('${type}', ${idx}, 1)" ${isLast ? 'disabled' : ''} title="Geser ke Bawah">▼</button>
-            </div>
-
-            <!-- Inputs -->
-            <div style="flex:1;display:grid;grid-template-columns:1.2fr 2fr 1fr;gap:0.75rem;align-items:center;">
-              <div>
-                <label style="display:block;font-size:11px;color:var(--wp-muted);margin-bottom:0.2rem;">Label Menu</label>
-                <input type="text" class="input" value="${escapeNavHtml(item.label || '')}" 
-                  placeholder="Misal: Tentang" 
-                  oninput="updateNavItemVal('${type}', ${idx}, 'label', this.value)"
-                  style="font-size:12.5px;padding:0.45rem 0.65rem;">
+          <div class="nav-item-card" data-index="${idx}" data-type="${type}" style="display:flex;flex-direction:column;gap:0.75rem;border:1px solid ${hasChildren ? 'var(--wp-brand)' : 'var(--wp-border)'};transition:border-color 0.2s;">
+            <!-- Main Parent Row -->
+            <div style="display:flex;align-items:center;gap:0.75rem;width:100%;">
+              <!-- Order Arrows & Badge -->
+              <div class="nav-item-order">
+                <button type="button" class="nav-order-btn" onclick="moveNavItem('${type}', ${idx}, -1)" ${isFirst ? 'disabled' : ''} title="Geser ke Atas">▲</button>
+                <span style="font-size:11px;font-weight:700;color:var(--wp-brand);">${idx + 1}</span>
+                <button type="button" class="nav-order-btn" onclick="moveNavItem('${type}', ${idx}, 1)" ${isLast ? 'disabled' : ''} title="Geser ke Bawah">▼</button>
               </div>
 
-              <div>
-                <label style="display:block;font-size:11px;color:var(--wp-muted);margin-bottom:0.2rem;">URL Target</label>
-                <input type="text" class="input" value="${escapeNavHtml(item.url || '')}" 
-                  placeholder="Misal: /#about atau /blog" 
-                  oninput="updateNavItemVal('${type}', ${idx}, 'url', this.value)"
-                  style="font-size:12.5px;padding:0.45rem 0.65rem;font-family:var(--font-mono);">
+              <!-- Inputs -->
+              <div style="flex:1;display:grid;grid-template-columns:1.2fr 2fr 1fr;gap:0.75rem;align-items:center;">
+                <div>
+                  <label style="display:block;font-size:11px;color:var(--wp-muted);margin-bottom:0.2rem;">Label Menu</label>
+                  <input type="text" class="input" value="${escapeNavHtml(item.label || '')}" 
+                    placeholder="Misal: Tentang" 
+                    oninput="updateNavItemVal('${type}', ${idx}, 'label', this.value)"
+                    style="font-size:12.5px;padding:0.45rem 0.65rem;">
+                </div>
+
+                <div>
+                  <label style="display:block;font-size:11px;color:var(--wp-muted);margin-bottom:0.2rem;">URL Target</label>
+                  <input type="text" class="input" value="${escapeNavHtml(item.url || '')}" 
+                    placeholder="Misal: /#about atau /blog" 
+                    oninput="updateNavItemVal('${type}', ${idx}, 'url', this.value)"
+                    style="font-size:12.5px;padding:0.45rem 0.65rem;font-family:var(--font-mono);">
+                </div>
+
+                <div>
+                  <label style="display:block;font-size:11px;color:var(--wp-muted);margin-bottom:0.2rem;">Buka Tautan</label>
+                  <select class="input" onchange="updateNavItemVal('${type}', ${idx}, 'target', this.value)" style="font-size:12px;padding:0.45rem 0.5rem;">
+                    <option value="_self" ${(!item.target || item.target === '_self') ? 'selected' : ''}>Tab Ini (_self)</option>
+                    <option value="_blank" ${item.target === '_blank' ? 'selected' : ''}>Tab Baru (_blank)</option>
+                  </select>
+                </div>
               </div>
 
+              <!-- Delete Action -->
               <div>
-                <label style="display:block;font-size:11px;color:var(--wp-muted);margin-bottom:0.2rem;">Buka Tautan</label>
-                <select class="input" onchange="updateNavItemVal('${type}', ${idx}, 'target', this.value)" style="font-size:12px;padding:0.45rem 0.5rem;">
-                  <option value="_self" ${(!item.target || item.target === '_self') ? 'selected' : ''}>Tab Ini (_self)</option>
-                  <option value="_blank" ${item.target === '_blank' ? 'selected' : ''}>Tab Baru (_blank)</option>
-                </select>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="removeNavItem('${type}', ${idx})" title="Hapus Tautan Ini" style="color:#F87171;padding:0.45rem 0.6rem;">
+                  <svg style="width:13px;height:13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
               </div>
             </div>
 
-            <!-- Delete Action -->
-            <div>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="removeNavItem('${type}', ${idx})" title="Hapus Tautan Ini" style="color:#F87171;padding:0.45rem 0.6rem;">
-                <svg style="width:13px;height:13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-              </button>
-            </div>
+            ${type === 'main' ? `
+              <!-- Submenu Section Header & Toggle -->
+              <div style="display:flex;justify-content:space-between;align-items:center;padding-top:0.6rem;border-top:1px dashed var(--wp-border);margin-top:0.2rem;">
+                <div style="font-size:11.5px;color:var(--wp-dim);display:flex;align-items:center;gap:0.5rem;">
+                  <span style="color:var(--wp-brand);font-weight:700;">↳ Submenu Dropdown:</span>
+                  <span class="badge" style="background:${hasChildren ? 'rgba(56, 189, 248, 0.15)' : 'rgba(255,255,255,0.06)'};color:${hasChildren ? '#38BDF8' : 'var(--wp-muted)'};font-size:10.5px;">
+                    ${hasChildren ? `${item.children.length} item submenu aktif` : 'Belum ada submenu'}
+                  </span>
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="addSubmenuItem(${idx})" style="font-size:11px;padding:0.25rem 0.65rem;display:inline-flex;align-items:center;gap:0.35rem;border-color:var(--wp-border);">
+                  <svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span>+ Tambah Submenu</span>
+                </button>
+              </div>
+
+              <!-- Nested Submenu Child Items -->
+              ${hasChildren ? `
+                <div class="nav-subitems-container" style="display:flex;flex-direction:column;gap:0.5rem;padding-left:1.5rem;border-left:2px solid var(--wp-brand);margin-left:0.5rem;margin-top:0.25rem;">
+                  ${item.children.map((child, cIdx) => `
+                    <div style="background:rgba(0,0,0,0.35);border:1px solid var(--wp-border);border-radius:8px;padding:0.65rem 0.85rem;display:flex;align-items:center;gap:0.65rem;">
+                      <!-- Child Order -->
+                      <div class="nav-item-order" style="gap:2px;">
+                        <button type="button" class="nav-order-btn" onclick="moveSubmenuItem(${idx}, ${cIdx}, -1)" ${cIdx === 0 ? 'disabled' : ''} title="Geser ke Atas" style="width:20px;height:18px;font-size:8px;">▲</button>
+                        <span style="font-size:10px;font-weight:700;color:var(--wp-brand);">${cIdx + 1}</span>
+                        <button type="button" class="nav-order-btn" onclick="moveSubmenuItem(${idx}, ${cIdx}, 1)" ${cIdx === item.children.length - 1 ? 'disabled' : ''} title="Geser ke Bawah" style="width:20px;height:18px;font-size:8px;">▼</button>
+                      </div>
+
+                      <div style="flex:1;display:grid;grid-template-columns:1.2fr 2fr 1fr;gap:0.6rem;align-items:center;">
+                        <div>
+                          <label style="display:block;font-size:10px;color:var(--wp-muted);margin-bottom:0.15rem;">Label Submenu</label>
+                          <input type="text" class="input" value="${escapeNavHtml(child.label || '')}" 
+                            placeholder="Misal: Kalkulator Affiliate" 
+                            oninput="updateSubmenuVal(${idx}, ${cIdx}, 'label', this.value)"
+                            style="font-size:12px;padding:0.35rem 0.55rem;">
+                        </div>
+                        <div>
+                          <label style="display:block;font-size:10px;color:var(--wp-muted);margin-bottom:0.15rem;">URL Target Submenu</label>
+                          <input type="text" class="input" value="${escapeNavHtml(child.url || '')}" 
+                            placeholder="Misal: /tools/kalkulator-affiliate" 
+                            oninput="updateSubmenuVal(${idx}, ${cIdx}, 'url', this.value)"
+                            style="font-size:12px;padding:0.35rem 0.55rem;font-family:var(--font-mono);">
+                        </div>
+                        <div>
+                          <label style="display:block;font-size:10px;color:var(--wp-muted);margin-bottom:0.15rem;">Buka Tautan</label>
+                          <select class="input" onchange="updateSubmenuVal(${idx}, ${cIdx}, 'target', this.value)" style="font-size:11.5px;padding:0.35rem 0.45rem;">
+                            <option value="_self" ${(!child.target || child.target === '_self') ? 'selected' : ''}>Tab Ini (_self)</option>
+                            <option value="_blank" ${child.target === '_blank' ? 'selected' : ''}>Tab Baru (_blank)</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <button type="button" class="btn btn-secondary btn-sm" onclick="removeSubmenuItem(${idx}, ${cIdx})" title="Hapus Submenu Ini" style="color:#F87171;padding:0.35rem 0.5rem;font-size:11px;">
+                        ✕
+                      </button>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+            ` : ''}
           </div>
         `;
       }).join('');
@@ -5420,6 +5496,9 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
         url: '/',
         target: '_self'
       };
+      if (type === 'main') {
+        newItem.children = [];
+      }
       list.push(newItem);
       renderNavItems(type);
       updateNavBadges();
@@ -5449,6 +5528,44 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
       }
     }
 
+    function addSubmenuItem(parentIdx) {
+      if (!navState.main[parentIdx]) return;
+      if (!navState.main[parentIdx].children || !Array.isArray(navState.main[parentIdx].children)) {
+        navState.main[parentIdx].children = [];
+      }
+      navState.main[parentIdx].children.push({
+        id: 'sub_' + Date.now(),
+        label: 'Submenu Baru',
+        url: '/',
+        target: '_self'
+      });
+      renderNavItems('main');
+    }
+
+    function removeSubmenuItem(parentIdx, childIdx) {
+      if (navState.main[parentIdx] && navState.main[parentIdx].children) {
+        navState.main[parentIdx].children.splice(childIdx, 1);
+        renderNavItems('main');
+      }
+    }
+
+    function moveSubmenuItem(parentIdx, childIdx, direction) {
+      const children = navState.main[parentIdx]?.children;
+      if (!children) return;
+      const targetIdx = childIdx + direction;
+      if (targetIdx < 0 || targetIdx >= children.length) return;
+      const temp = children[childIdx];
+      children[childIdx] = children[targetIdx];
+      children[targetIdx] = temp;
+      renderNavItems('main');
+    }
+
+    function updateSubmenuVal(parentIdx, childIdx, field, value) {
+      if (navState.main[parentIdx]?.children?.[childIdx]) {
+        navState.main[parentIdx].children[childIdx][field] = value;
+      }
+    }
+
     function resetNavToDefault() {
       if (confirm('Apakah Anda yakin ingin mengembalikan seluruh daftar navigasi ke default bawaan?')) {
         navState.main = JSON.parse(JSON.stringify(DEFAULT_NAV_MAIN));
@@ -5467,7 +5584,17 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
           id: item.id || ('nav_' + Math.random().toString(36).substr(2, 6)),
           label: item.label.trim(),
           url: (item.url && item.url.trim()) ? item.url.trim() : '#',
-          target: item.target || '_self'
+          target: item.target || '_self',
+          children: (item.children && Array.isArray(item.children))
+            ? item.children
+                .filter(c => c.label && c.label.trim() !== '')
+                .map(c => ({
+                  id: c.id || ('sub_' + Math.random().toString(36).substr(2, 6)),
+                  label: c.label.trim(),
+                  url: (c.url && c.url.trim()) ? c.url.trim() : '#',
+                  target: c.target || '_self'
+                }))
+            : []
         }));
 
       const cleanFooter = navState.footer

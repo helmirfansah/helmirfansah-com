@@ -1,4 +1,4 @@
-﻿/* ================================================================
+/* ================================================================
    CSS CUSTOM PROPERTIES - Light & Dark Mode
    ================================================================ */
 :root {
@@ -199,6 +199,112 @@ body::before {
   transition: color var(--transition-fast);
 }
 #main-nav a:hover { color: var(--ink); }
+
+/* Dropdown Submenu (Desktop) */
+#main-nav .has-submenu {
+  position: relative;
+}
+
+#main-nav .nav-parent-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+#main-nav .dropdown-chevron {
+  transition: transform var(--transition-fast);
+  stroke: currentColor;
+}
+
+#main-nav .has-submenu:hover .dropdown-chevron,
+#main-nav .has-submenu:focus-within .dropdown-chevron {
+  transform: rotate(180deg);
+}
+
+#main-nav .nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  min-width: 220px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  padding: 0.5rem 0;
+  list-style: none;
+  display: none;
+  flex-direction: column;
+  gap: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Hover bridge padding so pointer moving down doesn't lose hover */
+#main-nav .has-submenu::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 12px;
+}
+
+#main-nav .has-submenu:hover .nav-dropdown-menu,
+#main-nav .has-submenu:focus-within .nav-dropdown-menu {
+  display: flex;
+  animation: navDropdownAnim 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes navDropdownAnim {
+  from { opacity: 0; transform: translateX(-50%) translateY(3px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(8px); }
+}
+
+#main-nav .nav-dropdown-menu li {
+  width: 100%;
+}
+
+#main-nav .nav-dropdown-menu a {
+  display: block;
+  padding: 0.55rem 1rem;
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+#main-nav .nav-dropdown-menu a:hover {
+  background: var(--bg-alt);
+  color: var(--accent-clay);
+}
+
+/* Mobile Drawer Submenu */
+.mobile-drawer-sublink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0;
+  color: var(--ink-secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color var(--transition-fast);
+}
+
+.mobile-drawer-sublink:hover {
+  color: var(--accent-clay);
+}
+
+.mobile-submenu-toggle {
+  transition: transform 0.2s ease;
+}
+
+.mobile-submenu-toggle.open {
+  transform: rotate(180deg);
+}
 
 /* Theme Toggle - Tactile & Smooth Spring Transition */
 #theme-toggle {

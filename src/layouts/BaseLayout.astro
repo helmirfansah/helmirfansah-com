@@ -75,7 +75,18 @@ const {
         <ul id="header-nav-list">
           <li><a href="/#about">Tentang</a></li>
           <li><a href="/#works">Arsip Karya</a></li>
-          <li><a href="/tools">Kalkulator &amp; Tools</a></li>
+          <li class="has-submenu">
+            <a href="/tools" class="nav-parent-link">
+              <span>Kalkulator &amp; Tools</span>
+              <svg class="dropdown-chevron" viewBox="0 0 10 6" width="9" height="6"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+            </a>
+            <ul class="nav-dropdown-menu" role="menu">
+              <li><a href="/tools/kalkulator-affiliate">Kalkulator Komisi Affiliate</a></li>
+              <li><a href="/tools/kalkulator-engagement-rate">Kalkulator ER &amp; Rate Card</a></li>
+              <li><a href="/tools/kalkulator-cloud-vps">Kalkulator Cloud VPS</a></li>
+              <li><a href="/tools/kalkulator-token-ai">Kalkulator Token AI</a></li>
+            </ul>
+          </li>
           <li><a href="/blog">Blog</a></li>
           <li><a href="/#contact">Kontak</a></li>
         </ul>
@@ -109,7 +120,21 @@ const {
         <ul class="mobile-drawer-list" id="drawer-nav-list">
           <li><a href="/#about" class="mobile-drawer-link"><span class="link-idx">01</span><span class="link-text">Tentang</span></a></li>
           <li><a href="/#works" class="mobile-drawer-link"><span class="link-idx">02</span><span class="link-text">Arsip Karya</span></a></li>
-          <li><a href="/tools" class="mobile-drawer-link"><span class="link-idx">03</span><span class="link-text">Kalkulator &amp; Tools</span></a></li>
+          <li class="mobile-drawer-has-submenu">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <a href="/tools" class="mobile-drawer-link" style="flex:1;">
+                <span class="link-idx">03</span>
+                <span class="link-text">Kalkulator &amp; Tools</span>
+              </a>
+              <button type="button" class="mobile-submenu-toggle" onclick="toggleMobileSubmenu(this)" aria-label="Buka submenu" style="background:none;border:none;color:var(--ink-muted);padding:0.75rem 1rem;font-size:1.1rem;cursor:pointer;line-height:1;">▾</button>
+            </div>
+            <ul class="mobile-drawer-sublist" style="display:none;list-style:none;padding-left:2.5rem;margin:0.25rem 0 0.75rem;">
+              <li><a href="/tools/kalkulator-affiliate" class="mobile-drawer-sublink"><span style="color:var(--accent-clay);font-family:var(--font-mono);font-size:0.8rem;">↳</span> Kalkulator Komisi Affiliate</a></li>
+              <li><a href="/tools/kalkulator-engagement-rate" class="mobile-drawer-sublink"><span style="color:var(--accent-clay);font-family:var(--font-mono);font-size:0.8rem;">↳</span> Kalkulator ER &amp; Rate Card</a></li>
+              <li><a href="/tools/kalkulator-cloud-vps" class="mobile-drawer-sublink"><span style="color:var(--accent-clay);font-family:var(--font-mono);font-size:0.8rem;">↳</span> Kalkulator Cloud VPS</a></li>
+              <li><a href="/tools/kalkulator-token-ai" class="mobile-drawer-sublink"><span style="color:var(--accent-clay);font-family:var(--font-mono);font-size:0.8rem;">↳</span> Kalkulator Token AI</a></li>
+            </ul>
+          </li>
           <li><a href="/blog" class="mobile-drawer-link"><span class="link-idx">04</span><span class="link-text">Blog</span></a></li>
           <li><a href="/#contact" class="mobile-drawer-link"><span class="link-idx">05</span><span class="link-text">Kontak</span></a></li>
         </ul>
@@ -150,6 +175,17 @@ const {
 
   <!-- Dynamic Branding & Navigation Hydration Script -->
   <script is:inline>
+    function toggleMobileSubmenu(btn) {
+      if (!btn) return;
+      const parent = btn.closest('.mobile-drawer-has-submenu');
+      if (!parent) return;
+      const sublist = parent.querySelector('.mobile-drawer-sublist');
+      if (!sublist) return;
+      const isOpen = sublist.style.display !== 'none';
+      sublist.style.display = isOpen ? 'none' : 'block';
+      btn.classList.toggle('open', !isOpen);
+    }
+
     (function() {
       function applyBranding() {
         if (!window.BlogService) return;
@@ -172,24 +208,67 @@ const {
           }
         });
 
-        // 2. Navigasi Utama (Header & Mobile Drawer)
+        // 2. Navigasi Utama (Header & Mobile Drawer) dengan Dukungan Submenu
         if (s.nav_main && Array.isArray(s.nav_main) && s.nav_main.length > 0) {
           const headerNav = document.getElementById('header-nav-list');
           if (headerNav) {
-            headerNav.innerHTML = s.nav_main.map(item => `
-              <li><a href="${item.url}" target="${item.target || '_self'}">${item.label}</a></li>
-            `).join('');
+            headerNav.innerHTML = s.nav_main.map(item => {
+              const hasSub = item.children && Array.isArray(item.children) && item.children.length > 0;
+              if (!hasSub) {
+                return `<li><a href="${item.url}" target="${item.target || '_self'}">${item.label}</a></li>`;
+              }
+              const subItemsHtml = item.children.map(c => `
+                <li><a href="${c.url}" target="${c.target || '_self'}">${c.label}</a></li>
+              `).join('');
+              return `
+                <li class="has-submenu">
+                  <a href="${item.url}" target="${item.target || '_self'}" class="nav-parent-link" aria-haspopup="true" aria-expanded="false">
+                    <span>${item.label}</span>
+                    <svg class="dropdown-chevron" viewBox="0 0 10 6" width="9" height="6"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                  </a>
+                  <ul class="nav-dropdown-menu" role="menu">
+                    ${subItemsHtml}
+                  </ul>
+                </li>
+              `;
+            }).join('');
           }
+
           const drawerNav = document.getElementById('drawer-nav-list');
           if (drawerNav) {
             drawerNav.innerHTML = s.nav_main.map((item, idx) => {
               const num = String(idx + 1).padStart(2, '0');
-              return `
+              const hasSub = item.children && Array.isArray(item.children) && item.children.length > 0;
+              if (!hasSub) {
+                return `
+                  <li>
+                    <a href="${item.url}" class="mobile-drawer-link" target="${item.target || '_self'}">
+                      <span class="link-idx">${num}</span>
+                      <span class="link-text">${item.label}</span>
+                    </a>
+                  </li>
+                `;
+              }
+              const subDrawerHtml = item.children.map(c => `
                 <li>
-                  <a href="${item.url}" class="mobile-drawer-link" target="${item.target || '_self'}">
-                    <span class="link-idx">${num}</span>
-                    <span class="link-text">${item.label}</span>
+                  <a href="${c.url}" class="mobile-drawer-sublink" target="${c.target || '_self'}">
+                    <span style="color:var(--accent-clay);font-family:var(--font-mono);font-size:0.8rem;">↳</span>
+                    <span>${c.label}</span>
                   </a>
+                </li>
+              `).join('');
+              return `
+                <li class="mobile-drawer-has-submenu">
+                  <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <a href="${item.url}" class="mobile-drawer-link" target="${item.target || '_self'}" style="flex:1;">
+                      <span class="link-idx">${num}</span>
+                      <span class="link-text">${item.label}</span>
+                    </a>
+                    <button type="button" class="mobile-submenu-toggle" onclick="toggleMobileSubmenu(this)" aria-label="Buka submenu" style="background:none;border:none;color:var(--ink-muted);padding:0.75rem 1rem;font-size:1.1rem;cursor:pointer;line-height:1;">▾</button>
+                  </div>
+                  <ul class="mobile-drawer-sublist" style="display:none;list-style:none;padding-left:2.5rem;margin:0.25rem 0 0.75rem;">
+                    ${subDrawerHtml}
+                  </ul>
                 </li>
               `;
             }).join('');
