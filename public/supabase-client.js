@@ -646,15 +646,15 @@ class SupabaseBlogService {
 
       // Lab & Kalkulator
       lab_enabled: true,
-      lab_badge: 'LAB & KALKULATOR',
-      lab_title: 'Tools Gratis<br>untuk Developer & Startup',
-      lab_desc: 'Kalkulator interaktif untuk membuat keputusan infrastruktur yang lebih tepat - tanpa perlu menghitung manual.',
+      lab_badge: 'KALKULATOR & TOOLS',
+      lab_title: 'Kalkulator Cuan Afiliasi<br>&amp; Engagement Medsos',
+      lab_desc: 'Simulasi potensi komisi affiliate marketing, estimasi rate card endorsement akun media sosial, serta efisiensi server cloud &amp; token AI.',
       lab_usd_idr: 16000,
 
       // Bagian Kontak
       contact_badge: 'Kontak',
       contact_title: 'Mari ngobrol.',
-      contact_desc: 'Tertarik berkolaborasi, ada pertanyaan teknis, atau sekadar mau berdiskusi tentang tech? Saya terbuka untuk semuanya.',
+      contact_desc: 'Tertarik berkolaborasi, ada pertanyaan seputar social media &amp; affiliate, atau sekadar mau berdiskusi? Saya terbuka untuk semuanya.',
       contact_github_text: 'GitHub',
       contact_github_url: 'https://github.com/helmirfansah',
       contact_linkedin_text: 'LinkedIn',
@@ -662,13 +662,13 @@ class SupabaseBlogService {
 
       // Halaman Blog
       blog_archive_title: 'Catatan & Studi Kasus',
-      blog_archive_desc: 'Eksplorasi teknis mendalam tentang cloud architecture, evaluasi biaya SaaS, dan tooling AI berdasarkan uji coba dunia nyata.',
+      blog_archive_desc: 'Eksplorasi strategi social media growth, teknik konversi affiliate marketing, serta riset implementasi Web3 dunia nyata.',
 
       // Navigasi Menu Utama (Header & Mobile Drawer)
       nav_main: [
         { id: 'nav_1', label: 'Tentang', url: '/#about', target: '_self' },
         { id: 'nav_2', label: 'Arsip Karya', url: '/#works', target: '_self' },
-        { id: 'nav_3', label: 'Lab & Kalkulator', url: '/tools', target: '_self' },
+        { id: 'nav_3', label: 'Kalkulator & Tools', url: '/tools', target: '_self' },
         { id: 'nav_4', label: 'Blog', url: '/blog', target: '_self' },
         { id: 'nav_5', label: 'Kontak', url: '/#contact', target: '_self' }
       ],
@@ -676,9 +676,11 @@ class SupabaseBlogService {
       // Navigasi Menu Footer
       nav_footer: [
         { id: 'fnav_1', label: 'About Me', url: '/#about', target: '_self' },
-        { id: 'fnav_2', label: 'Privacy Policy', url: '/privacy', target: '_self' },
-        { id: 'fnav_3', label: 'Disclaimer', url: '/disclaimer', target: '_self' },
-        { id: 'fnav_4', label: 'Contact', url: '/#contact', target: '_self' }
+        { id: 'fnav_2', label: 'Kalkulator & Tools', url: '/tools', target: '_self' },
+        { id: 'fnav_3', label: 'Blog', url: '/blog', target: '_self' },
+        { id: 'fnav_4', label: 'Privacy Policy', url: '/privacy', target: '_self' },
+        { id: 'fnav_5', label: 'Disclaimer', url: '/disclaimer', target: '_self' },
+        { id: 'fnav_6', label: 'Contact', url: '/#contact', target: '_self' }
       ]
     };
     const stored = localStorage.getItem('hi_site_settings');

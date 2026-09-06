@@ -98,25 +98,108 @@ const personSchema = {
     <!-- ── LAB & CALCULATORS ─────────────────────────────────────── -->
     <section id="lab" aria-labelledby="lab-heading">
       <div class="section-inner">
-        <div class="section-label" data-brand-key="lab_badge">Lab &amp; Kalkulator</div>
-        <h2 id="lab-heading" data-brand-key="lab_title">Tools Gratis<br>untuk Developer &amp; Startup</h2>
-        <p class="section-sub" data-brand-key="lab_desc">Kalkulator interaktif untuk membuat keputusan infrastruktur yang lebih tepat - tanpa perlu menghitung manual.</p>
+        <div class="section-label" data-brand-key="lab_badge">Kalkulator &amp; Tools</div>
+        <h2 id="lab-heading" data-brand-key="lab_title">Kalkulator Cuan Afiliasi<br>&amp; Engagement Medsos</h2>
+        <p class="section-sub" data-brand-key="lab_desc">Simulasi potensi komisi affiliate marketing, estimasi rate card endorsement akun media sosial, serta efisiensi server cloud &amp; token AI.</p>
 
         <!-- CALCULATOR WIDGET -->
-        <div class="calc-container" id="cloud-calc">
-          <div class="calc-header">
+        <div class="calc-container" id="tools-calc">
+          <div class="calc-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
             <div class="calc-tabs" role="tablist" aria-label="Pilih Kalkulator">
-              <button class="calc-tab active" role="tab" aria-selected="true" data-tab="cloud">
-                ☁️ Server Cloud (IDR)
+              <button class="calc-tab active" role="tab" aria-selected="true" data-tab="affiliate">
+                💰 Komisi Afiliasi
+              </button>
+              <button class="calc-tab" role="tab" aria-selected="false" data-tab="social">
+                📊 ER &amp; Rate Card
+              </button>
+              <button class="calc-tab" role="tab" aria-selected="false" data-tab="cloud">
+                ☁️ Cloud VPS
               </button>
               <button class="calc-tab" role="tab" aria-selected="false" data-tab="ai">
-                🤖 Token API AI (IDR)
+                🤖 Token AI
               </button>
             </div>
           </div>
 
-          <!-- TAB 1: CLOUD CALCULATOR -->
-          <div class="calc-body" id="tab-cloud" role="tabpanel">
+          <!-- TAB 1: AFFILIATE CALCULATOR -->
+          <div class="calc-body" id="tab-affiliate" role="tabpanel">
+            <div style="margin-bottom: 1rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem;">
+              <span style="font-size: 0.75rem; font-weight: 600; color: var(--ink-muted);">Preset:</span>
+              <button type="button" class="aff-preset-btn active" data-preset="shopee" style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); cursor: pointer;">Shopee (7%)</button>
+              <button type="button" class="aff-preset-btn" data-preset="tiktok" style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); cursor: pointer;">TikTok (12%)</button>
+              <button type="button" class="aff-preset-btn" data-preset="saas" style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); cursor: pointer;">SaaS (35%)</button>
+              <button type="button" class="aff-preset-btn" data-preset="web3" style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); cursor: pointer;">Web3 (25%)</button>
+            </div>
+
+            <div class="calc-inputs">
+              <div class="input-group">
+                <label for="aff-views">Views / bln: <strong id="aff-views-val">60.000 Views</strong></label>
+                <input type="range" id="aff-views" min="1000" max="1000000" value="60000" step="1000">
+              </div>
+              <div class="input-group">
+                <label for="aff-ctr">CTR Klik: <strong id="aff-ctr-val">4.0%</strong></label>
+                <input type="range" id="aff-ctr" min="0.5" max="20" value="4.0" step="0.1">
+              </div>
+              <div class="input-group">
+                <label for="aff-cvr">Konversi Pembelian: <strong id="aff-cvr-val">2.5%</strong></label>
+                <input type="range" id="aff-cvr" min="0.5" max="15" value="2.5" step="0.1">
+              </div>
+              <div class="input-group">
+                <label for="aff-price">Harga Produk Rata-rata: <strong id="aff-price-val">Rp 125.000</strong></label>
+                <input type="range" id="aff-price" min="10000" max="2000000" value="125000" step="5000">
+              </div>
+              <div class="input-group" style="grid-column: 1 / -1;">
+                <label for="aff-comm">Komisi Afiliasi: <strong id="aff-comm-val">7.0%</strong></label>
+                <input type="range" id="aff-comm" min="1" max="50" value="7.0" step="0.5">
+              </div>
+            </div>
+            <div class="calc-results" id="affiliate-results">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- TAB 2: SOCIAL MEDIA CALCULATOR -->
+          <div class="calc-body hidden" id="tab-social" role="tabpanel">
+            <div style="margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <label style="display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.3rem 0.6rem; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                <input type="radio" name="soc-platform" value="tiktok" checked style="accent-color: var(--accent-clay);"> TikTok
+              </label>
+              <label style="display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.3rem 0.6rem; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                <input type="radio" name="soc-platform" value="instagram" style="accent-color: var(--accent-clay);"> Instagram
+              </label>
+              <label style="display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.3rem 0.6rem; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                <input type="radio" name="soc-platform" value="youtube" style="accent-color: var(--accent-clay);"> YouTube
+              </label>
+              <label style="display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.3rem 0.6rem; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                <input type="radio" name="soc-platform" value="twitter" style="accent-color: var(--accent-clay);"> 𝕏
+              </label>
+            </div>
+
+            <div class="calc-inputs">
+              <div class="input-group">
+                <label for="soc-followers">Followers: <strong id="soc-followers-val">25.000 Followers</strong></label>
+                <input type="range" id="soc-followers" min="1000" max="1000000" value="25000" step="1000">
+              </div>
+              <div class="input-group">
+                <label for="soc-likes">Rata-rata Likes: <strong id="soc-likes-val">1.200 Likes</strong></label>
+                <input type="range" id="soc-likes" min="10" max="100000" value="1200" step="50">
+              </div>
+              <div class="input-group">
+                <label for="soc-comments">Rata-rata Komentar: <strong id="soc-comments-val">85 Komentar</strong></label>
+                <input type="range" id="soc-comments" min="0" max="10000" value="85" step="5">
+              </div>
+              <div class="input-group">
+                <label for="soc-shares">Shares / Saves: <strong id="soc-shares-val">45 Shares</strong></label>
+                <input type="range" id="soc-shares" min="0" max="10000" value="45" step="5">
+              </div>
+            </div>
+            <div class="calc-results" id="social-results">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- TAB 3: CLOUD CALCULATOR -->
+          <div class="calc-body hidden" id="tab-cloud" role="tabpanel">
             <div class="calc-inputs">
               <div class="input-group">
                 <label for="vcpu">vCPU: <strong id="vcpu-val">4 vCPU</strong></label>
@@ -140,7 +223,7 @@ const personSchema = {
             </div>
           </div>
 
-          <!-- TAB 2: AI CALCULATOR -->
+          <!-- TAB 4: AI CALCULATOR -->
           <div class="calc-body hidden" id="tab-ai" role="tabpanel">
             <div class="calc-inputs">
               <div class="input-group">

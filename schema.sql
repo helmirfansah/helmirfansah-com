@@ -145,10 +145,43 @@ TO public
 USING (true) 
 WITH CHECK (true);
 
--- Baris data default untuk 'global'
+-- Baris data default untuk 'global' dengan branding Social Media & Affiliate Marketing
 INSERT INTO public.site_settings (id, data) 
-VALUES ('global', '{}'::jsonb) 
-ON CONFLICT (id) DO NOTHING;
+VALUES ('global', '{
+  "brand_logo_text": "Helmi Irfansah",
+  "brand_role": "Social Media & Affiliate Marketer | Web3 Explorer",
+  "brand_tagline": "Spesialis pertumbuhan audiens organik, optimasi konversi afiliasi, dan riset adopsi Web3.",
+  "hero_badge": "Social Media & Affiliate Marketing · helmirfansah.com",
+  "hero_title": "Membangun audiens setia. <em style=\"font-style:italic;color:var(--accent-clay);\">Mengubah atensi</em> menjadi konversi nyata.",
+  "hero_sub": "Dari strategi viral organik di TikTok & Instagram, rekayasa konversi corong affiliate marketing (Shopee/TikTok/SaaS), hingga eksperimen adopsi Web3 & Blockchain.",
+  "hero_cta_1_text": "Kalkulator & Tools",
+  "hero_cta_1_url": "/tools",
+  "hero_cta_2_text": "Baca Catatan Strategi →",
+  "hero_cta_2_url": "/blog",
+  "about_badge": "Tentang Saya",
+  "about_title": "Membangun audiens.<br>Menguji apa yang benar-benar menghasilkan.",
+  "lab_badge": "KALKULATOR & TOOLS",
+  "lab_title": "Kalkulator Cuan Afiliasi<br>&amp; Engagement Medsos",
+  "lab_desc": "Simulasi potensi komisi affiliate marketing, estimasi rate card endorsement akun media sosial, serta efisiensi server cloud &amp; token AI.",
+  "lab_usd_idr": 16000,
+  "nav_main": [
+    { "id": "nav_1", "label": "Tentang", "url": "/#about", "target": "_self" },
+    { "id": "nav_2", "label": "Arsip Karya", "url": "/#works", "target": "_self" },
+    { "id": "nav_3", "label": "Kalkulator & Tools", "url": "/tools", "target": "_self" },
+    { "id": "nav_4", "label": "Blog", "url": "/blog", "target": "_self" },
+    { "id": "nav_5", "label": "Kontak", "url": "/#contact", "target": "_self" }
+  ],
+  "nav_footer": [
+    { "id": "fnav_1", "label": "About Me", "url": "/#about", "target": "_self" },
+    { "id": "fnav_2", "label": "Kalkulator & Tools", "url": "/tools", "target": "_self" },
+    { "id": "fnav_3", "label": "Blog", "url": "/blog", "target": "_self" },
+    { "id": "fnav_4", "label": "Privacy Policy", "url": "/privacy", "target": "_self" },
+    { "id": "fnav_5", "label": "Disclaimer", "url": "/disclaimer", "target": "_self" },
+    { "id": "fnav_6", "label": "Contact", "url": "/#contact", "target": "_self" }
+  ]
+}'::jsonb) 
+ON CONFLICT (id) DO UPDATE 
+SET data = EXCLUDED.data, updated_at = timezone('utc'::text, now());
 
 -- ==============================================================================
 -- 6. SAMPLE INITIAL POSTS (Artikel Contoh & Perkenalan)

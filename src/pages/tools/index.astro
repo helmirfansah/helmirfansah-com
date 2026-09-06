@@ -2,8 +2,8 @@
 // src/pages/tools/index.astro
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const pageTitle = "Kalkulator Biaya Cloud Server & Token AI (IDR) | Helmi Irfansah Tools";
-const pageDesc = "Kalkulator interaktif gratis untuk menghitung estimasi biaya server VPS (AWS, DigitalOcean, Biznet Gio, IDCloudHost) dan biaya API Token AI (OpenAI GPT-4o, Claude 3.7, Gemini 2.5 Flash) dalam Rupiah (IDR).";
+const pageTitle = "Kalkulator Komisi Affiliate & Engagement Rate Medsos | Helmi Irfansah Tools";
+const pageDesc = "Kalkulator interaktif gratis untuk menghitung estimasi komisi affiliate marketing (Shopee, TikTok Shop, SaaS, Web3) dan kalkulator Engagement Rate (ER) serta estimasi rate card endorsement media sosial dalam Rupiah (IDR).";
 const pageCanonical = "https://helmirfansah.com/tools";
 
 const schema = {
@@ -12,9 +12,9 @@ const schema = {
     {
       "@type": "WebApplication",
       "@id": "https://helmirfansah.com/tools#app",
-      "name": "Kalkulator Biaya Cloud VPS & Token AI",
+      "name": "Kalkulator Komisi Affiliate & Engagement Rate Medsos",
       "url": "https://helmirfansah.com/tools",
-      "applicationCategory": "DeveloperApplication",
+      "applicationCategory": "BusinessApplication",
       "operatingSystem": "All",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
@@ -23,6 +23,13 @@ const schema = {
         "priceCurrency": "IDR"
       },
       "description": pageDesc,
+      "featureList": [
+        "Kalkulator Komisi Affiliate Shopee, TikTok Shop, SaaS, dan Web3",
+        "Kalkulator Engagement Rate (ER) TikTok, Instagram, YouTube, dan X",
+        "Estimasi Nilai Wajar Rate Card Endorsement Influencer",
+        "Simulasi Biaya Cloud VPS Server Indonesia vs Global",
+        "Estimasi Biaya API Token OpenAI GPT-4o, Claude 3.7, dan Gemini"
+      ],
       "author": {
         "@type": "Person",
         "name": "Helmi Irfansah",
@@ -35,6 +42,38 @@ const schema = {
       "mainEntity": [
         {
           "@type": "Question",
+          "name": "Bagaimana cara menghitung estimasi komisi affiliate marketing di Shopee dan TikTok?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Estimasi komisi dihitung menggunakan rumus: Komisi = Total Views × CTR (Click-Through Rate link) × CVR (Conversion Rate pembelian) × Rata-rata Harga Produk (AOV) × Persentase Komisi Afiliasi. Contohnya, dari 50.000 views dengan CTR 4% didapat 2.000 klik. Dengan CVR 2.5%, terjadi 50 order. Jika harga rata-rata produk Rp 100.000 dan komisi 10%, maka komisi bersih yang didapat adalah Rp 500.000."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Apa itu Conversion Rate (CVR) dan Click-Through Rate (CTR) dalam affiliate marketing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "CTR (Click-Through Rate) adalah persentase audiens yang mengklik link afiliasi Anda dari total penonton konten Anda. Sedangkan CVR (Conversion Rate) adalah persentase orang yang benar-benar menyelesaikan pembelian setelah mengklik link tersebut. Keduanya merupakan metrik kunci untuk melipatgandakan penghasilan afiliasi tanpa harus menambah follower."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Bagaimana cara menghitung Engagement Rate (ER) Instagram dan TikTok?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Rumus standar industri untuk Engagement Rate berbasis followers adalah: ER (%) = ((Total Likes + Komentar + Shares/Saves) ÷ Jumlah Followers) × 100%. Untuk TikTok, shares dan saves diberi bobot lebih tinggi karena algoritma FYP sangat memprioritaskan konten yang dibagikan atau disimpan."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Berapa standar nilai Rate Card endorsement untuk kreator media sosial di Indonesia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Standar nilai rate card di Indonesia bervariasi berdasarkan ukuran audiens dan kualitas engagement: Akun Nano (1k-10k followers) berkisar Rp 150.000 - Rp 600.000; Micro (10k-50k followers) berkisar Rp 500.000 - Rp 2.500.000; Mid-tier (50k-200k followers) berkisar Rp 1.500.000 - Rp 6.500.000; dan Macro (200k+ followers) mulai dari Rp 6.500.000 ke atas per video atau post feed."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Bagaimana cara menghitung estimasi biaya Cloud VPS di Indonesia?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -43,34 +82,10 @@ const schema = {
         },
         {
           "@type": "Question",
-          "name": "Mengapa provider VPS lokal seperti Biznet Gio dan IDCloudHost seringkali lebih hemat?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Provider lokal memiliki data center fisik di Jakarta dengan koneksi langsung ke Indonesia Internet Exchange (IIX). Mereka memberikan kuota bandwidth lokal gratis yang sangat besar (1-2 TB) dan mematok tarif dalam IDR tetap tanpa risiko fluktuasi kurs mata uang USD atau biaya tersembunyi transfer data antar-region."
-          }
-        },
-        {
-          "@type": "Question",
           "name": "Bagaimana cara menghitung kebutuhan token API OpenAI dan Claude?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "1 token kira-kira setara dengan 0.75 kata atau 4 karakter dalam bahasa Inggris (dalam bahasa Indonesia sekitar 2-3 karakter per token). Kalikan rata-rata token input dan output per request dengan volume request harian Anda, lalu hitung tarif per 1 juta token sesuai model (misal: GPT-4o, Claude 3.7 Sonnet, atau Gemini 2.5 Flash)."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Apa perbedaan antara token input dan token output pada API LLM?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Token input adalah teks prompt, instruksi sistem, dan riwayat percakapan yang Anda kirimkan ke model. Token output adalah teks respons yang dihasilkan oleh model. Token output biasanya dibanderol dengan harga 3 hingga 5 kali lebih mahal daripada token input karena proses komputasi generasi autoregresif yang lebih berat."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Berapa kurs USD ke IDR yang digunakan pada kalkulator ini?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Kalkulator ini menggunakan acuan standar Rp 16.000 per 1 USD yang dapat disesuaikan secara dinamis melalui panel pengaturan admin situs."
           }
         }
       ]
@@ -95,52 +110,213 @@ const schema = {
       </div>
       
       <h1 style="font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.15; color: var(--ink); margin-bottom: 1rem;">
-        Kalkulator Biaya <em style="font-style: italic; color: var(--accent-clay);">Cloud Server</em> &amp; Token AI
+        Kalkulator Komisi Affiliate &amp; <em style="font-style: italic; color: var(--accent-clay);">Engagement Rate</em> Medsos
       </h1>
       
-      <p style="font-size: 1.05rem; color: var(--ink-secondary); max-width: 720px; line-height: 1.6; margin-bottom: 1.75rem;">
-        Simulasi komparasi biaya infrastruktur VPS nyata (DigitalOcean, AWS, Vultr, Google Cloud, Biznet Gio, IDCloudHost) dan estimasi tagihan API LLM (OpenAI GPT-4o, Claude 3.7, Gemini 2.5) dalam Rupiah (IDR).
+      <p style="font-size: 1.05rem; color: var(--ink-secondary); max-width: 760px; line-height: 1.6; margin-bottom: 1.75rem;">
+        Kumpulan kalkulator interaktif gratis untuk mengukur potensi komisi <strong>affiliate marketing</strong> (Shopee, TikTok, SaaS, Web3), tolak ukur <strong>engagement rate (ER)</strong> &amp; estimasi <strong>rate card endorsement</strong>, serta simulator biaya cloud VPS dan token API AI dalam Rupiah (IDR).
       </p>
 
       <!-- Quick Nav Buttons -->
       <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
         <a href="#kalkulator" class="btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.85rem;">
-          ⚙️ Buka Kalkulator
+          ⚙️ Buka Kalkulator Interaktif
         </a>
-        <a href="#panduan-vps" class="btn-ghost" style="padding: 0.6rem 1.25rem; font-size: 0.85rem;">
-          📖 Panduan Spesifikasi
+        <a href="#panduan-affiliate" class="btn-ghost" style="padding: 0.6rem 1.25rem; font-size: 0.85rem;">
+          💰 Panduan Rumus Afiliasi
+        </a>
+        <a href="#panduan-er" class="btn-ghost" style="padding: 0.6rem 1.25rem; font-size: 0.85rem;">
+          📊 Standar ER Medsos
         </a>
         <a href="#faq" class="btn-ghost" style="padding: 0.6rem 1.25rem; font-size: 0.85rem;">
-          ❓ FAQ &amp; Pertanyaan Umum
+          ❓ Tanya Jawab (FAQ)
         </a>
       </div>
     </section>
 
     <!-- ── CALCULATOR CONTAINER ── -->
     <section id="kalkulator" style="max-width: var(--max-w); margin: 0 auto; padding: 1rem 1.5rem 3rem;">
-      <div class="calc-container" id="cloud-calc" style="box-shadow: var(--shadow-sm);">
-        <div class="calc-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div class="calc-container" id="tools-calc" style="box-shadow: var(--shadow-sm); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--bg-card);">
+        
+        <div class="calc-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border); padding: 1.25rem 1.5rem; background: var(--bg-alt);">
           <div>
             <h2 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 500; color: var(--ink); margin-bottom: 0.25rem;">
-              Simulasi Biaya Infrastruktur
+              Simulasi Data &amp; Kalkulasi Instan
             </h2>
             <p style="font-size: 0.875rem; color: var(--ink-muted); margin: 0;">
-              Geser tuas parameter untuk menghitung estimasi biaya seketika. Kurs acuan: Rp 16.000 / USD.
+              Pilih jenis kalkulator di bawah, lalu sesuaikan tuas parameter untuk melihat proyeksi angka seketika.
             </p>
           </div>
-          <div class="calc-tabs" role="tablist" aria-label="Pilih Jenis Kalkulator" style="border: none; padding: 0; background: transparent;">
-            <button class="calc-tab active" role="tab" aria-selected="true" data-tab="cloud" style="font-weight: 600;">
+          <div class="calc-tabs" role="tablist" aria-label="Pilih Jenis Kalkulator" style="border: none; padding: 0; background: transparent; display: flex; flex-wrap: wrap; gap: 0.4rem;">
+            <button class="calc-tab active" role="tab" aria-selected="true" data-tab="affiliate" style="font-weight: 600; font-size: 0.85rem;">
+              💰 Komisi Afiliasi (Cuan &amp; ROI)
+            </button>
+            <button class="calc-tab" role="tab" aria-selected="false" data-tab="social" style="font-weight: 600; font-size: 0.85rem;">
+              📊 ER &amp; Rate Card Medsos
+            </button>
+            <button class="calc-tab" role="tab" aria-selected="false" data-tab="cloud" style="font-weight: 600; font-size: 0.85rem;">
               ☁️ Cloud VPS (IDR)
             </button>
-            <button class="calc-tab" role="tab" aria-selected="false" data-tab="ai" style="font-weight: 600;">
-              🤖 Token API AI (IDR)
+            <button class="calc-tab" role="tab" aria-selected="false" data-tab="ai" style="font-weight: 600; font-size: 0.85rem;">
+              🤖 Token API AI
             </button>
           </div>
         </div>
 
-        <!-- TAB 1: CLOUD CALCULATOR -->
-        <div class="calc-body" id="tab-cloud" role="tabpanel">
-          <div class="calc-inputs" style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+        <!-- ── TAB 1: AFFILIATE COMMISSION CALCULATOR ── -->
+        <div class="calc-body" id="tab-affiliate" role="tabpanel" style="padding: 1.5rem;">
+          
+          <!-- Preset Buttons -->
+          <div style="margin-bottom: 1.25rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <span style="font-size: 0.8rem; font-weight: 600; color: var(--ink-muted); margin-right: 0.25rem;">Preset Cepat:</span>
+            <button type="button" class="aff-preset-btn active" data-preset="shopee" style="font-size: 0.75rem; font-weight: 600; padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); cursor: pointer;">
+              🛍️ Shopee (7%)
+            </button>
+            <button type="button" class="aff-preset-btn" data-preset="tiktok" style="font-size: 0.75rem; font-weight: 600; padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); cursor: pointer;">
+              🎵 TikTok Shop (12%)
+            </button>
+            <button type="button" class="aff-preset-btn" data-preset="saas" style="font-size: 0.75rem; font-weight: 600; padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); cursor: pointer;">
+              💻 SaaS / Digital (35%)
+            </button>
+            <button type="button" class="aff-preset-btn" data-preset="web3" style="font-size: 0.75rem; font-weight: 600; padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); cursor: pointer;">
+              ⚡ Web3 Referral (25%)
+            </button>
+          </div>
+
+          <div class="calc-inputs" style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
+            
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="aff-views" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Estimasi Views / Traffic:</label>
+                <strong id="aff-views-val" style="font-family: var(--font-mono); color: var(--accent-clay);">60.000 Views</strong>
+              </div>
+              <input type="range" id="aff-views" min="1000" max="1000000" value="60000" step="1000" aria-label="Views Bulanan">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Total penonton video / pembaca blog per bulan.</span>
+            </div>
+
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="aff-ctr" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Click-Through Rate (CTR):</label>
+                <strong id="aff-ctr-val" style="font-family: var(--font-mono); color: var(--accent-clay);">4.0%</strong>
+              </div>
+              <input type="range" id="aff-ctr" min="0.5" max="20" value="4.0" step="0.1" aria-label="CTR Klik Link">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Rata-rata link bio/deskripsi: 2% - 6%.</span>
+            </div>
+
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="aff-cvr" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Conversion Rate (CVR):</label>
+                <strong id="aff-cvr-val" style="font-family: var(--font-mono); color: var(--accent-clay);">2.5%</strong>
+              </div>
+              <input type="range" id="aff-cvr" min="0.5" max="15" value="2.5" step="0.1" aria-label="Tingkat Konversi Pembelian">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Persentase klik yang menjadi pembeli (1.5% - 4%).</span>
+            </div>
+
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="aff-price" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Rata-rata Harga Produk (AOV):</label>
+                <strong id="aff-price-val" style="font-family: var(--font-mono); color: var(--accent-clay);">Rp 125.000</strong>
+              </div>
+              <input type="range" id="aff-price" min="10000" max="2000000" value="125000" step="5000" aria-label="Harga Rata-rata Produk">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Nilai keranjang belanja rata-rata per transaksi.</span>
+            </div>
+
+            <div class="input-group" style="grid-column: 1 / -1;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="aff-comm" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Persentase Komisi Afiliasi:</label>
+                <strong id="aff-comm-val" style="font-family: var(--font-mono); color: var(--accent-clay);">7.0%</strong>
+              </div>
+              <input type="range" id="aff-comm" min="1" max="50" value="7.0" step="0.5" aria-label="Persentase Komisi">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Fisik/E-commerce: 5%-15% | Digital/Web3: 20%-50%.</span>
+            </div>
+
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <div class="calc-results" id="affiliate-results">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TAB 2: SOCIAL MEDIA ER & RATE CARD CALCULATOR ── -->
+        <div class="calc-body hidden" id="tab-social" role="tabpanel" style="padding: 1.5rem;">
+          
+          <!-- Platform Selection -->
+          <div style="margin-bottom: 1.25rem;">
+            <label style="font-size: 0.85rem; font-weight: 600; color: var(--ink); display: block; margin-bottom: 0.5rem;">
+              Pilih Platform Media Sosial:
+            </label>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <label style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.85rem; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                <input type="radio" name="soc-platform" value="tiktok" checked style="accent-color: var(--accent-clay);">
+                🎵 TikTok
+              </label>
+              <label style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.85rem; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                <input type="radio" name="soc-platform" value="instagram" style="accent-color: var(--accent-clay);">
+                📸 Instagram
+              </label>
+              <label style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.85rem; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                <input type="radio" name="soc-platform" value="youtube" style="accent-color: var(--accent-clay);">
+                ▶️ YouTube
+              </label>
+              <label style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.85rem; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                <input type="radio" name="soc-platform" value="twitter" style="accent-color: var(--accent-clay);">
+                𝕏 / Twitter
+              </label>
+            </div>
+          </div>
+
+          <div class="calc-inputs" style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
+            
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="soc-followers" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Jumlah Followers / Subs:</label>
+                <strong id="soc-followers-val" style="font-family: var(--font-mono); color: var(--accent-clay);">25.000 Followers</strong>
+              </div>
+              <input type="range" id="soc-followers" min="1000" max="1000000" value="25000" step="1000" aria-label="Jumlah Followers">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Total pengikut aktif akun Anda saat ini.</span>
+            </div>
+
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="soc-likes" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Rata-rata Likes / Konten:</label>
+                <strong id="soc-likes-val" style="font-family: var(--font-mono); color: var(--accent-clay);">1.200 Likes</strong>
+              </div>
+              <input type="range" id="soc-likes" min="10" max="100000" value="1200" step="50" aria-label="Rata-rata Likes">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Ambil sampel dari 10 postingan organik terakhir.</span>
+            </div>
+
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="soc-comments" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Rata-rata Komentar / Konten:</label>
+                <strong id="soc-comments-val" style="font-family: var(--font-mono); color: var(--accent-clay);">85 Komentar</strong>
+              </div>
+              <input type="range" id="soc-comments" min="0" max="10000" value="85" step="5" aria-label="Rata-rata Komentar">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Komentar publik dari audiens riil.</span>
+            </div>
+
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="soc-shares" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Rata-rata Shares / Saves:</label>
+                <strong id="soc-shares-val" style="font-family: var(--font-mono); color: var(--accent-clay);">45 Shares</strong>
+              </div>
+              <input type="range" id="soc-shares" min="0" max="10000" value="45" step="5" aria-label="Rata-rata Shares atau Simpan">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Metrik bernilai tinggi pendorong algoritma rekomendasi.</span>
+            </div>
+
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <div class="calc-results" id="social-results">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TAB 3: CLOUD VPS CALCULATOR ── -->
+        <div class="calc-body hidden" id="tab-cloud" role="tabpanel" style="padding: 1.5rem;">
+          <div class="calc-inputs" style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
             <div class="input-group">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
                 <label for="vcpu" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Processor (vCPU):</label>
@@ -180,25 +356,25 @@ const schema = {
 
           <div style="margin-top: 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
-              <h3 style="font-size: 1rem; font-weight: 600; color: var(--ink);">Perbandingan Harga per Provider</h3>
+              <h3 style="font-size: 1rem; font-weight: 600; color: var(--ink);">Perbandingan Harga per Provider Cloud VPS</h3>
               <span style="font-size: 11px; color: var(--ink-muted);">Diurutkan dari yang paling efisien</span>
             </div>
             <div class="calc-results" id="cloud-results">
-              <!-- Rendered dynamically by tools.js -->
+              <!-- Rendered via JS -->
             </div>
           </div>
         </div>
 
-        <!-- TAB 2: AI CALCULATOR -->
-        <div class="calc-body hidden" id="tab-ai" role="tabpanel">
-          <div class="calc-inputs" style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+        <!-- ── TAB 4: AI TOKEN CALCULATOR ── -->
+        <div class="calc-body hidden" id="tab-ai" role="tabpanel" style="padding: 1.5rem;">
+          <div class="calc-inputs" style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
             <div class="input-group">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
                 <label for="tokens-in" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Input Tokens / hari:</label>
                 <strong id="tokens-in-val" style="font-family: var(--font-mono); color: var(--accent-clay);">500K token</strong>
               </div>
               <input type="range" id="tokens-in" min="10" max="5000" value="500" step="10" aria-label="Input Tokens per hari">
-              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Prompt + instruksi + konteks riwayat chat.</span>
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Prompt + konteks instruksi sistem.</span>
             </div>
 
             <div class="input-group">
@@ -213,126 +389,133 @@ const schema = {
 
           <div style="margin-top: 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
-              <h3 style="font-size: 1rem; font-weight: 600; color: var(--ink);">Estimasi Biaya Model LLM Terpopuler</h3>
-              <span style="font-size: 11px; color: var(--ink-muted);">Dihitung untuk 30 hari penggunaan aktif</span>
+              <h3 style="font-size: 1rem; font-weight: 600; color: var(--ink);">Estimasi Biaya Model LLM Terpopuler (30 Hari)</h3>
+              <span style="font-size: 11px; color: var(--ink-muted);">Dihitung dalam Rupiah (USD @16.000)</span>
             </div>
             <div class="calc-results" id="ai-results">
-              <!-- Rendered dynamically by tools.js -->
+              <!-- Rendered via JS -->
             </div>
           </div>
         </div>
+
       </div>
     </section>
 
-    <!-- ── SEO SECTION 1: PANDUAN SPESIFIKASI ── -->
-    <section id="panduan-vps" style="max-width: var(--max-w); margin: 2rem auto; padding: 2rem 1.5rem; border-top: 1px solid var(--border);">
-      <div class="section-label">PANDUAN INFRASTRUKTUR</div>
+    <!-- ── SEO SECTION 1: PANDUAN LENGKAP RUMUS AFILIASI ── -->
+    <section id="panduan-affiliate" style="max-width: var(--max-w); margin: 2rem auto; padding: 2rem 1.5rem; border-top: 1px solid var(--border);">
+      <div class="section-label">PANDUAN AFFILIATE MARKETING</div>
       <h2 style="font-family: var(--font-serif); font-size: 1.75rem; color: var(--ink); margin-bottom: 1rem;">
-        Cara Memilih Spesifikasi VPS yang Tepat untuk Kebutuhan Nyata
+        Rumus Matematis Menghitung Komisi Affiliate Marketing &amp; Proyeksi ROI
       </h2>
       <p style="color: var(--ink-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
-        Memilih server untuk aplikasi produksi seringkali menjebak: membeli spek terlalu kecil mengakibatkan <em>Out of Memory (OOM)</em> saat trafik naik mendadak, sementara membeli spek terlalu besar menyia-nyiakan anggaran operasional hingga jutaan rupiah per bulan.
+        Banyak affiliate pemula hanya fokus mengejar <em>views</em> atau <em>followers</em> tanpa memahami matematika di balik corong penjualan (<em>sales funnel</em>). Padahal, potensi penghasilan afiliasi Anda ditentukan oleh 5 variabel yang saling mengalikan:
       </p>
+
+      <div style="background: var(--bg-alt); border-left: 4px solid var(--accent-clay); padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;">
+        <p style="font-family: var(--font-mono); font-size: 0.95rem; color: var(--ink); margin: 0; font-weight: 600;">
+          Penghasilan Komisi = Views × CTR (%) × CVR (%) × Rata-rata Nilai Keranjang (AOV) × Persentase Komisi (%)
+        </p>
+      </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
         <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 1.5rem; border-radius: var(--radius-sm);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🌱</div>
-          <h3 style="font-size: 1.1rem; color: var(--ink); margin-bottom: 0.5rem;">Starter / Side Project (1 vCPU, 2 GB RAM)</h3>
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎯</div>
+          <h3 style="font-size: 1.1rem; color: var(--ink); margin-bottom: 0.5rem;">1. CTR (Click-Through Rate)</h3>
           <p style="font-size: 0.9rem; color: var(--ink-secondary); line-height: 1.6;">
-            Cocok untuk blog pribadi, landing page statis (Astro/Next.js SSG), bot Telegram/WhatsApp ringan, atau API internal ber-trafik di bawah 10.000 pengunjung per bulan.
-          </p>
-        </div>
-
-        <div style="background: var(--bg-card); border: 1px solid var(--border-strong); padding: 1.5rem; border-radius: var(--radius-sm); position: relative;">
-          <span style="position: absolute; top: 1rem; right: 1rem; font-size: 10px; font-weight: 700; background: var(--accent-clay); color: #fff; padding: 0.15rem 0.5rem; border-radius: 4px;">PALING POPULER</span>
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🚀</div>
-          <h3 style="font-size: 1.1rem; color: var(--ink); margin-bottom: 0.5rem;">Production Standard (2–4 vCPU, 4–8 GB RAM)</h3>
-          <p style="font-size: 0.9rem; color: var(--ink-secondary); line-height: 1.6;">
-            Spesifikasi <em>sweet spot</em> untuk startup dan UMKM. Mampu menjalankan multi-container Docker dengan Coolify/Dokku, database PostgreSQL lokal, Redis caching, dan backend Node.js/Go dengan ratusan request per detik.
+            Berapa banyak orang yang mengklik link afiliasi di bio atau keranjang kuning Anda. Konten yang memberikan <em>contextual bridge</em> (menjelaskan solusi masalah sebelum menyuruh klik) dapat melipatgandakan CTR dari 2% menjadi 6%+.
           </p>
         </div>
 
         <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 1.5rem; border-radius: var(--radius-sm);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏢</div>
-          <h3 style="font-size: 1.1rem; color: var(--ink); margin-bottom: 0.5rem;">Heavy Workload (8+ vCPU, 16+ GB RAM)</h3>
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🛒</div>
+          <h3 style="font-size: 1.1rem; color: var(--ink); margin-bottom: 0.5rem;">2. CVR (Conversion Rate)</h3>
           <p style="font-size: 0.9rem; color: var(--ink-secondary); line-height: 1.6;">
-            Dibutuhkan jika Anda menjalankan pemrosesan video/gambar intensif, worker antrean RabbitMQ skala besar, Elasticsearch, atau model AI self-hosted (Ollama/vLLM) di lingkungan CPU.
+            Persentase orang yang membeli barang setelah masuk ke halaman produk. Produk dengan rating bintang 4.8+ dan ulasan foto melimpah memiliki CVR 2x hingga 3x lipat lebih tinggi dibanding produk tanpa rekam jejak.
+          </p>
+        </div>
+
+        <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 1.5rem; border-radius: var(--radius-sm);">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💎</div>
+          <h3 style="font-size: 1.1rem; color: var(--ink); margin-bottom: 0.5rem;">3. High-Ticket vs Low-Ticket</h3>
+          <p style="font-size: 0.9rem; color: var(--ink-secondary); line-height: 1.6;">
+            Menjual produk Rp 50.000 dengan komisi 5% memberi Anda Rp 2.500 per transaksi. Mempromosikan produk digital / SaaS / Web3 referral seharga Rp 500.000 dengan komisi 30% memberi Anda Rp 150.000 per transaksi (60x lipat lebih besar).
           </p>
         </div>
       </div>
     </section>
 
-    <!-- ── SEO SECTION 2: LOKAL VS GLOBAL ── -->
-    <section style="max-width: var(--max-w); margin: 2rem auto; padding: 2rem 1.5rem; border-top: 1px solid var(--border);">
-      <div class="section-label">ANALISIS EMPIRIS</div>
+    <!-- ── SEO SECTION 2: STANDAR ENGAGEMENT RATE & RATE CARD ── -->
+    <section id="panduan-er" style="max-width: var(--max-w); margin: 2rem auto; padding: 2rem 1.5rem; border-top: 1px solid var(--border);">
+      <div class="section-label">METRIK MEDIA SOSIAL</div>
       <h2 style="font-family: var(--font-serif); font-size: 1.75rem; color: var(--ink); margin-bottom: 1rem;">
-        Server Lokal Indonesia vs Hyperscaler Global (AWS / GCP / DigitalOcean)
+        Standar Tolak Ukur Engagement Rate (ER) &amp; Cara Pasang Tarif Endorsement
       </h2>
       <p style="color: var(--ink-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
-        Berdasarkan hasil pengujian latensi dan audit biaya riil yang sering kami bahas di artikel blog teknis, berikut faktor pertimbangan utama saat memilih lokasi infrastruktur:
+        Di tahun 2026, <em>brand</em> tidak lagi tertipu oleh jumlah followers semata. Akun dengan 100.000 followers namun hanya mendapat 50 likes (ER &lt; 0.1%) dianggap sebagai <em>zombie account</em>. Sebaliknya, akun nano/micro dengan 15.000 followers dan 1.200 likes (ER &gt; 8%) memiliki daya tarik konversi yang sangat bernilai tinggi.
       </p>
 
-      <div style="overflow-x: auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+      <div style="overflow-x: auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
         <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
           <thead>
             <tr style="border-bottom: 2px solid var(--border); background: var(--bg-alt);">
-              <th style="padding: 0.85rem 1rem; color: var(--ink);">Aspek Perbandingan</th>
-              <th style="padding: 0.85rem 1rem; color: var(--ink);">Provider Lokal (Biznet / IDCloudHost)</th>
-              <th style="padding: 0.85rem 1rem; color: var(--ink);">Provider Global (AWS / DO / GCP)</th>
+              <th style="padding: 0.85rem 1rem; color: var(--ink);">Tingkat / Kategori Akun</th>
+              <th style="padding: 0.85rem 1rem; color: var(--ink);">Jumlah Followers</th>
+              <th style="padding: 0.85rem 1rem; color: var(--ink);">Standar ER Sehat</th>
+              <th style="padding: 0.85rem 1rem; color: var(--ink);">Estimasi Rate Card Video (Reels/TikTok)</th>
             </tr>
           </thead>
           <tbody>
             <tr style="border-bottom: 1px solid var(--border);">
-              <td style="padding: 0.85rem 1rem; font-weight: 600;">Latensi ke User Indonesia</td>
-              <td style="padding: 0.85rem 1rem; color: #15803d; font-weight: 600;">Sangat Rendah (5 – 15 ms via IIX)</td>
-              <td style="padding: 0.85rem 1rem; color: var(--ink-secondary);">Sedang (25 – 40 ms via Region SG)</td>
+              <td style="padding: 0.85rem 1rem; font-weight: 600;">Nano Creator</td>
+              <td style="padding: 0.85rem 1rem; color: var(--ink-secondary);">1.000 – 10.000</td>
+              <td style="padding: 0.85rem 1rem; color: #15803d; font-weight: 600;">4.0% – 10.0%+</td>
+              <td style="padding: 0.85rem 1rem; color: var(--ink); font-weight: 500;">Rp 250.000 – Rp 800.000</td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border);">
-              <td style="padding: 0.85rem 1rem; font-weight: 600;">Biaya Transfer Bandwidth (Egress)</td>
-              <td style="padding: 0.85rem 1rem; color: #15803d; font-weight: 600;">Gratis kuota besar (1–2 TB / bulan)</td>
-              <td style="padding: 0.85rem 1rem; color: #b91c1c;">Mahal di AWS ($0.09/GB setelah kuota habis)</td>
+              <td style="padding: 0.85rem 1rem; font-weight: 600;">Micro Influencer</td>
+              <td style="padding: 0.85rem 1rem; color: var(--ink-secondary);">10.000 – 50.000</td>
+              <td style="padding: 0.85rem 1rem; color: #15803d; font-weight: 600;">2.5% – 6.0%</td>
+              <td style="padding: 0.85rem 1rem; color: var(--ink); font-weight: 500;">Rp 800.000 – Rp 2.500.000</td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border);">
-              <td style="padding: 0.85rem 1rem; font-weight: 600;">Mata Uang &amp; Perpajakan</td>
-              <td style="padding: 0.85rem 1rem; color: #15803d;">Rupiah IDR tetap + Faktur Pajak PPN 11%</td>
-              <td style="padding: 0.85rem 1rem; color: var(--ink-secondary);">USD (Tergantung fluktuasi kurs mata uang)</td>
+              <td style="padding: 0.85rem 1rem; font-weight: 600;">Mid-Tier Creator</td>
+              <td style="padding: 0.85rem 1rem; color: var(--ink-secondary);">50.000 – 200.000</td>
+              <td style="padding: 0.85rem 1rem; color: #d97706; font-weight: 600;">1.8% – 4.0%</td>
+              <td style="padding: 0.85rem 1rem; color: var(--ink); font-weight: 500;">Rp 2.200.000 – Rp 6.500.000</td>
             </tr>
             <tr>
-              <td style="padding: 0.85rem 1rem; font-weight: 600;">Ekosistem Managed Services</td>
-              <td style="padding: 0.85rem 1rem; color: var(--ink-secondary);">Terbatas (Fokus IaaS VPS murni)</td>
-              <td style="padding: 0.85rem 1rem; color: #15803d; font-weight: 600;">Sangat Lengkap (RDS, S3, SQS, CloudWatch)</td>
+              <td style="padding: 0.85rem 1rem; font-weight: 600;">Macro / Top Tier</td>
+              <td style="padding: 0.85rem 1rem; color: var(--ink-secondary);">200.000 – 1.000.000+</td>
+              <td style="padding: 0.85rem 1rem; color: var(--ink-secondary);">1.2% – 2.5%</td>
+              <td style="padding: 0.85rem 1rem; color: var(--accent-clay); font-weight: 600;">Rp 6.500.000 – Rp 25.000.000+</td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- ── SEO SECTION 3: STRATEGI TOKEN AI ── -->
+    <!-- ── SEO SECTION 3: CLOUD VPS & AI TOKEN QUICK GUIDE ── -->
     <section style="max-width: var(--max-w); margin: 2rem auto; padding: 2rem 1.5rem; border-top: 1px solid var(--border);">
-      <div class="section-label">OPTIMASI AI TOOLS</div>
+      <div class="section-label">INFRASTRUKTUR TEKNOLOGI</div>
       <h2 style="font-family: var(--font-serif); font-size: 1.75rem; color: var(--ink); margin-bottom: 1rem;">
-        3 Strategi Menghemat Biaya Token API AI hingga 70%
+        Efisiensi Biaya Server Cloud &amp; Model AI untuk Startup Digital
       </h2>
-      
+      <p style="color: var(--ink-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
+        Bagi kreator yang membangun ekosistem digital mandiri (seperti portal media, bot otomatisasi, atau tools SaaS), biaya server dan LLM bisa menjadi beban terbesar. Dua prinsip utama penghematan:
+      </p>
+
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
         <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 1.25rem; border-radius: var(--radius-sm);">
-          <h3 style="font-size: 1rem; color: var(--ink); margin-bottom: 0.4rem;">1. Model Routing (Smart Cascading)</h3>
+          <h3 style="font-size: 1rem; color: var(--ink); margin-bottom: 0.4rem;">Gunakan VPS Lokal untuk Target Indonesia</h3>
           <p style="font-size: 0.875rem; color: var(--ink-secondary); line-height: 1.6;">
-            Jangan gunakan model flagship mahal (GPT-4o / Claude 3.7 Sonnet) untuk semua tugas. Gunakan model hemat seperti <strong>Gemini 2.5 Flash</strong> atau <strong>Claude 3.5 Haiku</strong> untuk klasifikasi teks, ekstraksi data, dan pemformatan. Hanya panggil model besar saat membutuhkan penalaran multi-step kompleks.
+            Provider lokal seperti <strong>Biznet Gio</strong> atau <strong>IDCloudHost</strong> menawarkan latency ultra-rendah (5-15ms via IIX Jakarta) dengan kuota bandwidth gratis 1-2 TB per bulan, tanpa risiko fluktuasi tagihan egress seperti pada AWS atau GCP.
           </p>
         </div>
 
         <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 1.25rem; border-radius: var(--radius-sm);">
-          <h3 style="font-size: 1rem; color: var(--ink); margin-bottom: 0.4rem;">2. Manfaatkan Prompt Caching</h3>
+          <h3 style="font-size: 1rem; color: var(--ink); margin-bottom: 0.4rem;">Smart Cascading Model AI</h3>
           <p style="font-size: 0.875rem; color: var(--ink-secondary); line-height: 1.6;">
-            Anthropic dan OpenAI mendukung fitur <em>Prompt Caching</em>. Jika instruksi sistem atau dokumen referensi Anda berulang (misal dokumen PDF 20 halaman), cache token tersebut untuk memotong biaya input hingga 90% pada panggilan berikutnya.
-          </p>
-        </div>
-
-        <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 1.25rem; border-radius: var(--radius-sm);">
-          <h3 style="font-size: 1rem; color: var(--ink); margin-bottom: 0.4rem;">3. Token Pruning &amp; Semantic Truncation</h3>
-          <p style="font-size: 0.875rem; color: var(--ink-secondary); line-height: 1.6;">
-            Bersihkan metadata HTML, whitespace berlebih, dan riwayat chat lama sebelum dikirimkan ke model LLM. Mengurangi 1.000 token input per request pada 50.000 request harian menghemat jutaan rupiah per bulan.
+            Gunakan model ringan seperti <strong>Gemini 2.5 Flash</strong> ($0.075/1M input) untuk klasifikasi dan ringkasan, dan alokasikan <strong>GPT-4o</strong> atau <strong>Claude 3.7 Sonnet</strong> hanya untuk tugas reasoning berat. Strategi ini memangkas pengeluaran API hingga 80%.
           </p>
         </div>
       </div>
@@ -342,25 +525,52 @@ const schema = {
     <section id="faq" style="max-width: var(--max-w); margin: 2rem auto; padding: 2rem 1.5rem; border-top: 1px solid var(--border);">
       <div class="section-label">FAQ</div>
       <h2 style="font-family: var(--font-serif); font-size: 1.75rem; color: var(--ink); margin-bottom: 1.5rem;">
-        Pertanyaan yang Sering Diajukan (FAQ)
+        Pertanyaan yang Sering Diajukan Seputar Tools &amp; Kalkulator
       </h2>
 
       <div style="display: flex; flex-direction: column; gap: 1rem;">
         <details style="background: var(--bg-card); border: 1px solid var(--border); padding: 1rem 1.25rem; border-radius: var(--radius-sm); cursor: pointer;" open>
           <summary style="font-weight: 600; color: var(--ink); font-size: 1rem; outline: none;">
-            Bagaimana cara menghitung estimasi biaya Cloud VPS di Indonesia?
+            Bagaimana cara menghitung estimasi komisi affiliate marketing di Shopee dan TikTok?
           </summary>
           <p style="margin-top: 0.75rem; font-size: 0.925rem; color: var(--ink-secondary); line-height: 1.6;">
-            Estimasi biaya Cloud VPS dihitung berdasarkan kombinasi 4 variabel utama: jumlah vCPU, kapasitas RAM, penyimpanan NVMe SSD, dan kuota transfer bandwidth keluar (egress). Kalkulator ini mengalikan spesifikasi yang Anda pilih dengan tarif per jam/bulan masing-masing provider dan mengonversinya ke Rupiah (IDR).
+            Estimasi komisi dihitung menggunakan rumus: Komisi = Total Views × CTR (Click-Through Rate link) × CVR (Conversion Rate pembelian) × Rata-rata Harga Produk (AOV) × Persentase Komisi Afiliasi. Contohnya, dari 50.000 views dengan CTR 4% didapat 2.000 klik. Dengan CVR 2.5%, terjadi 50 order. Jika harga rata-rata produk Rp 100.000 dan komisi 10%, maka komisi bersih yang didapat adalah Rp 500.000.
           </p>
         </details>
 
         <details style="background: var(--bg-card); border: 1px solid var(--border); padding: 1rem 1.25rem; border-radius: var(--radius-sm); cursor: pointer;">
           <summary style="font-weight: 600; color: var(--ink); font-size: 1rem; outline: none;">
-            Mengapa provider VPS lokal seperti Biznet Gio dan IDCloudHost seringkali lebih hemat?
+            Apa itu Conversion Rate (CVR) dan Click-Through Rate (CTR) dalam affiliate marketing?
           </summary>
           <p style="margin-top: 0.75rem; font-size: 0.925rem; color: var(--ink-secondary); line-height: 1.6;">
-            Provider lokal memiliki data center fisik di Jakarta dengan koneksi langsung ke Indonesia Internet Exchange (IIX). Mereka memberikan kuota bandwidth lokal gratis yang sangat besar (1-2 TB) dan mematok tarif dalam IDR tetap tanpa risiko fluktuasi kurs mata uang USD atau biaya tersembunyi transfer data antar-region.
+            CTR (Click-Through Rate) adalah persentase audiens yang mengklik link afiliasi Anda dari total penonton konten Anda. Sedangkan CVR (Conversion Rate) adalah persentase orang yang benar-benar menyelesaikan pembelian setelah mengklik link tersebut. Keduanya merupakan metrik kunci untuk melipatgandakan penghasilan afiliasi tanpa harus menambah follower.
+          </p>
+        </details>
+
+        <details style="background: var(--bg-card); border: 1px solid var(--border); padding: 1rem 1.25rem; border-radius: var(--radius-sm); cursor: pointer;">
+          <summary style="font-weight: 600; color: var(--ink); font-size: 1rem; outline: none;">
+            Bagaimana cara menghitung Engagement Rate (ER) Instagram dan TikTok?
+          </summary>
+          <p style="margin-top: 0.75rem; font-size: 0.925rem; color: var(--ink-secondary); line-height: 1.6;">
+            Rumus standar industri untuk Engagement Rate berbasis followers adalah: ER (%) = ((Total Likes + Komentar + Shares/Saves) ÷ Jumlah Followers) × 100%. Untuk TikTok, shares dan saves diberi bobot lebih tinggi karena algoritma FYP sangat memprioritaskan konten yang dibagikan atau disimpan.
+          </p>
+        </details>
+
+        <details style="background: var(--bg-card); border: 1px solid var(--border); padding: 1rem 1.25rem; border-radius: var(--radius-sm); cursor: pointer;">
+          <summary style="font-weight: 600; color: var(--ink); font-size: 1rem; outline: none;">
+            Berapa standar nilai Rate Card endorsement untuk kreator media sosial di Indonesia?
+          </summary>
+          <p style="margin-top: 0.75rem; font-size: 0.925rem; color: var(--ink-secondary); line-height: 1.6;">
+            Standar nilai rate card di Indonesia bervariasi berdasarkan ukuran audiens dan kualitas engagement: Akun Nano (1k-10k followers) berkisar Rp 150.000 - Rp 600.000; Micro (10k-50k followers) berkisar Rp 500.000 - Rp 2.500.000; Mid-tier (50k-200k followers) berkisar Rp 1.500.000 - Rp 6.500.000; dan Macro (200k+ followers) mulai dari Rp 6.500.000 ke atas per video atau post feed.
+          </p>
+        </details>
+
+        <details style="background: var(--bg-card); border: 1px solid var(--border); padding: 1rem 1.25rem; border-radius: var(--radius-sm); cursor: pointer;">
+          <summary style="font-weight: 600; color: var(--ink); font-size: 1rem; outline: none;">
+            Bagaimana cara menghitung estimasi biaya Cloud VPS di Indonesia?
+          </summary>
+          <p style="margin-top: 0.75rem; font-size: 0.925rem; color: var(--ink-secondary); line-height: 1.6;">
+            Estimasi biaya Cloud VPS dihitung berdasarkan kombinasi 4 variabel utama: jumlah vCPU, kapasitas RAM, penyimpanan NVMe SSD, dan kuota transfer bandwidth keluar (egress). Kalkulator ini mengalikan spesifikasi yang Anda pilih dengan tarif per jam/bulan masing-masing provider dan mengonversinya ke Rupiah (IDR).
           </p>
         </details>
 
@@ -372,29 +582,20 @@ const schema = {
             1 token kira-kira setara dengan 0.75 kata atau 4 karakter dalam bahasa Inggris (dalam bahasa Indonesia sekitar 2-3 karakter per token). Kalikan rata-rata token input dan output per request dengan volume request harian Anda, lalu hitung tarif per 1 juta token sesuai model (misal: GPT-4o, Claude 3.7 Sonnet, atau Gemini 2.5 Flash).
           </p>
         </details>
-
-        <details style="background: var(--bg-card); border: 1px solid var(--border); padding: 1rem 1.25rem; border-radius: var(--radius-sm); cursor: pointer;">
-          <summary style="font-weight: 600; color: var(--ink); font-size: 1rem; outline: none;">
-            Apa perbedaan antara token input dan token output pada API LLM?
-          </summary>
-          <p style="margin-top: 0.75rem; font-size: 0.925rem; color: var(--ink-secondary); line-height: 1.6;">
-            Token input adalah teks prompt, instruksi sistem, dan riwayat percakapan yang Anda kirimkan ke model. Token output adalah teks respons yang dihasilkan oleh model. Token output biasanya dibanderol dengan harga 3 hingga 5 kali lebih mahal daripada token input karena proses komputasi generasi autoregresif yang lebih berat.
-          </p>
-        </details>
       </div>
     </section>
 
     <!-- ── FOOTER CALLOUT ── -->
     <section style="max-width: var(--max-w); margin: 3rem auto 0; padding: 2.5rem 1.5rem; background: var(--bg-card); border: 1px dashed var(--border-strong); border-radius: var(--radius-md); text-align: center;">
       <h3 style="font-family: var(--font-serif); font-size: 1.35rem; color: var(--ink); margin-bottom: 0.5rem;">
-        Punya Studi Kasus atau Pertanyaan Arsitektur Cloud?
+        Mau Kolaborasi Kampanye Afiliasi atau Diskusi Pertumbuhan Medsos?
       </h3>
       <p style="color: var(--ink-secondary); font-size: 0.95rem; max-width: 540px; margin: 0 auto 1.5rem; line-height: 1.6;">
-        Saya rutin menulis artikel bedah arsitektur server mandiri (self-hosting), perbandingan database, dan studi kasus efisiensi biaya SaaS di blog.
+        Saya rutin berbagi strategi monetisasi konten, studi kasus campaign, serta pengujian sistem digital di blog dan kanal sosial media.
       </p>
       <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
         <a href="/blog" class="btn-primary" style="padding: 0.65rem 1.5rem; font-size: 0.875rem;">
-          Baca Artikel Blog &amp; Riset Teknis →
+          Baca Artikel &amp; Studi Kasus →
         </a>
         <a href="/#contact" class="btn-ghost" style="padding: 0.65rem 1.5rem; font-size: 0.875rem;">
           Hubungi Saya
