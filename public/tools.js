@@ -606,24 +606,63 @@ function renderAIResults() {
 function initTabs() {
   const tabs = document.querySelectorAll('.calc-tab');
   const bodies = document.querySelectorAll('.calc-body');
+  const directLinkBtn = document.getElementById('calc-direct-page-link');
+
+  const TAB_URL_MAP = {
+    affiliate: { url: '/tools/kalkulator-affiliate', label: 'Buka Halaman Lengkap Kalkulator Komisi Afiliasi →' },
+    social:    { url: '/tools/kalkulator-engagement-rate', label: 'Buka Halaman Lengkap Kalkulator ER & Rate Card →' },
+    cloud:     { url: '/tools/kalkulator-cloud-vps', label: 'Buka Halaman Lengkap Kalkulator Cloud VPS →' },
+    ai:        { url: '/tools/kalkulator-token-ai', label: 'Buka Halaman Lengkap Kalkulator Token AI →' }
+  };
+
+  function activateTab(target) {
+    if (!target) return;
+    tabs.forEach(t => {
+      const isMatch = t.dataset.tab === target;
+      t.classList.toggle('active', isMatch);
+      t.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+    });
+    bodies.forEach(b => {
+      const isTarget = b.id === 'tab-' + target;
+      b.classList.toggle('hidden', !isTarget);
+    });
+
+    // Update direct page link button (if present on homepage or tools hub)
+    if (directLinkBtn && TAB_URL_MAP[target]) {
+      directLinkBtn.href = TAB_URL_MAP[target].url;
+      directLinkBtn.textContent = TAB_URL_MAP[target].label;
+    }
+
+    if (target === 'affiliate') renderAffiliateResults();
+    else if (target === 'social') renderSocialResults();
+    else if (target === 'cloud') renderCloudResults();
+    else if (target === 'ai') renderAIResults();
+  }
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const target = tab.dataset.tab;
-      tabs.forEach(t => {
-        t.classList.toggle('active', t === tab);
-        t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
-      });
-      bodies.forEach(b => {
-        const isTarget = b.id === 'tab-' + target;
-        b.classList.toggle('hidden', !isTarget);
-      });
-      if (target === 'affiliate') renderAffiliateResults();
-      else if (target === 'social') renderSocialResults();
-      else if (target === 'cloud') renderCloudResults();
-      else if (target === 'ai') renderAIResults();
+      activateTab(target);
+      if (window.location.pathname.startsWith('/tools')) {
+        try {
+          history.replaceState(null, '', '#' + target);
+        } catch(e) {}
+      }
     });
   });
+
+  // Handle URL hash on initial page load (e.g. #social, #cloud, #ai, #affiliate)
+  const hash = window.location.hash.replace('#', '').toLowerCase();
+  const validTabs = ['affiliate', 'social', 'cloud', 'ai'];
+  if (hash && validTabs.includes(hash)) {
+    activateTab(hash);
+  } else {
+    // Sync initial direct link button with active tab
+    const activeTab = document.querySelector('.calc-tab.active');
+    if (activeTab && activeTab.dataset.tab) {
+      activateTab(activeTab.dataset.tab);
+    }
+  }
 }
 
 function bindSliders() {

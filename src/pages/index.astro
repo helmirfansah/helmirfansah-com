@@ -241,10 +241,43 @@ const personSchema = {
           </div>
         </div>
 
-        <div style="text-align: center; margin-top: 1.5rem;">
-          <a href="/tools" class="btn-ghost" style="font-size: 0.9rem;">
-            Buka Halaman Lengkap Kalkulator, Panduan &amp; FAQ →
+        <!-- Dynamic Call-to-Action for Active Calculator -->
+        <div style="text-align: center; margin-top: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+          <a id="calc-direct-page-link" href="/tools/kalkulator-affiliate" class="btn-primary" style="padding: 0.65rem 1.5rem; font-size: 0.875rem;">
+            Buka Halaman Lengkap Kalkulator Komisi Afiliasi →
           </a>
+          <a href="/tools" class="btn-ghost" style="font-size: 0.85rem;">
+            Lihat Semua Koleksi Tools di Hub (/tools)
+          </a>
+        </div>
+
+        <!-- 4 Dedicated Calculator Portals Grid -->
+        <div style="margin-top: 2.5rem; border-top: 1px dashed var(--border); padding-top: 1.75rem;">
+          <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); display: block; text-align: center; margin-bottom: 1rem;">
+            Akses Langsung Halaman Khusus Per Topik Kalkulator:
+          </span>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+            <a href="/tools/kalkulator-affiliate" style="display: block; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; text-decoration: none; transition: border-color 0.2s;">
+              <div style="font-size: 1.25rem; margin-bottom: 0.25rem;">💰</div>
+              <strong style="color: var(--ink); font-size: 0.9rem; display: block;">Kalkulator Afiliasi</strong>
+              <span style="font-size: 0.75rem; color: var(--ink-muted); display: block; margin-top: 0.2rem;">/tools/kalkulator-affiliate</span>
+            </a>
+            <a href="/tools/kalkulator-engagement-rate" style="display: block; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; text-decoration: none; transition: border-color 0.2s;">
+              <div style="font-size: 1.25rem; margin-bottom: 0.25rem;">📊</div>
+              <strong style="color: var(--ink); font-size: 0.9rem; display: block;">Kalkulator ER Medsos</strong>
+              <span style="font-size: 0.75rem; color: var(--ink-muted); display: block; margin-top: 0.2rem;">/tools/kalkulator-engagement-rate</span>
+            </a>
+            <a href="/tools/kalkulator-cloud-vps" style="display: block; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; text-decoration: none; transition: border-color 0.2s;">
+              <div style="font-size: 1.25rem; margin-bottom: 0.25rem;">☁️</div>
+              <strong style="color: var(--ink); font-size: 0.9rem; display: block;">Kalkulator Cloud VPS</strong>
+              <span style="font-size: 0.75rem; color: var(--ink-muted); display: block; margin-top: 0.2rem;">/tools/kalkulator-cloud-vps</span>
+            </a>
+            <a href="/tools/kalkulator-token-ai" style="display: block; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; text-decoration: none; transition: border-color 0.2s;">
+              <div style="font-size: 1.25rem; margin-bottom: 0.25rem;">🤖</div>
+              <strong style="color: var(--ink); font-size: 0.9rem; display: block;">Kalkulator Token AI</strong>
+              <span style="font-size: 0.75rem; color: var(--ink-muted); display: block; margin-top: 0.2rem;">/tools/kalkulator-token-ai</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>

@@ -1,0 +1,176 @@
+---
+// src/pages/tools/kalkulator-cloud-vps.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const pageTitle = "Kalkulator Biaya Cloud VPS Server (AWS, DigitalOcean, Biznet Gio) | Helmi Irfansah Tools";
+const pageDesc = "Kalkulator biaya server Cloud VPS interaktif gratis dalam Rupiah (IDR). Bandingkan harga sewa VPS DigitalOcean, AWS EC2, Vultr, Google Cloud, Biznet Gio, dan IDCloudHost sesuai kebutuhan vCPU, RAM, SSD, dan bandwidth.";
+const pageCanonical = "https://helmirfansah.com/tools/kalkulator-cloud-vps";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://helmirfansah.com/tools/kalkulator-cloud-vps#app",
+      "name": "Kalkulator Biaya Cloud VPS Server",
+      "url": pageCanonical,
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "IDR"
+      },
+      "description": pageDesc,
+      "author": {
+        "@type": "Person",
+        "name": "Helmi Irfansah",
+        "url": "https://helmirfansah.com"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://helmirfansah.com/tools/kalkulator-cloud-vps#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Bagaimana cara menghitung estimasi biaya Cloud VPS di Indonesia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Estimasi biaya dihitung dari perkalian 4 spesifikasi kunci: vCPU, RAM, penyimpanan SSD NVMe, dan biaya transfer keluar (bandwidth egress) yang kemudian dikonversikan ke mata uang Rupiah (IDR)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Mengapa provider VPS lokal Indonesia seperti Biznet Gio dan IDCloudHost lebih hemat?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Provider lokal memiliki data center fisik di Indonesia (Jakarta) dengan koneksi langsung ke IIX (Indonesia Internet Exchange), kuota transfer gratis 1-2 TB, serta harga tetap dalam IDR tanpa risiko kenaikan kurs dolar USD."
+          }
+        }
+      ]
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDesc}
+  canonical={pageCanonical}
+  schema={schema}
+>
+  <main id="main-content" style="padding-top: 2rem; padding-bottom: 5rem;">
+    
+    <!-- ── BREADCRUMB & HERO ── -->
+    <section style="max-width: var(--max-w); margin: 0 auto; padding: 1.5rem 1.5rem 1rem;">
+      <nav aria-label="Breadcrumb" style="font-size: 0.825rem; color: var(--ink-muted); margin-bottom: 0.75rem;">
+        <a href="/" style="color: var(--ink-muted);">Beranda</a> &rsaquo; 
+        <a href="/tools" style="color: var(--ink-muted);">Tools</a> &rsaquo; 
+        <span style="color: var(--accent-clay); font-weight: 600;">Kalkulator Cloud VPS</span>
+      </nav>
+
+      <!-- Topic Switcher Pills -->
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+        <a href="/tools/kalkulator-affiliate" style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--bg-alt); border: 1px solid var(--border); color: var(--ink-secondary);">
+          💰 Komisi Afiliasi &rarr;
+        </a>
+        <a href="/tools/kalkulator-engagement-rate" style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--bg-alt); border: 1px solid var(--border); color: var(--ink-secondary);">
+          📊 ER &amp; Rate Card Medsos &rarr;
+        </a>
+        <span style="font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--accent-clay); color: #fff;">
+          ☁️ Cloud VPS Server (Aktif)
+        </span>
+        <a href="/tools/kalkulator-token-ai" style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--bg-alt); border: 1px solid var(--border); color: var(--ink-secondary);">
+          🤖 Token API AI &rarr;
+        </a>
+      </div>
+
+      <h1 style="font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.15; color: var(--ink); margin-bottom: 0.75rem;">
+        Kalkulator Biaya <em style="font-style: italic; color: var(--accent-clay);">Cloud Server VPS</em> (IDR)
+      </h1>
+      <p style="font-size: 1.05rem; color: var(--ink-secondary); max-width: 760px; line-height: 1.6; margin-bottom: 1.5rem;">
+        Bandingkan harga sewa VPS nyata dari 6 provider terkemuka (DigitalOcean, AWS EC2, Vultr, Google Cloud, Biznet Gio, dan IDCloudHost). Dihitung dalam Rupiah dengan simulasi pemakaian vCPU, RAM, dan bandwidth bulanan.
+      </p>
+    </section>
+
+    <!-- ── CALCULATOR CONTAINER ── -->
+    <section style="max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem 3rem;">
+      <div class="calc-container" style="box-shadow: var(--shadow-sm); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--bg-card);">
+        
+        <div class="calc-header" style="border-bottom: 1px solid var(--border); padding: 1.25rem 1.5rem; background: var(--bg-alt); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <h2 style="font-family: var(--font-serif); font-size: 1.3rem; font-weight: 500; color: var(--ink); margin: 0 0 0.25rem;">
+              Simulasi Spesifikasi Cloud Server
+            </h2>
+            <p style="font-size: 0.85rem; color: var(--ink-muted); margin: 0;">
+              Geser tuas di bawah untuk melihat estimasi tagihan bulanan dan tahunan tiap provider.
+            </p>
+          </div>
+          <a href="/tools" class="btn-ghost" style="font-size: 0.8rem; padding: 0.4rem 0.85rem;">
+            ← Semua Tools &amp; Hub
+          </a>
+        </div>
+
+        <div class="calc-body" style="padding: 1.5rem;">
+          <div class="calc-inputs" style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="vcpu" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Processor (vCPU):</label>
+                <strong id="vcpu-val" style="font-family: var(--font-mono); color: var(--accent-clay);">4 vCPU</strong>
+              </div>
+              <input type="range" id="vcpu" min="1" max="32" value="4" step="1" aria-label="Jumlah vCPU">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Rekomendasi: 2-4 vCPU untuk web production standar.</span>
+            </div>
+
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="ram" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Memory (RAM):</label>
+                <strong id="ram-val" style="font-family: var(--font-mono); color: var(--accent-clay);">8 GB</strong>
+              </div>
+              <input type="range" id="ram" min="1" max="128" value="8" step="1" aria-label="Kapasitas RAM">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Ideal: 4-8 GB untuk container Docker/Node.js.</span>
+            </div>
+
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="storage" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">NVMe / SSD Disk:</label>
+                <strong id="storage-val" style="font-family: var(--font-mono); color: var(--accent-clay);">100 GB</strong>
+              </div>
+              <input type="range" id="storage" min="20" max="1000" value="100" step="10" aria-label="Kapasitas Storage">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Penyimpanan cepat berbasis NVMe SSD.</span>
+            </div>
+
+            <div class="input-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.4rem;">
+                <label for="transfer" style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Egress Bandwidth:</label>
+                <strong id="transfer-val" style="font-family: var(--font-mono); color: var(--accent-clay);">2 TB</strong>
+              </div>
+              <input type="range" id="transfer" min="1" max="20" value="2" step="1" aria-label="Bandwidth Transfer">
+              <span style="font-size: 11px; color: var(--ink-muted); display: block; margin-top: 0.25rem;">Trafik keluar bulanan ke pengunjung website.</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <div class="calc-results" id="cloud-results">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SEO ARTICLE & COMPARISON ── -->
+    <section style="max-width: var(--max-w); margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid var(--border);">
+      <div class="section-label">ANALISIS INFRASTRUKTUR</div>
+      <h2 style="font-family: var(--font-serif); font-size: 1.75rem; color: var(--ink); margin-bottom: 1rem;">
+        Server Lokal Indonesia vs Hyperscaler Global (AWS / GCP)
+      </h2>
+      <p style="color: var(--ink-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
+        Untuk aplikasi dengan target pasar Indonesia, memilih penyedia lokal seperti Biznet Gio atau IDCloudHost memberikan keunggulan latensi 5–15 ms dan kuota bandwidth lokal gratis tanpa biaya egress tak terduga.
+      </p>
+    </section>
+
+  </main>
+</BaseLayout>
