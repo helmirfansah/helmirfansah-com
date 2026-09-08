@@ -202,11 +202,11 @@ const DEFAULT_TOOLS = [
 ];
 
 // Auto-purge cache dummy lama dari pengujian lokal sebelumnya
-if (typeof localStorage !== 'undefined' && !localStorage.getItem('hi_prod_cleaned_v2')) {
+if (typeof localStorage !== 'undefined' && !localStorage.getItem('hi_prod_cleaned_v3')) {
   localStorage.removeItem(LOCAL_POSTS_STORAGE_KEY);
   localStorage.removeItem('hi_media');
   localStorage.removeItem('hi_site_settings');
-  localStorage.setItem('hi_prod_cleaned_v2', 'true');
+  localStorage.setItem('hi_prod_cleaned_v3', 'true');
 }
 
 class SupabaseBlogService {
@@ -839,8 +839,8 @@ class SupabaseBlogService {
       author_name: 'Helmi Irfansah',
       contact_email: 'halo@helmirfansah.com',
       meta_title_format: '%title% - %site_name%',
-      meta_description: 'Helmi Irfansah: developer Indonesia yang menulis studi teknis mendalam tentang cloud infrastructure, SaaS tools, AI, dan web development.',
-      meta_keywords: 'cloud migration, nextjs, vps, coolify, supabase, midtrans, llm token, tech writer indonesia',
+      meta_description: 'Helmi Irfansah: praktisi media sosial, affiliate marketer, dan software engineer yang membagikan strategi distribusi konten, optimasi konversi, serta kalkulator interaktif.',
+      meta_keywords: 'social media growth, affiliate marketing, rate card endorsement, engagement rate, digital marketing, helmi irfansah',
       og_image: '',
       google_verification: '',
       adsense_client_id: '',
@@ -850,51 +850,51 @@ class SupabaseBlogService {
       // Header, Logo & Footer Branding
       brand_logo_text: 'Helmi Irfansah',
       footer_status_text: '● Siap Berkolaborasi',
-      footer_copyright: '© 2026 Helmi · Dibuat dengan bantuan Antigravity',
+      footer_copyright: '© 2026 Helmi Irfansah',
       drawer_copyright: '© 2026 Helmi Irfansah',
 
       // Hero Section
-      hero_badge: 'Riset Teknis & Rekayasa Sistem · helmirfansah.com',
-      hero_title: 'Membongkar kompleksitas <em style="font-style:italic;color:var(--accent-clay);">cloud</em> dan perangkat lunak.',
-      hero_sub: 'Dari audit efisiensi server hingga integrasi AI modern - dibedah tuntas dengan data empiris, angka nyata, dan arsitektur mandiri <em>(self-hosted)</em>.',
+      hero_badge: 'Social Media & Affiliate Marketing · helmirfansah.com',
+      hero_title: 'Strategi media sosial, affiliate marketing, dan <em style="font-style:italic;color:var(--accent-clay);">rekayasa digital</em>.',
+      hero_sub: 'Menggabungkan riset data distribusi konten, optimasi corong konversi affiliate, dan pembuatan tools interaktif untuk membantu kreator serta brand berkembang.',
       hero_cta_1_text: 'Buka Lab Kalkulator',
       hero_cta_1_url: '#lab',
-      hero_cta_2_text: 'Baca Catatan Teknis →',
+      hero_cta_2_text: 'Baca Catatan',
       hero_cta_2_url: '/blog',
 
       // About Section
       about_badge: 'Tentang Saya',
-      about_title: 'Membangun perangkat lunak.<br>Membagikan apa yang dipelajari.',
-      about_p1: 'Halo, saya <strong>Helmi Irfansah</strong>. Saya seorang software engineer dan tech writer asal Indonesia yang berfokus pada arsitektur cloud berbiaya efisien, integrasi AI modern, dan pengembangan produk B2B SaaS.',
-      about_p2: 'Di era di mana biaya cloud dan kompleksitas stack semakin tidak terkendali, saya memprioritaskan kesederhanaan, transparansi angka, dan kepemilikan data mandiri <em>(self-hosting)</em>.',
-      about_p3: 'Website ini adalah kanvas riset terbuka saya - tempat saya mempublikasikan benchmark latensi nyata, audit biaya penyedia infrastruktur, dan kalkulator interaktif gratis untuk membantu sesama developer & pendiri startup.',
+      about_title: 'Dari baris kode hingga corong konversi media sosial.',
+      about_p1: 'Halo, saya <strong>Helmi Irfansah</strong>. Berangkat dari latar belakang rekayasa perangkat lunak, saya kini berfokus pada strategi pertumbuhan media sosial dan monetisasi affiliate marketing.',
+      about_p2: 'Saya menggabungkan pendekatan analitis ke dalam distribusi konten: membedah algoritma platform, merancang hook video, menghitung metrik konversi (CTR, CVR), hingga membuat tools kalkulator interaktif yang menyelesaikan kebutuhan nyata audiens.',
+      about_p3: 'Website ini merangkum catatan lapangan, studi kasus, dan kumpulan kalkulator praktis yang bisa Anda gunakan secara langsung.',
 
       // 4 Kartu Keahlian & Fokus (Skills)
       skill_1_num: '01',
-      skill_1_title: 'Cloud Architecture & VPS',
-      skill_1_desc: 'Migrasi dari platform serverless mahal (Vercel, Heroku) ke VPS mandiri (Coolify, Dokku, Hetzner, Biznet Gio) yang menghemat biaya hingga 80%.',
+      skill_1_title: 'Social Media Growth & Distribution',
+      skill_1_desc: 'Strategi konten berbasis retensi audiens, hook 3 detik pertama, dan pemanfaatan algoritma video pendek (TikTok, Reels, Shorts).',
       skill_2_num: '02',
-      skill_2_title: 'BaaS & Database Modern',
-      skill_2_desc: 'PostgreSQL, Supabase, Firebase, dan ClickHouse - merancang skema relasional tangguh dengan Row Level Security dan query sub-50ms.',
+      skill_2_title: 'Affiliate Funnel & Conversion',
+      skill_2_desc: 'Membangun corong affiliate bernilai konversi tinggi (Shopee & TikTok Affiliate), optimasi rasio klik (CTR), dan copywriting persuasif.',
       skill_3_num: '03',
-      skill_3_title: 'Integrasi LLM & AI Tools',
-      skill_3_desc: 'Menerapkan OpenAI, Anthropic Claude, dan Gemini API ke dalam produk produksi dengan caching token efisien dan pemantauan biaya transparan.',
+      skill_3_title: 'Interactive Web Tools & Calculators',
+      skill_3_desc: 'Mengembangkan micro-tools berbasis web (kalkulator komisi, simulator ER) untuk mendatangkan traffic organik SEO jangka panjang.',
       skill_4_num: '04',
-      skill_4_title: 'B2B Payment & FinTech',
-      skill_4_desc: 'Integrasi Midtrans, Xendit, dan Doku untuk pasar Indonesia - simulasi fee transaksi, penanganan webhook andal, dan rekonsiliasi otomatis.',
+      skill_4_title: 'Analytics & Rate Card Valuation',
+      skill_4_desc: 'Audit performa analitik kreator secara objektif, estimasi nilai wajar rate card endorsement, dan simulasi ROI kampanye brand.',
 
       // Judul Bagian Konten & Empty State
-      works_badge: 'Studi Kasus Unggulan',
-      works_title: 'Eksplorasi Teknis<br>& Benchmark Nyata',
+      works_badge: 'Karya & Eksplorasi',
+      works_title: 'Studi Kasus &<br>Eksperimen Lapangan',
       works_empty_title: 'Belum Ada Studi Kasus Dipublikasikan',
-      works_empty_desc: 'Artikel dan eksplorasi teknis terbaru akan segera hadir. Anda dapat menulis dan merilis artikel pertama Anda melalui panel admin.',
-      works_empty_btn: 'Buka Admin Panel →',
-      works_more_btn_text: 'Lihat Semua Tulisan →',
+      works_empty_desc: 'Artikel dan studi kasus lapangan terbaru akan segera hadir. Anda dapat menulis dan merilis artikel melalui panel admin.',
+      works_empty_btn: 'Buka Admin Panel',
+      works_more_btn_text: 'Lihat Semua Tulisan',
 
-      notes_badge: 'Catatan Teknis',
-      notes_title: 'Fragmen Pemikiran<br>& Eksplorasi',
+      notes_badge: 'Catatan & Tulisan',
+      notes_title: 'Catatan &<br>Tulisan Terkini',
       notes_empty_desc: 'Belum ada catatan teknis tersedia saat ini.',
-      notes_more_btn_text: 'Semua Catatan →',
+      notes_more_btn_text: 'Semua Catatan',
 
       // Lab & Kalkulator
       lab_enabled: true,
@@ -905,8 +905,8 @@ class SupabaseBlogService {
 
       // Bagian Kontak
       contact_badge: 'Kontak',
-      contact_title: 'Mari ngobrol.',
-      contact_desc: 'Tertarik berkolaborasi, ada pertanyaan seputar social media &amp; affiliate, atau sekadar mau berdiskusi? Saya terbuka untuk semuanya.',
+      contact_title: 'Mari Terhubung',
+      contact_desc: 'Tertarik berkolaborasi, ada pertanyaan seputar social media &amp; affiliate, atau sekadar mau berdiskusi? Saya terbuka untuk terhubung.',
       contact_github_text: 'GitHub',
       contact_github_url: 'https://github.com/helmirfansah',
       contact_linkedin_text: 'LinkedIn',
@@ -914,7 +914,7 @@ class SupabaseBlogService {
 
       // Halaman Blog
       blog_archive_title: 'Catatan & Studi Kasus',
-      blog_archive_desc: 'Eksplorasi strategi social media growth, teknik konversi affiliate marketing, serta riset implementasi Web3 dunia nyata.',
+      blog_archive_desc: 'Eksplorasi strategi social media growth, teknik konversi affiliate marketing, serta riset implementasi digital dunia nyata.',
 
       // Navigasi Menu Utama (Header & Mobile Drawer) dengan Dukungan Submenu
       nav_main: [
