@@ -57,6 +57,19 @@ const {
   {schema && (
     <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
   )}
+  <!-- Inline Theme Initialization (prevents FOUC) -->
+  <script is:inline>
+    (function() {
+      try {
+        var saved = localStorage.getItem('hi-theme');
+        var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        var theme = saved || system;
+        document.documentElement.setAttribute('data-theme', theme);
+        var metaTheme = document.getElementById('theme-color-meta');
+        if (metaTheme) metaTheme.content = theme === 'dark' ? '#181410' : '#F6F1E4';
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="light" data-theme="light">
 
@@ -293,6 +306,53 @@ const {
         applyBranding();
       }
       window.addEventListener('hi_settings_updated', applyBranding);
+    })();
+  </script>
+
+  <!-- Dedicated Theme Toggle Script -->
+  <script is:inline>
+    (function() {
+      function initTheme() {
+        const btn = document.getElementById('theme-toggle');
+        const metaTheme = document.getElementById('theme-color-meta');
+
+        function applyTheme(theme) {
+          document.documentElement.setAttribute('data-theme', theme);
+          document.body.setAttribute('data-theme', theme);
+          document.body.className = theme;
+          if (metaTheme) metaTheme.content = theme === 'dark' ? '#181410' : '#F6F1E4';
+          try {
+            localStorage.setItem('hi-theme', theme);
+          } catch (e) {}
+          window.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
+        }
+
+        const saved = localStorage.getItem('hi-theme');
+        const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        const activeTheme = saved || system;
+        applyTheme(activeTheme);
+
+        if (btn) {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const current = document.body.getAttribute('data-theme') || document.documentElement.getAttribute('data-theme') || 'light';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+          });
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+          if (!localStorage.getItem('hi-theme')) {
+            applyTheme(e.matches ? 'dark' : 'light');
+          }
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTheme);
+      } else {
+        initTheme();
+      }
     })();
   </script>
 </body>
