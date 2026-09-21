@@ -12,9 +12,6 @@ const LOCAL_POSTS_STORAGE_KEY = 'hi_local_posts';
 const DEFAULT_SUPABASE_URL = '';
 const DEFAULT_SUPABASE_ANON_KEY = '';
 
-// Clean Slate: 0 Dummy Content untuk Peluncuran Produksi
-const INITIAL_SEED_POSTS = [];
-
 // Sample Artikel Resmi untuk Eksplorasi & Demo (Bisa diisi via 1-click di Admin)
 const SAMPLE_ARTICLES = [
   {
@@ -294,6 +291,9 @@ Agar mudah dipahami, bayangkan dompet crypto seperti **kotak surat pribadi**:
   }
 ];
 
+// Initial seed posts to ensure the site is populated with curated articles
+const INITIAL_SEED_POSTS = SAMPLE_ARTICLES;
+
 // Koleksi Default Tools & Kalkulator Interaktif Website (Dapat di-CRUD di Admin Panel)
 const DEFAULT_TOOLS = [
   {
@@ -351,11 +351,11 @@ const DEFAULT_TOOLS = [
 ];
 
 // Auto-purge cache dummy lama dari pengujian lokal sebelumnya
-if (typeof localStorage !== 'undefined' && !localStorage.getItem('hi_prod_cleaned_v3')) {
+if (typeof localStorage !== 'undefined' && !localStorage.getItem('hi_prod_cleaned_v4')) {
   localStorage.removeItem(LOCAL_POSTS_STORAGE_KEY);
   localStorage.removeItem('hi_media');
   localStorage.removeItem('hi_site_settings');
-  localStorage.setItem('hi_prod_cleaned_v3', 'true');
+  localStorage.setItem('hi_prod_cleaned_v4', 'true');
 }
 
 class SupabaseBlogService {
