@@ -140,7 +140,156 @@ Faktor pengali harga meliputi orisinalitas konsep, kualitas produksi audio-visua
     meta_description: 'Cara menghitung Engagement Rate media sosial dan menentukan nilai wajar rate card endorsement kreator di pasar Indonesia tahun 2026.',
     is_published: true,
     view_count: 64,
-    created_at: new Date().toISOString(),
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'post_sample_4',
+    slug: 'apa-itu-airdrop-crypto-panduan-pemula',
+    title: 'Apa Itu Airdrop Crypto? Panduan Lengkap Mendapatkan Token Gratis untuk Pemula',
+    excerpt: 'Mengenal konsep airdrop crypto, alasan di balik pembagian token digital gratis oleh proyek Web3, serta cara berpartisipasi dengan aman.',
+    content: `## Berkenalan dengan Konsep Airdrop Crypto
+
+Bayangkan Anda sedang mencoba platform digital baru yang sedang dalam tahap peluncuran. Tiba-tiba pengembang platform tersebut membagikan token utilitas atau aset digital secara cuma-cuma ke dompet digital Anda karena Anda menjadi pengguna awal *(early adopter)*.
+
+Di dunia teknologi terdesentralisasi *(Web3)*, mekanisme promosi ini dikenal luas dengan istilah **Airdrop Crypto**.
+
+---
+
+### Mengapa Proyek Web3 Membagikan Token Gratis?
+
+Banyak orang yang baru pertama kali mendengar airdrop merasa heran: *Mengapa pengembang bersedia membagikan aset bernilai ekonomis tanpa meminta pembayaran tunai?*
+
+Jawabannya terletak pada strategi pemasaran dan distribusi kepemilikan jaringan:
+
+1. **Insentif Penguji Jaringan (Beta Testing):** Sebelum meluncurkan produk ke jaringan utama (*Mainnet*), pengembang membutuhkan ribuan pengguna nyata untuk menguji skalabilitas server, menemukan celah bug, dan mencoba fitur transaksi.
+2. **Distribusi Tata Kelola (Decentralized Governance):** Proyek Web3 sering kali bertransformasi menjadi organisasi otonom (DAO). Token yang dibagikan berfungsi sebagai hak suara *(voting power)* bagi komunitas.
+3. **Efek Jaringan & Pertumbuhan Organik:** Strategi airdrop menciptakan gelombang atensi masif di media sosial (X/Twitter, Discord, Telegram) yang mendongkrak adopsi produk dengan biaya akuisisi pengguna (*CAC*) yang jauh lebih terukur dibandingkan iklan konvensional.
+
+---
+
+### 3 Kategori Misi Airdrop yang Umum Dijumpai
+
+- **Testnet Airdrop:** Misi yang 100% bebas risiko finansial. Pengguna hanya berinteraksi menggunakan token uji coba gratis (faucet) untuk mencoba fitur aplikasi.
+- **Retroactive Airdrop:** Hadiah kejutan bagi pengguna awal yang pernah menggunakan produk (seperti transaksi swap atau penyediaan likuiditas) sebelum pengumuman resmi token diluncurkan.
+- **Community & Social Tasks:** Misi partisipasi komunitas, seperti mengikuti pembaruan riset, memberikan umpan balik produk, dan mengedukasi audiens baru di platform media sosial.
+
+> [!NOTE]
+> Selalu terapkan prinsip kehati-hatian: jangan pernah membagikan kata kunci rahasia (*Secret Recovery Phrase / Seed Phrase*) dompet Anda kepada siapa pun, dan hindari menandatangani transaksi dari tautan yang tidak resmi.`,
+    category: 'Web3 & Crypto',
+    tags: ['Airdrop', 'Web3', 'Crypto', 'Blockchain', 'Edukasi'],
+    reading_time_minutes: 5,
+    cover_image: '',
+    featured_image: '',
+    seo_focus_keyword: 'Apa itu airdrop crypto',
+    meta_description: 'Panduan lengkap memahami apa itu airdrop crypto, alasan pembagian token gratis di Web3, dan cara berpartisipasi dengan aman bagi pemula.',
+    is_published: true,
+    view_count: 95,
+    created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'post_sample_5',
+    slug: 'apa-itu-blockchain-penjelasan-mudah-untuk-pemula',
+    title: 'Memahami Apa Itu Blockchain: Penjelasan Sederhana Cara Kerja Buku Kas Digital Terdesentralisasi',
+    excerpt: 'Penjelasan mudah cara kerja teknologi blockchain menggunakan analogi buku kas kelas yang transparan, aman dari manipulasi, dan tanpa perantara.',
+    content: `## Membedah Teknologi di Balik Internet Masa Depan
+
+Banyak orang mengira blockchain adalah teknologi yang sangat rumit dan penuh dengan matematika rumit. Padahal, jika disederhanakan, konsep dasarnya sangat mirip dengan **buku catatan kas bersama yang anti-curang**.
+
+---
+
+### Cerita Analogi: Buku Kas yang Dipegang Bersama
+
+Bayangkan dalam sebuah organisasi atau perkumpulan, hanya ada satu orang bendahara yang memegang satu-satunya buku catatan keuangan. 
+- Jika bendahara tersebut salah mencatat atau berniat curang, catatan bisa diubah secara sepihak.
+- Jika buku tersebut hilang atau rusak, seluruh riwayat transaksi musnah.
+
+**Solusi Blockchain:**
+Setiap kali terjadi transaksi pembayaran, pengumuman disiarkan secara terbuka ke seluruh anggota. **Semua anggota serentak mencatat transaksi yang sama di buku catatan masing-masing.** 
+
+Jika ada satu pihak yang mencoba memalsukan catatannya, salinan tersebut akan langsung ditolak oleh mayoritas anggota lain karena tidak cocok dengan ribuan salinan yang sah. 
+
+Inilah esensi dasar dari **sistem buku besar terdistribusi (Distributed Ledger Technology)**.
+
+---
+
+### Mengapa Disebut "Block" dan "Chain"?
+
+- **Block (Blok Data):** Transaksi yang terjadi dalam rentang waktu tertentu dikelompokkan ke dalam satu balok data digital.
+- **Chain (Rantai Kriptografi):** Setiap blok data baru dihubungkan ke blok sebelumnya menggunakan kode sidik jari digital unik (*cryptographic hash*). 
+
+Keterikatan matematis ini memastikan bahwa sekali sebuah transaksi tercatat dan dirantai ke masa lalu, catatan tersebut **mustahil diubah atau dihapus (immutable)** tanpa merusak seluruh integritas rantai berikutnya.
+
+---
+
+### 3 Pilar Keunggulan Blockchain
+
+1. **Desentralisasi:** Tidak ada server tunggal yang dapat dimatikan oleh satu pihak berwenang. Sistem berjalan di ribuan komputer independen *(node)* di seluruh dunia.
+2. **Transparansi Tinggi:** Siapa pun dapat memeriksa keabsahan riwayat transaksi melalui *blockchain explorer* publik tanpa perlu bergantung pada pihak ketiga.
+3. **Ketahanan Data:** Data yang telah divalidasi bersifat permanen dan tahan terhadap risiko sensor maupun manipulasi data.`,
+    category: 'Web3 & Crypto',
+    tags: ['Blockchain', 'Teknologi', 'Web3', 'Desentralisasi', 'Edukasi'],
+    reading_time_minutes: 5,
+    cover_image: '',
+    featured_image: '',
+    seo_focus_keyword: 'Apa itu blockchain',
+    meta_description: 'Penjelasan mudah cara kerja teknologi blockchain menggunakan analogi buku kas digital terdesentralisasi, transparan, dan tahan manipulasi.',
+    is_published: true,
+    view_count: 112,
+    created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: 'post_sample_6',
+    slug: 'apa-itu-crypto-wallet-dan-web3-wallet',
+    title: 'Mengenal Crypto Wallet: Cara Kerja Dompet Web3 dan Fondasi Keamanan Aset Digital',
+    excerpt: 'Pelajari perbedaan nomor alamat publik dan kata sandi pemulihan rahasia (seed phrase), serta aturan dasar menjaga aset digital tetap aman.',
+    content: `## Dompet Digital Bukan Sekadar Tempat Menyimpan Uang
+
+Jika dalam perbankan konvensional Anda menyimpan saldo di server milik bank, pada ekosistem Web3 Anda memegang kendali penuh atas aset digital Anda sendiri. Media utama yang digunakan untuk berinteraksi di dunia ini adalah **Crypto Wallet** atau **Web3 Wallet**.
+
+---
+
+### Cara Kerja: Dompet Tidak Menyimpan Koin Secara Fisik
+
+Salah satu kesalahpahaman paling umum adalah mengira dompet crypto menyimpan koin di dalam perangkat memori HP atau laptop Anda.
+
+Secara teknis, koin digital Anda **selalu berada di dalam jaringan blockchain**. Yang disimpan oleh aplikasi dompet Anda adalah **kunci kriptografi rahasia** yang membuktikan kepemilikan Anda atas alamat aset tersebut.
+
+---
+
+### Rahasia Dua Kunci: Public Address vs Private Key
+
+Agar mudah dipahami, bayangkan dompet crypto seperti **kotak surat pribadi**:
+
+1. **Public Address (Alamat Publik):**
+   - Diibaratkan seperti nomor kotak surat atau nomor rekening bank Anda.
+   - Formatnya berupa kombinasi panjang huruf dan angka (misal diawali \`0x...\`).
+   - Informasi ini aman untuk dibagikan kepada siapa pun yang ingin mengirimkan token atau aset kepada Anda.
+
+2. **Seed Phrase / Secret Recovery Phrase (Frase Pemulihan Rahasia):**
+   - Diibaratkan sebagai kunci fisik master untuk membuka brankas kotak surat tersebut.
+   - Terdiri dari rangkaian 12 atau 24 kata acak bahasa Inggris.
+   - **Peringatan Penting:** Siapa pun yang mengetahui rangkaian kata ini memiliki akses penuh untuk memindahkan seluruh aset Anda. Jangan pernah menyimpan frase ini di tangkapan layar (screenshot), email, atau memberikannya kepada siapa pun.
+
+---
+
+### Checklist Praktis Menjaga Keamanan Dompet Web3
+
+- **Cadangkan di Media Fisik:** Tulis 12/24 kata frase pemulihan di atas kertas dan simpan di tempat yang aman dari air dan api.
+- **Gunakan Dompet Terpisah untuk Eksplorasi:** Pisahkan dompet untuk penyimpanan jangka panjang *(cold storage)* dengan dompet aktif yang digunakan untuk menguji aplikasi baru.
+- **Waspada Phishing:** Selalu periksa kembali URL situs web sebelum menghubungkan *(connect)* dompet digital Anda.`,
+    category: 'Web3 & Crypto',
+    tags: ['Crypto Wallet', 'Web3', 'MetaMask', 'Keamanan Digital', 'Edukasi'],
+    reading_time_minutes: 5,
+    cover_image: '',
+    featured_image: '',
+    seo_focus_keyword: 'Crypto wallet pemula',
+    meta_description: 'Panduan memahami cara kerja crypto wallet, perbedaan public address dan seed phrase, serta tips penting menjaga keamanan dompet Web3.',
+    is_published: true,
+    view_count: 88,
+    created_at: new Date(Date.now() - 86400000 * 4).toISOString(),
     updated_at: new Date().toISOString()
   }
 ];

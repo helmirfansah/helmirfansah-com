@@ -3096,8 +3096,11 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
           <button type="button" class="btn btn-secondary btn-sm" style="font-size:11px;" onclick="copySchemaSql()">
             📋 Salin SQL ke Clipboard
           </button>
+          <a href="/seed_articles.sql" download="seed_articles.sql" class="btn btn-secondary btn-sm" style="font-size:11px;text-decoration:none;">
+            📄 Unduh seed_articles.sql
+          </a>
           <button type="button" class="btn btn-brand btn-sm" style="font-size:11px;background:#3B82F6;" onclick="handleSeedSampleData()">
-            ✨ Isi 3 Artikel Contoh (Sample)
+            ✨ Publikasikan 6 Artikel Contoh ke Supabase
           </button>
         </div>
       </div>
@@ -4577,9 +4580,9 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || '';
     }
 
     async function handleSeedSampleData() {
-      if (confirm('Muat 3 artikel contoh seputar Social Media, Affiliate Marketing, dan Perkenalan?')) {
+      if (confirm('Publikasikan 6 artikel contoh (Perkenalan, Affiliate Marketing, Engagement Rate, Airdrop, Blockchain, dan Web3 Wallet) ke Supabase?')) {
         const res = await window.BlogService.seedSampleArticles();
-        showToast(`Berhasil memuat ${res.count} artikel contoh!`);
+        showToast(`Berhasil memuat ${res.count} artikel ke ${res.mode === 'supabase' ? 'database Supabase cloud' : 'penyimpanan lokal'}!`);
         await refreshPosts();
         closeSupabaseModal();
         switchNav('posts');
