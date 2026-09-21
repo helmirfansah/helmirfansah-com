@@ -843,9 +843,9 @@ class SupabaseBlogService {
       meta_keywords: 'social media growth, affiliate marketing, rate card endorsement, engagement rate, digital marketing, helmi irfansah',
       og_image: '',
       google_verification: '',
-      adsense_client_id: '',
-      adsense_enabled: false,
-      ads_txt_content: '',
+      adsense_client_id: 'ca-pub-2621670273502393',
+      adsense_enabled: true,
+      ads_txt_content: 'google.com, pub-2621670273502393, DIRECT, f08c47fec0942fa0',
 
       // Header, Logo & Footer Branding
       brand_logo_text: 'Helmi Irfansah',
